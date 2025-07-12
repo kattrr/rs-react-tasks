@@ -10,7 +10,7 @@ class Card extends Component<CardProps> {
     const { name, sprites, types } = this.props.pokemon;
 
     return (
-      <div className="">
+      <div className="bg-white">
         <img
           src={sprites.front_default}
           alt={name}
