@@ -40,10 +40,7 @@ class SearchBar extends Component<SearchBarProps, SearchBarState> {
           className="bg-white/10 py-2 pl-4 rounded-2xl flex-3/4 mr-4"
           placeholder="Search Pokémon..."
         />
-        <button
-          onClick={this.handleSearch}
-          className="rounded-2xl flex-1/4"
-        >
+        <button onClick={this.handleSearch} className="rounded-2xl flex-1/4">
           Search
         </button>
       </div>

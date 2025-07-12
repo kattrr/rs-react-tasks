@@ -11,13 +11,11 @@ class Card extends Component<CardProps> {
 
     return (
       <div className="bg-white rounded-4xl flex flex-col items-center p-4 shadow-md">
-        <img
-          src={sprites.front_default}
-          alt={name}
-          className=""
-        />
+        <img src={sprites.front_default} alt={name} className="" />
         <h2 className="text-black">name: {name}</h2>
-        <p className="text-black">type: {types.map((t) => t.type.name).join(', ')}</p>
+        <p className="text-black">
+          type: {types.map((t) => t.type.name).join(', ')}
+        </p>
       </div>
     );
   }
