@@ -1,5 +1,6 @@
-import  { Component } from 'react';
+import { Component } from 'react';
 import { fetchPokemonList, fetchPokemonByName } from './api/pokeapi';
+import SearchBar from './components/SearchBar';
 
 class App extends Component {
   componentDidMount(): void {
@@ -24,6 +25,10 @@ class App extends Component {
     return (
       <div>
         <h1>PokeAPI Test</h1>
+        <div className="p-4">
+          <h2 className="text-2xl font-bold mb-4">Pokémon Search</h2>
+          <SearchBar onSearch={(term) => console.log('Buscar:', term)} />
+        </div>
         <p>Abre la consola del navegador (F12) para ver los resultados</p>
       </div>
     );
