@@ -71,7 +71,7 @@ class App extends Component<{}, AppState> {
     const { pokemons, loading, error } = this.state;
 
     return (
-      <div className="p-4 max-w-4xl mx-auto">
+      <div className="mx-auto">
         <h1 className="text-3xl font-bold mb-4">🔍 Pokémon Search</h1>
         <SearchBar onSearch={this.handleSearch} />
 
