@@ -1,8 +1,21 @@
 import { Component } from 'react';
 import { fetchPokemonList, fetchPokemonByName } from './api/pokeapi';
 import SearchBar from './components/SearchBar';
+import Card from './components/Card';
 
-class App extends Component {
+import type { PokemonDetails } from './api/pokeapi';
+
+interface AppState {
+  pokemon?: PokemonDetails;
+}
+
+class App extends Component<{}, AppState> {
+  constructor(props: {}) {
+    super(props);
+    this.state = {
+      pokemon: undefined,
+    };
+  }
   componentDidMount(): void {
     fetchPokemonList(0, 10)
       .then((data) => {
@@ -14,11 +27,9 @@ class App extends Component {
 
     fetchPokemonByName('pikachu')
       .then((data) => {
-        console.log('Datos de Pikachu:', data);
+        this.setState({ pokemon: data });
       })
-      .catch((err) => {
-        console.error('Error al buscar Pikachu:', err);
-      });
+      .catch(console.error);
   }
 
   render() {
@@ -30,6 +41,11 @@ class App extends Component {
           <SearchBar onSearch={(term) => console.log('Buscar:', term)} />
         </div>
         <p>Abre la consola del navegador (F12) para ver los resultados</p>
+        {this.state.pokemon && (
+          <div className="mt-6">
+            <Card pokemon={this.state.pokemon} />
+          </div>
+        )}
       </div>
     );
   }
