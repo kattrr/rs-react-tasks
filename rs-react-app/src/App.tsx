@@ -1,54 +1,54 @@
 import { Component } from 'react';
-import { fetchPokemonList, fetchPokemonByName } from './api/pokeapi';
 import SearchBar from './components/SearchBar';
-import Card from './components/Card';
-
-import type { PokemonDetails } from './api/pokeapi';
+import CardList from './components/CardList';
+import { type PokemonDetails, fetchPokemonList, fetchPokemonByName } from './api/pokeapi';
 
 interface AppState {
-  pokemon?: PokemonDetails;
+  pokemons: PokemonDetails[];
+  loading: boolean;
 }
 
 class App extends Component<{}, AppState> {
   constructor(props: {}) {
     super(props);
     this.state = {
-      pokemon: undefined,
+      pokemons: [],
+      loading: false,
     };
   }
-  componentDidMount(): void {
-    fetchPokemonList(0, 10)
-      .then((data) => {
-        console.log('Lista de Pokémon:', data);
-      })
-      .catch((err) => {
-        console.error('Error en lista:', err);
-      });
 
-    fetchPokemonByName('pikachu')
-      .then((data) => {
-        this.setState({ pokemon: data });
-      })
-      .catch(console.error);
+  componentDidMount(): void {
+    this.loadDefaultList();
   }
+
+  loadDefaultList = async () => {
+    this.setState({ loading: true });
+
+    try {
+      const list = await fetchPokemonList(0, 5); // obtén 5 pokemones
+      const detailedList = await Promise.all(
+        list.map((p) => fetchPokemonByName(p.name))
+      );
+      this.setState({ pokemons: detailedList, loading: false });
+    } catch (err) {
+      console.error(err);
+      this.setState({ loading: false });
+    }
+  };
 
   render() {
     return (
-      <div>
-        <h1>PokeAPI Test</h1>
-        <div className="">
-          <h2 className="">Pokémon Search</h2>
-          <SearchBar onSearch={(term) => console.log('Buscar:', term)} />
-        </div>
-        <p>Abre la consola del navegador (F12) para ver los resultados</p>
-        {this.state.pokemon && (
-          <div className="mt-6">
-            <Card pokemon={this.state.pokemon} />
-          </div>
+      <div className="p-4">
+        <h1 className="text-2xl font-bold mb-4">Pokémon Search</h1>
+        <SearchBar onSearch={(term) => console.log('Buscar:', term)} />
+
+        {this.state.loading && <p>Cargando...</p>}
+
+        {!this.state.loading && (
+          <CardList pokemons={this.state.pokemons} />
         )}
       </div>
     );
   }
 }
-
 export default App;
