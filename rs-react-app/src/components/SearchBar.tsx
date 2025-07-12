@@ -32,17 +32,17 @@ class SearchBar extends Component<SearchBarProps, SearchBarState> {
 
   render() {
     return (
-      <div className="flex gap-2 p-4 bg-gray-100 rounded">
+      <div className="">
         <input
           type="text"
           value={this.state.searchTerm}
           onChange={this.handleChange}
-          className="border border-gray-300 p-2 rounded w-full"
+          className=""
           placeholder="Search Pokémon..."
         />
         <button
           onClick={this.handleSearch}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          className=""
         >
           Search
         </button>

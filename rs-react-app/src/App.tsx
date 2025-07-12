@@ -25,8 +25,8 @@ class App extends Component {
     return (
       <div>
         <h1>PokeAPI Test</h1>
-        <div className="p-4">
-          <h2 className="text-2xl font-bold mb-4">Pokémon Search</h2>
+        <div className="">
+          <h2 className="">Pokémon Search</h2>
           <SearchBar onSearch={(term) => console.log('Buscar:', term)} />
         </div>
         <p>Abre la consola del navegador (F12) para ver los resultados</p>
