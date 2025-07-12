@@ -14,8 +14,8 @@ interface AppState {
   error: string | null;
 }
 
-class App extends Component<{}, AppState> {
-  constructor(props: {}) {
+class App extends Component<object, AppState> {
+  constructor(props: object) {
     super(props);
     this.state = {
       pokemons: [],
@@ -43,7 +43,7 @@ class App extends Component<{}, AppState> {
         list.map((p) => fetchPokemonByName(p.name))
       );
       this.setState({ pokemons: detailed, loading: false });
-    } catch (err) {
+    } catch {
       this.setState({
         loading: false,
         error: 'Error al cargar los Pokémon por defecto',
@@ -60,7 +60,7 @@ class App extends Component<{}, AppState> {
       const pokemon = await fetchPokemonByName(term.toLowerCase());
       this.setState({ pokemons: [pokemon], loading: false });
       localStorage.setItem('searchTerm', term);
-    } catch (err) {
+    } catch {
       this.setState({
         error: `No se encontró ningún Pokémon llamado "${term}"`,
         loading: false,
