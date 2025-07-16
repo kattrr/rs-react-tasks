@@ -2,7 +2,6 @@ import { describe, expect, beforeEach, vi, test } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import SearchBar from '../SearchBar';
 
-
 describe('SearchBar component', () => {
   beforeEach(() => {
     localStorage.clear();
@@ -45,4 +44,3 @@ describe('SearchBar component', () => {
     expect(onSearchMock).toHaveBeenCalledWith('charmander');
   });
 });
-

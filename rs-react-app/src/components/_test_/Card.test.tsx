@@ -9,16 +9,17 @@ describe('Card component', () => {
     sprites: {
       front_default: 'https://example.com/pikachu.png',
     },
-    types: [
-      { type: { name: 'electric' } },
-    ],
+    types: [{ type: { name: 'electric' } }],
   };
 
   it('renders name, type, and image correctly', () => {
     render(<Card pokemon={mockPokemon} />);
     expect(screen.getByText(/name: pikachu/i)).toBeInTheDocument();
     expect(screen.getByText(/type: electric/i)).toBeInTheDocument();
-    expect(screen.getByAltText(/pikachu/i)).toHaveAttribute('src', mockPokemon.sprites.front_default);
+    expect(screen.getByAltText(/pikachu/i)).toHaveAttribute(
+      'src',
+      mockPokemon.sprites.front_default
+    );
   });
 
   it('renders safely when some props are missing', () => {

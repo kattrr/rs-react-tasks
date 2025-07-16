@@ -20,10 +20,8 @@ describe('ErrorBoundary', () => {
   const originalError = console.error;
 
   beforeEach(() => {
-
     console.error = vi.fn();
   });
-  
 
   afterEach(() => {
     console.error = originalError;
@@ -36,9 +34,7 @@ describe('ErrorBoundary', () => {
       </ErrorBoundary>
     );
 
-    expect(
-      screen.getByText(/Oops! Algo salió mal/i)
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Oops! Algo salió mal/i)).toBeInTheDocument();
     expect(
       screen.getByText(/Por favor recarga la aplicación/i)
     ).toBeInTheDocument();
@@ -62,7 +58,13 @@ describe('ErrorBoundary', () => {
 
   it('restablece el estado al hacer clic en "Volver a intentar"', () => {
     // Wrapper to control ErrorBoundary key for remounting
-    function Wrapper({ shouldThrow, boundaryKey }: { shouldThrow: boolean; boundaryKey: number }) {
+    function Wrapper({
+      shouldThrow,
+      boundaryKey,
+    }: {
+      shouldThrow: boolean;
+      boundaryKey: number;
+    }) {
       return (
         <ErrorBoundary key={boundaryKey}>
           <BuggyComponent shouldThrow={shouldThrow} />
