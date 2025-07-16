@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "format:fix": "prettier --write .",
-    "prepare": "husky install",
+    "prepare": "husky",
     "test": "vitest run",
     "test:ui": "vitest",
     "test:coverage": "vitest run --coverage"
