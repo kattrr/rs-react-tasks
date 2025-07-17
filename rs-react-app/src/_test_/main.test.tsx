@@ -1,10 +1,19 @@
-import { describe, it, beforeEach, afterEach, expect, vi, type Mock } from 'vitest';
+import {
+  describe,
+  it,
+  beforeEach,
+  afterEach,
+  expect,
+  vi,
+  type Mock,
+} from 'vitest';
 import React from 'react';
 import * as ReactDOMClient from 'react-dom/client';
 
 // Mock de createRoot para interceptar el renderizado
 vi.mock('react-dom/client', async () => {
-  const actual = await vi.importActual<typeof ReactDOMClient>('react-dom/client');
+  const actual =
+    await vi.importActual<typeof ReactDOMClient>('react-dom/client');
   return {
     ...actual,
     createRoot: vi.fn(() => ({

@@ -1,9 +1,15 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor, fireEvent, act } from '@testing-library/react';
+import {
+  render,
+  screen,
+  waitFor,
+  fireEvent,
+  act,
+} from '@testing-library/react';
 import App from '../App';
 import type { PokemonDetails } from '../api/pokeapi';
 import * as api from '../api/pokeapi';
-import { type Component } from 'react';
+import ErrorBoundary from '../components/ErrorBoundary';
 
 // Limpia el localStorage y mocks antes de cada test
 beforeEach(() => {
@@ -52,18 +58,18 @@ describe('App Component', () => {
     });
   });
 
-// it('Shows the Spinner when AppState loading is true', () => {
-//   const { container } = render(<App />);
+  // it('Shows the Spinner when AppState loading is true', () => {
+  //   const { container } = render(<App />);
 
-//   act(() => {
-//     // Accedemos al componente y forzamos el estado
-//     const instance = (container.firstChild as any)._reactRootContainer._internalRoot.current.child.stateNode;
-//     instance.setState({ loading: true });
-//   });
+  //   act(() => {
+  //     // Accedemos al componente y forzamos el estado
+  //     const instance = (container.firstChild as any)._reactRootContainer._internalRoot.current.child.stateNode;
+  //     instance.setState({ loading: true });
+  //   });
 
-//   // Verifica que el spinner (clase animate-spin) esté en el documento
-//   expect(container.querySelector('animate-spin')).toBeInTheDocument();
-// });
+  //   // Verifica que el spinner (clase animate-spin) esté en el documento
+  //   expect(container.querySelector('animate-spin')).toBeInTheDocument();
+  // });
 
   it('updates state correctly on successful search', async () => {
     vi.spyOn(api, 'fetchPokemonByName').mockResolvedValue(mockPokemon);
@@ -98,16 +104,4 @@ describe('App Component', () => {
       ).toBeInTheDocument();
     });
   });
-
-  //   const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-
-  //   render(<App />);
-  //   const button = screen.getByText(/Lanzar error/i);
-
-  //   fireEvent.click(button);
-
-  //   expect(errorSpy).toHaveBeenCalled();
-
-  //   errorSpy.mockRestore();
-  // });
 });
