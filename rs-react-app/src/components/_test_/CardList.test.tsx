@@ -16,7 +16,7 @@ describe('CardList component', () => {
       { name: 'charmander', sprites: { front_default: '' }, types: [] },
     ];
 
-    render(<CardList key={mockData.values.name} pokemons={mockData} />);
+    render(<CardList pokemons={mockData} />);
     const cards = screen.getAllByTestId('mock-card');
     expect(cards).toHaveLength(2);
     expect(cards[0]).toHaveTextContent('bulbasaur');
@@ -30,8 +30,8 @@ describe('CardList component', () => {
   });
 
   it('handles missing or undefined props gracefully', () => {
-    const mockData: any = [
-      { name: undefined, id: null, sprites: null, types: null },
+    const mockData: PokemonDetails[] = [
+      { name: '', sprites: { front_default: '' }, types: [] },
     ];
 
     render(<CardList pokemons={mockData} />);

@@ -1,15 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import {
-  render,
-  screen,
-  waitFor,
-  fireEvent,
-  act,
-} from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import App from '../App';
 import type { PokemonDetails } from '../api/pokeapi';
 import * as api from '../api/pokeapi';
-import ErrorBoundary from '../components/ErrorBoundary';
 
 // Limpia el localStorage y mocks antes de cada test
 beforeEach(() => {

@@ -2,16 +2,16 @@ import '@testing-library/jest-dom';
 
 if (!globalThis.localStorage) {
   const localStorageMock = (() => {
-    let store: Record<string, string> = {};
+    let store: Record<string, string | undefined> = {};
     return {
       getItem(key: string) {
-        return store[key] || null;
+        return store[key] ?? null;
       },
       setItem(key: string, value: string) {
         store[key] = value;
       },
       removeItem(key: string) {
-        delete store[key];
+        store[key] = undefined;
       },
       clear() {
         store = {};
