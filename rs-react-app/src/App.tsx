@@ -11,7 +11,7 @@ import {
 interface AppState {
   pokemons: PokemonDetails[];
   loading: boolean;
-  error: string | null
+  error: string | null;
 }
 
 class App extends Component<object, AppState> {
