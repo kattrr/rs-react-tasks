@@ -1,7 +1,5 @@
 import { Component } from 'react';
-import SearchBar from './components/SearchBar';
-import CardList from './components/CardList';
-import Spinner from './components/Spinner';
+import { SearchBar, CardList, Spinner } from './components';
 import {
   fetchPokemonByName,
   fetchPokemonList,
