@@ -15,6 +15,7 @@ A simple React + TypeScript application to search and display Pokémon informati
 ## Getting Started
 
 ### Prerequisites
+
 - Node.js (v16 or higher recommended)
 - npm or yarn
 
@@ -35,6 +36,7 @@ A simple React + TypeScript application to search and display Pokémon informati
 ### Running the App
 
 Start the development server:
+
 ```bash
 npm run dev
 # or
@@ -46,6 +48,7 @@ Open [http://localhost:5173](http://localhost:5173) to view the app in your brow
 ### Running Tests
 
 To run unit tests:
+
 ```bash
 npm run test
 # or
@@ -61,6 +64,7 @@ yarn test
 - `public/` - Static assets
 
 ## Technologies Used
+
 - [React](https://react.dev/)
 - [TypeScript](https://www.typescriptlang.org/)
 - [Vite](https://vitejs.dev/)

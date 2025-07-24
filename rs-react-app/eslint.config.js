@@ -39,13 +39,12 @@ export default defineConfig([
       ...pluginReact.configs.recommended.rules,
       ...pluginReact.configs['jsx-runtime'].rules,
       ...reactHooks.configs.recommended.rules,
-      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+      'react-refresh/only-export-components': [
+        'warn',
+        { allowConstantExport: true },
+      ],
       'react-compiler/react-compiler': 'error',
     },
-    extends: [
-      js.configs.recommended,
-      ...tseslint.configs.strict,
-      prettier,
-    ],
+    extends: [js.configs.recommended, ...tseslint.configs.strict, prettier],
   },
 ]);

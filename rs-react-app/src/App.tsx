@@ -71,7 +71,9 @@ class App extends Component<object, AppState> {
 
     return (
       <div className="mx-auto">
-        <h1 className="text-4xl font-bold mb-4 leading-tight">🔍 Pokémon Search</h1>
+        <h1 className="text-4xl font-bold mb-4 leading-tight">
+          🔍 Pokémon Search
+        </h1>
         <SearchBar onSearch={this.handleSearch} />
 
         {loading && <Spinner />}
