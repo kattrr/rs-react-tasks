@@ -30,12 +30,12 @@ class ErrorBoundary extends Component<Props, State> {
     if (this.state.hasError) {
       return (
         <div className="">
-          <h2 className="">Oops! Algo salió mal.</h2>
+          <h2 className="">Oops! Something went wrong.</h2>
           <p className="">
-            Por favor recarga la aplicación o intenta nuevamente.
+            Please reload the application or try again.
           </p>
           <button onClick={this.handleReset} className="">
-            Volver a intentar
+            Try again
           </button>
         </div>
       );
