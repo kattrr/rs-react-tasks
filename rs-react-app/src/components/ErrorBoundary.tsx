@@ -29,12 +29,10 @@ class ErrorBoundary extends Component<Props, State> {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="">
-          <h2 className="">Oops! Something went wrong.</h2>
-          <p className="">
-            Please reload the application or try again.
-          </p>
-          <button onClick={this.handleReset} className="">
+        <div className="flex flex-col items-center justify-center p-8 bg-red-50 rounded-xl shadow-md">
+          <h2 className="text-2xl font-bold text-red-700 mb-2">Oops! Something went wrong.</h2>
+          <p className="text-gray-700 mb-4">Please reload the application or try again.</p>
+          <button onClick={this.handleReset} className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 transition-colors font-medium">
             Try again
           </button>
         </div>
