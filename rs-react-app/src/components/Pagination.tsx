@@ -7,10 +7,22 @@ interface PaginationProps {
 const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) => {
   if (totalPages <= 1) return null;
 
-  const pages = [];
-  for (let i = 1; i <= totalPages; i++) {
-    pages.push(i);
-  }
+  const getPageNumbers = () => {
+    const pages = [];
+    if (totalPages <= 4) {
+      for (let i = 1; i <= totalPages; i++) pages.push(i);
+      return pages;
+    }
+    if (currentPage <= 2) {
+      return [1, 2, 3, 4];
+    }
+    if (currentPage >= totalPages - 1) {
+      return [totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+    }
+    return [currentPage - 1, currentPage, currentPage + 1, currentPage + 2];
+  };
+
+  const pageNumbers = getPageNumbers();
 
   return (
     <div className="flex justify-center items-center gap-2 mt-6">
@@ -21,7 +33,18 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
       >
         Preview
       </button>
-      {pages.map((page) => (
+      {pageNumbers[0] > 1 && (
+        <>
+          <button
+            onClick={() => onPageChange(1)}
+            className={`px-3 py-1 rounded font-medium ${1 === currentPage ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-blue-100'}`}
+          >
+            1
+          </button>
+          {pageNumbers[0] > 2 && <span className="px-2">...</span>}
+        </>
+      )}
+      {pageNumbers.map((page) => (
         <button
           key={page}
           onClick={() => onPageChange(page)}
@@ -34,6 +57,17 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
           {page}
         </button>
       ))}
+      {pageNumbers[pageNumbers.length - 1] < totalPages && (
+        <>
+          {pageNumbers[pageNumbers.length - 1] < totalPages - 1 && <span className="px-2">...</span>}
+          <button
+            onClick={() => onPageChange(totalPages)}
+            className={`px-3 py-1 rounded font-medium ${totalPages === currentPage ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-blue-100'}`}
+          >
+            {totalPages}
+          </button>
+        </>
+      )}
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}

@@ -14,9 +14,9 @@ const Card = ({ pokemon }: CardProps) => {
         alt={name}
         className="w-24 h-24 object-contain mb-2"
       />
-      <h2 className="text-black text-lg font-semibold">name: {name}</h2>
+      <h2 className="text-black text-lg font-semibold">{name}</h2>
       <p className="text-black text-base">
-        type: {types.map((t) => t.type.name).join(', ')}
+        <b>type:</b> {types.map((t) => t.type.name).join(', ')}
       </p>
     </div>
   );

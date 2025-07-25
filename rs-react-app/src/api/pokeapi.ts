@@ -9,6 +9,10 @@ export interface PokemonDetails {
     front_default: string;
   };
   types: { type: { name: string } }[];
+  height: number;
+  abilities: { ability: { name: string } }[];
+  forms: { name: string }[];
+  moves: { move: { name: string } }[];
 }
 
 export async function fetchPokemonList(
@@ -36,6 +40,6 @@ export async function fetchPokemonByName(
     throw new Error(`Pokémon "${name}" not found (${response.status})`);
   }
 
-  const data = await response.json();
+  const data = await response.json(); console.log(data);
   return data;
 }

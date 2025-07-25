@@ -9,7 +9,7 @@ import {
   type PokemonDetails,
 } from './api/pokeapi';
 import { useLocalStorage } from './hooks/useLocalStorage';
-import Pagination from './components/Pagination';
+
 
 const PAGE_SIZE = 12;
 const TOTAL_POKEMONS = 1302;
