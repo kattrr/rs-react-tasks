@@ -53,7 +53,7 @@ const App = () => {
       setLoading(false);
     } catch {
       setLoading(false);
-      setError('Error al cargar los Pokémon por defecto');
+      setError('Error loading default Pokémon');
     }
   };
 
@@ -70,7 +70,7 @@ const App = () => {
       setPokemons([pokemon]);
       setLoading(false);
     } catch {
-      setError(`No se encontró ningún Pokémon llamado "${term}"`);
+      setError(`No Pokémon found named "${term}"`);
       setLoading(false);
     }
   };

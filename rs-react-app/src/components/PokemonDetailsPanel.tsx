@@ -21,7 +21,7 @@ const PokemonDetailsPanel = ({ detailsName, onClose }: PokemonDetailsPanelProps)
         setLoading(false);
       })
       .catch(() => {
-        setError('No se pudo cargar el detalle');
+        setError('Could not load details');
         setLoading(false);
       });
   }, [detailsName]);

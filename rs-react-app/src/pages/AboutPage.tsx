@@ -7,14 +7,14 @@ const AboutPage = () => (
         <div className="absolute w-[150%] h-[500%] opacity-60 left-0 top-0 bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 rounded-[40%] animate-spin [animation-duration:15s] delay-100 -z-10"></div>
         <div className="absolute w-[150%] h-[500%] opacity-60 left-0 top-0 bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 rounded-[40%] animate-spin [animation-duration:15s] delay-200 -z-10"></div>
 
-        <h1 className="text-4xl font-bold mb-6 mt-2 z-50">Sobre mí</h1>
+        <h1 className="text-4xl font-bold mb-6 mt-2 z-50">About Me</h1>
 
         <div className="space-y-4 bg-transparent z-50">
           <h2 className="text-2xl font-semibold text-white break-words z-50">
             Kathering Rivera Rodriguez
           </h2>
           <p className="text-lg text-indigo-100 break-words z-50">
-            Desarrolladora Front-End / Diseñadora UX/UI
+            Front-End Developer / UX/UI Designer
           </p>
 
           <div className="flex justify-center gap-4 mt-6 text-lg flex-wrap z-50">
