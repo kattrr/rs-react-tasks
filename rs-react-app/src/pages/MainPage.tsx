@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { SearchBar, CardList, Spinner } from '../components';
 import Pagination from '../components/Pagination';
 import { useSearchParams } from 'react-router-dom';

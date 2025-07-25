@@ -3,6 +3,7 @@ import { Routes, Route, useSearchParams, useNavigate } from 'react-router-dom';
 import MainPage from './pages/MainPage';
 import AboutPage from './pages/AboutPage';
 import NotFoundPage from './pages/NotFoundPage';
+import Navbar from './components/Navbar';
 import {
   fetchPokemonByName,
   fetchPokemonList,
@@ -79,26 +80,29 @@ const App = () => {
   };
 
   return (
-    <Routes>
-      <Route
-        path="/"
-        element={
-          <MainPage
-            pokemons={pokemons}
-            loading={loading}
-            error={error}
-            searchTerm={searchTerm}
-            currentPage={currentPage}
-            totalPages={TOTAL_PAGES}
-            onSearch={handleSearch}
-            onPageChange={handlePageChange}
-            onThrowError={() => setShouldThrow(true)}
-          />
-        }
-      />
-      <Route path="/about" element={<AboutPage />} />
-      <Route path="*" element={<NotFoundPage />} />
-    </Routes>
+    <>
+      <Navbar />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <MainPage
+              pokemons={pokemons}
+              loading={loading}
+              error={error}
+              searchTerm={searchTerm}
+              currentPage={currentPage}
+              totalPages={TOTAL_PAGES}
+              onSearch={handleSearch}
+              onPageChange={handlePageChange}
+              onThrowError={() => setShouldThrow(true)}
+            />
+          }
+        />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </>
   );
 };
 
