@@ -9,8 +9,9 @@ export default defineConfig({
     globals: true,
     setupFiles: './src/test/setup.ts',
     coverage: {
+      enabled: true,
       provider: 'v8',
-      reporter: ['text', 'json', 'html'],
+      reporter: ['text', 'html'],
       thresholds: {
         statements: 80,
         branches: 50,
