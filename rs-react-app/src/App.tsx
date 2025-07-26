@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Routes, Route, useSearchParams, useNavigate } from 'react-router-dom';
+import { useState, useEffect, useCallback } from 'react';
+import { Routes, Route, useSearchParams } from 'react-router-dom';
 import MainPage from './pages/MainPage';
 import AboutPage from './pages/AboutPage';
 import NotFoundPage from './pages/NotFoundPage';
@@ -10,7 +10,6 @@ import {
   type PokemonDetails,
 } from './api/pokeapi';
 import { useLocalStorage } from './hooks/useLocalStorage';
-
 
 const PAGE_SIZE = 12;
 const TOTAL_POKEMONS = 1302;
@@ -23,22 +22,9 @@ const App = () => {
   const [searchTerm] = useLocalStorage('searchTerm', '');
   const [shouldThrow, setShouldThrow] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
-  const navigate = useNavigate();
 
   const pageParam = parseInt(searchParams.get('page') || '1', 10);
   const currentPage = isNaN(pageParam) || pageParam < 1 ? 1 : pageParam;
-
-  useEffect(() => {
-    if (shouldThrow) throw new Error('Prueba de error');
-  }, [shouldThrow]);
-
-  useEffect(() => {
-    if (searchTerm.trim() !== '') {
-      handleSearch(searchTerm);
-    } else {
-      loadDefaultList(currentPage);
-    }
-  }, [currentPage]);
 
   const loadDefaultList = async (page: number) => {
     setLoading(true);
@@ -57,23 +43,38 @@ const App = () => {
     }
   };
 
-  const handleSearch = async (term: string) => {
-    if (!term) {
+  const handleSearch = useCallback(
+    async (term: string) => {
+      if (!term) {
+        loadDefaultList(currentPage);
+        return;
+      }
+      setLoading(true);
+      setError(null);
+      setPokemons([]);
+      try {
+        const pokemon = await fetchPokemonByName(term.toLowerCase());
+        setPokemons([pokemon]);
+        setLoading(false);
+      } catch {
+        setError(`No Pokémon found named "${term}"`);
+        setLoading(false);
+      }
+    },
+    [currentPage]
+  );
+
+  useEffect(() => {
+    if (shouldThrow) throw new Error('error Test');
+  }, [shouldThrow]);
+
+  useEffect(() => {
+    if (searchTerm.trim() !== '') {
+      handleSearch(searchTerm);
+    } else {
       loadDefaultList(currentPage);
-      return;
     }
-    setLoading(true);
-    setError(null);
-    setPokemons([]);
-    try {
-      const pokemon = await fetchPokemonByName(term.toLowerCase());
-      setPokemons([pokemon]);
-      setLoading(false);
-    } catch {
-      setError(`No Pokémon found named "${term}"`);
-      setLoading(false);
-    }
-  };
+  }, [currentPage, searchTerm, handleSearch]);
 
   const handlePageChange = (page: number) => {
     setSearchParams({ page: String(page) });

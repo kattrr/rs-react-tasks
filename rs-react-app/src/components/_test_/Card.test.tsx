@@ -14,8 +14,8 @@ describe('Card component', () => {
 
   it('renders name, type, and image correctly', () => {
     render(<Card pokemon={mockPokemon} />);
-    expect(screen.getByText(/name: pikachu/i)).toBeInTheDocument();
-    expect(screen.getByText(/type: electric/i)).toBeInTheDocument();
+    expect(screen.getByText('pikachu')).toBeInTheDocument();
+    expect(screen.getByText('electric')).toBeInTheDocument();
     expect(screen.getByAltText(/pikachu/i)).toHaveAttribute(
       'src',
       mockPokemon.sprites.front_default
@@ -30,8 +30,8 @@ describe('Card component', () => {
     } as unknown as PokemonDetails;
 
     render(<Card pokemon={incompletePokemon} />);
-    expect(screen.getByText(/name: unknown/i)).toBeInTheDocument();
-    expect(screen.getByText(/type:/i)).toBeInTheDocument(); // vacío pero no rompe
+    expect(screen.getByText('unknown')).toBeInTheDocument();
+    expect(screen.getByText(/type:/i)).toBeInTheDocument(); // empty but doesn't break
   });
 
   it('uses the name as alt text for image (accessibility)', () => {

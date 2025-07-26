@@ -50,7 +50,10 @@ describe('main.tsx', () => {
     const renderedTree = renderMock.mock.calls[0][0];
     expect(renderedTree.type).toBe(React.StrictMode);
 
-    const errorBoundary = renderedTree.props.children;
+    const browserRouter = renderedTree.props.children;
+    expect(browserRouter.type.name).toBe('BrowserRouter');
+
+    const errorBoundary = browserRouter.props.children;
     expect(errorBoundary.type.name).toBe('ErrorBoundary');
 
     const appInside = errorBoundary.props.children;

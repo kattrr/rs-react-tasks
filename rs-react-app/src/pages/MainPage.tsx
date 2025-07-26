@@ -2,9 +2,10 @@ import { SearchBar, CardList, Spinner } from '../components';
 import Pagination from '../components/Pagination';
 import { useSearchParams } from 'react-router-dom';
 import PokemonDetailsPanel from '../components/PokemonDetailsPanel';
+import type { PokemonDetails } from '../api/pokeapi';
 
 interface MainPageProps {
-  pokemons: any[];
+  pokemons: PokemonDetails[];
   loading: boolean;
   error: string | null;
   searchTerm: string;
@@ -42,7 +43,7 @@ const MainPage = ({
 
   return (
     <div className="flex gap-6 min-w-screen px-[20%] items-center">
-      <div className={`flex-1 ${detailsName ? 'w-2/3' : 'w-full'}`}> 
+      <div className={`flex-1 ${detailsName ? 'w-2/3' : 'w-full'}`}>
         <h1 className="text-4xl font-bold mb-4 leading-tight">
           🔍 Pokémon Search
         </h1>
@@ -69,10 +70,13 @@ const MainPage = ({
         </button>
       </div>
       {detailsName && (
-        <PokemonDetailsPanel detailsName={detailsName} onClose={handleCloseDetails} />
+        <PokemonDetailsPanel
+          detailsName={detailsName}
+          onClose={handleCloseDetails}
+        />
       )}
     </div>
   );
 };
 
-export default MainPage; 
+export default MainPage;

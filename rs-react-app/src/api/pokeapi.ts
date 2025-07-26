@@ -40,6 +40,7 @@ export async function fetchPokemonByName(
     throw new Error(`Pokémon "${name}" not found (${response.status})`);
   }
 
-  const data = await response.json(); console.log(data);
+  const data = await response.json();
+  console.log(data);
   return data;
 }

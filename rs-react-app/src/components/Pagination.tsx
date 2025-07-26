@@ -4,7 +4,11 @@ interface PaginationProps {
   onPageChange: (page: number) => void;
 }
 
-const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) => {
+const Pagination = ({
+  currentPage,
+  totalPages,
+  onPageChange,
+}: PaginationProps) => {
   if (totalPages <= 1) return null;
 
   const getPageNumbers = () => {
@@ -25,13 +29,16 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
   const pageNumbers = getPageNumbers();
 
   return (
-    <div className="flex justify-center items-center gap-2 mt-6">
+    <div
+      role="navigation"
+      className="flex justify-center items-center gap-2 mt-6"
+    >
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
         className="px-3 py-1 rounded bg-gray-200 disabled:bg-gray-100 text-gray-700 font-medium"
       >
-        Preview
+        Previous
       </button>
       {pageNumbers[0] > 1 && (
         <>
@@ -59,7 +66,9 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
       ))}
       {pageNumbers[pageNumbers.length - 1] < totalPages && (
         <>
-          {pageNumbers[pageNumbers.length - 1] < totalPages - 1 && <span className="px-2">...</span>}
+          {pageNumbers[pageNumbers.length - 1] < totalPages - 1 && (
+            <span className="px-2">...</span>
+          )}
           <button
             onClick={() => onPageChange(totalPages)}
             className={`px-3 py-1 rounded font-medium ${totalPages === currentPage ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-blue-100'}`}
@@ -79,4 +88,4 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
   );
 };
 
-export default Pagination; 
+export default Pagination;
