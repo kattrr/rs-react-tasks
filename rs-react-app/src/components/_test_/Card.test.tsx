@@ -10,6 +10,10 @@ describe('Card component', () => {
       front_default: 'https://example.com/pikachu.png',
     },
     types: [{ type: { name: 'electric' } }],
+    height: 4,
+    abilities: [{ ability: { name: 'static' } }],
+    forms: [{ name: 'pikachu' }],
+    moves: [{ move: { name: 'thunder-shock' } }],
   };
 
   it('renders name, type, and image correctly', () => {
@@ -27,6 +31,10 @@ describe('Card component', () => {
       name: 'unknown',
       sprites: { front_default: '' },
       types: [],
+      height: 0,
+      abilities: [],
+      forms: [],
+      moves: [],
     } as unknown as PokemonDetails;
 
     render(<Card pokemon={incompletePokemon} />);
