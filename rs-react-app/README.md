@@ -1,69 +1,77 @@
-# React + TypeScript + Vite
+# Pokémon Search App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple React + TypeScript application to search and display Pokémon information using the [PokéAPI](https://pokeapi.co/). Built with Vite for fast development and modern tooling.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Search Pokémon by name**: Enter a Pokémon name to fetch and display its details (name, type, image).
+- **Default Pokémon list**: Shows a default set of Pokémon on first load.
+- **Persistent search**: Remembers your last search using localStorage.
+- **Loading indicator**: Displays a spinner while fetching data.
+- **Error handling**: User-friendly error messages and an error boundary for unexpected issues.
+- **Component-based architecture**: Clean separation of UI and logic.
+- **Unit tests**: Includes tests for main components and API logic using Vitest and Testing Library.
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Prerequisites
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- Node.js (v16 or higher recommended)
+- npm or yarn
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+### Installation
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+1. Clone the repository:
+   ```bash
+   git clone <repo-url>
+   cd rs-react-app
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+### Running the App
+
+Start the development server:
+
+```bash
+npm run dev
+# or
+yarn dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Open [http://localhost:5173](http://localhost:5173) to view the app in your browser.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x';
-import reactDom from 'eslint-plugin-react-dom';
+### Running Tests
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+To run unit tests:
+
+```bash
+npm run test
+# or
+yarn test
 ```
+
+## Project Structure
+
+- `src/` - Main source code
+  - `components/` - React components (Card, CardList, SearchBar, Spinner, ErrorBoundary)
+  - `api/` - API logic for fetching Pokémon data
+  - `_test_/` - Unit tests
+- `public/` - Static assets
+
+## Technologies Used
+
+- [React](https://react.dev/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Vite](https://vitejs.dev/)
+- [PokéAPI](https://pokeapi.co/)
+- [Vitest](https://vitest.dev/) & [Testing Library](https://testing-library.com/)
+- [Tailwind CSS](https://tailwindcss.com/) (for styling)
+
+## License
+
+This project is licensed under the MIT License.
