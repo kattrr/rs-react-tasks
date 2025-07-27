@@ -49,6 +49,10 @@ describe('pokeapi.ts', () => {
           front_default: 'https://example.com/pikachu.png',
         },
         types: [{ type: { name: 'electric' } }],
+        height: 4,
+        abilities: [{ ability: { name: 'static' } }],
+        forms: [{ name: 'pikachu' }],
+        moves: [{ move: { name: 'thunder-shock' } }],
       };
 
       mockFetch.mockResolvedValueOnce({

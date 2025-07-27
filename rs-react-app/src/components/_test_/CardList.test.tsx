@@ -12,8 +12,24 @@ vi.mock('../Card', () => ({
 describe('CardList component', () => {
   it('renders correct number of items when data is provided', () => {
     const mockData: PokemonDetails[] = [
-      { name: 'bulbasaur', sprites: { front_default: '' }, types: [] },
-      { name: 'charmander', sprites: { front_default: '' }, types: [] },
+      {
+        name: 'bulbasaur',
+        sprites: { front_default: '' },
+        types: [],
+        height: 7,
+        abilities: [{ ability: { name: 'overgrow' } }],
+        forms: [{ name: 'bulbasaur' }],
+        moves: [{ move: { name: 'tackle' } }],
+      },
+      {
+        name: 'charmander',
+        sprites: { front_default: '' },
+        types: [],
+        height: 6,
+        abilities: [{ ability: { name: 'blaze' } }],
+        forms: [{ name: 'charmander' }],
+        moves: [{ move: { name: 'scratch' } }],
+      },
     ];
 
     render(<CardList pokemons={mockData} />);
@@ -31,7 +47,15 @@ describe('CardList component', () => {
 
   it('handles missing or undefined props gracefully', () => {
     const mockData: PokemonDetails[] = [
-      { name: '', sprites: { front_default: '' }, types: [] },
+      {
+        name: '',
+        sprites: { front_default: '' },
+        types: [],
+        height: 0,
+        abilities: [],
+        forms: [],
+        moves: [],
+      },
     ];
 
     render(<CardList pokemons={mockData} />);

@@ -1,23 +1,25 @@
-import { Component } from 'react';
 import Card from './Card';
 import type { PokemonDetails } from '../api/pokeapi';
 
 interface CardListProps {
   pokemons: PokemonDetails[];
+  onCardClick?: (name: string) => void;
 }
 
-class CardList extends Component<CardListProps> {
-  render() {
-    const { pokemons } = this.props;
-
-    return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-        {pokemons.map((pokemon) => (
-          <Card key={pokemon.name} pokemon={pokemon} />
-        ))}
-      </div>
-    );
-  }
-}
+const CardList = ({ pokemons, onCardClick }: CardListProps) => {
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+      {pokemons.map((pokemon) => (
+        <div
+          key={pokemon.name}
+          onClick={onCardClick ? () => onCardClick(pokemon.name) : undefined}
+          className={onCardClick ? 'cursor-pointer' : ''}
+        >
+          <Card pokemon={pokemon} />
+        </div>
+      ))}
+    </div>
+  );
+};
 
 export default CardList;

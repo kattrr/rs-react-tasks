@@ -4,16 +4,15 @@ import ErrorBoundary from '../ErrorBoundary';
 import { describe, beforeEach, vi, afterEach, it, expect } from 'vitest';
 import { Component } from 'react';
 
-// Componente que lanza error para pruebas
 const ProblematicComponent = () => {
-  throw new Error('Este es un error de prueba');
+  throw new Error('This is a test error');
 };
 class BuggyComponent extends Component<{ shouldThrow: boolean }> {
   render() {
     if (this.props.shouldThrow) {
       throw new Error('Crashed!');
     }
-    return <div>Todo bien</div>;
+    return <div>All good</div>;
   }
 }
 describe('ErrorBoundary', () => {
@@ -27,23 +26,23 @@ describe('ErrorBoundary', () => {
     console.error = originalError;
   });
 
-  it('muestra la UI de fallback cuando ocurre un error', () => {
+  it('shows fallback UI when an error occurs', () => {
     render(
       <ErrorBoundary>
         <ProblematicComponent />
       </ErrorBoundary>
     );
 
-    expect(screen.getByText(/Oops! Algo salió mal/i)).toBeInTheDocument();
+    expect(screen.getByText(/Oops! Something went wrong/i)).toBeInTheDocument();
     expect(
-      screen.getByText(/Por favor recarga la aplicación/i)
+      screen.getByText(/Please reload the application/i)
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: /Volver a intentar/i })
+      screen.getByRole('button', { name: /Try again/i })
     ).toBeInTheDocument();
   });
 
-  it('registra el error en la consola', () => {
+  it('logs the error to console', () => {
     const spy = vi.spyOn(console, 'error');
 
     render(
@@ -56,7 +55,7 @@ describe('ErrorBoundary', () => {
     spy.mockRestore();
   });
 
-  it('restablece el estado al hacer clic en "Volver a intentar"', () => {
+  it('resets state when clicking "Try again"', () => {
     // Wrapper to control ErrorBoundary key for remounting
     function Wrapper({
       shouldThrow,
@@ -78,18 +77,14 @@ describe('ErrorBoundary', () => {
       <Wrapper shouldThrow={shouldThrow} boundaryKey={boundaryKey} />
     );
 
-    // Asegura que el fallback se muestre
-    expect(screen.getByText(/Oops! Algo salió mal/i)).toBeInTheDocument();
+    expect(screen.getByText(/Oops! Something went wrong/i)).toBeInTheDocument();
 
-    // Hace clic en el botón de volver a intentar
-    fireEvent.click(screen.getByText(/Volver a intentar/i));
+    fireEvent.click(screen.getByRole('button', { name: /Try again/i }));
 
-    // Cambia props para que BuggyComponent ya no lance error y fuerza remount
     shouldThrow = false;
     boundaryKey += 1;
     rerender(<Wrapper shouldThrow={shouldThrow} boundaryKey={boundaryKey} />);
 
-    // Ahora debería mostrarse el texto original
-    expect(screen.getByText('Todo bien')).toBeInTheDocument();
+    expect(screen.getByText('All good')).toBeInTheDocument();
   });
 });
