@@ -4,7 +4,6 @@ import ErrorBoundary from '../ErrorBoundary';
 import { describe, beforeEach, vi, afterEach, it, expect } from 'vitest';
 import { Component } from 'react';
 
-// Component that throws error for testing
 const ProblematicComponent = () => {
   throw new Error('This is a test error');
 };
@@ -78,18 +77,14 @@ describe('ErrorBoundary', () => {
       <Wrapper shouldThrow={shouldThrow} boundaryKey={boundaryKey} />
     );
 
-    // Ensure fallback is shown
     expect(screen.getByText(/Oops! Something went wrong/i)).toBeInTheDocument();
 
-    // Click the try again button
     fireEvent.click(screen.getByRole('button', { name: /Try again/i }));
 
-    // Change props so BuggyComponent no longer throws error and force remount
     shouldThrow = false;
     boundaryKey += 1;
     rerender(<Wrapper shouldThrow={shouldThrow} boundaryKey={boundaryKey} />);
 
-    // Now should show the original text
     expect(screen.getByText('All good')).toBeInTheDocument();
   });
 });

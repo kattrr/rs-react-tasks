@@ -37,7 +37,7 @@ describe('PokemonDetailsPanel', () => {
       { move: { name: 'thunder-wave' } },
       { move: { name: 'light-screen' } },
       { move: { name: 'thunder' } },
-      { move: { name: 'extra-move' } }, // 11th move to test truncation
+      { move: { name: 'extra-move' } },
     ],
   };
 
@@ -56,7 +56,7 @@ describe('PokemonDetailsPanel', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    // Default mock for fetchPokemonByName
+
     vi.mocked(api.fetchPokemonByName).mockResolvedValue(mockPokemon);
   });
 

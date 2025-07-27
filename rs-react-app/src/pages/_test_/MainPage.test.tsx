@@ -107,7 +107,7 @@ describe('MainPage', () => {
     error: null,
     searchTerm: '',
     currentPage: 1,
-    totalPages: 10, // Required prop for MainPage component
+    totalPages: 10,
     onSearch: vi.fn(),
     onPageChange: vi.fn(),
     onThrowError: vi.fn(),
@@ -123,7 +123,6 @@ describe('MainPage', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    // Default mock for useSearchParams
     const mockSetSearchParams = vi.fn();
     vi.mocked(useSearchParams).mockReturnValue([
       new URLSearchParams(''),
@@ -131,7 +130,6 @@ describe('MainPage', () => {
     ]);
   });
 
-  // Tests for specific lines that need coverage
   it('renders the main page title', () => {
     renderMainPage();
     expect(screen.getByText('🔍 Pokémon Search')).toBeInTheDocument();
@@ -151,7 +149,6 @@ describe('MainPage', () => {
       fireEvent.click(card);
     });
 
-    // Verify that setSearchParams was called with the correct parameters
     expect(mockSetSearchParams).toHaveBeenCalledWith({
       page: '1',
       details: 'pikachu',
@@ -159,7 +156,6 @@ describe('MainPage', () => {
   });
 
   it('shows details panel when detailsName is in URL', () => {
-    // Mock useSearchParams to return a detailsName
     const mockSetSearchParams = vi.fn();
     vi.mocked(useSearchParams).mockReturnValue([
       new URLSearchParams('?details=pikachu'),
@@ -173,7 +169,6 @@ describe('MainPage', () => {
   });
 
   it('handles closing details panel', () => {
-    // Mock useSearchParams to return a detailsName to simulate panel being open
     const mockSetSearchParams = vi.fn();
     vi.mocked(useSearchParams).mockReturnValue([
       new URLSearchParams('?details=pikachu'),
@@ -182,19 +177,15 @@ describe('MainPage', () => {
 
     renderMainPage();
 
-    // Panel should be open initially
     expect(screen.getByTestId('details-panel')).toBeInTheDocument();
 
-    // Then close it
     const closeButton = screen.getByTestId('close-details');
     fireEvent.click(closeButton);
 
-    // Verify that setSearchParams was called to remove details from URL
     expect(mockSetSearchParams).toHaveBeenCalledWith({ page: '1' });
   });
 
   it('does not show details panel when detailsName is not in URL', () => {
-    // Mock useSearchParams to return no detailsName
     const mockSetSearchParams = vi.fn();
     vi.mocked(useSearchParams).mockReturnValue([
       new URLSearchParams(''),

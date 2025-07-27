@@ -5,7 +5,6 @@ import App from '../App';
 import type { PokemonDetails } from '../api/pokeapi';
 import * as api from '../api/pokeapi';
 
-// Limpia el localStorage y mocks antes de cada test
 beforeEach(() => {
   localStorage.clear();
   vi.restoreAllMocks();

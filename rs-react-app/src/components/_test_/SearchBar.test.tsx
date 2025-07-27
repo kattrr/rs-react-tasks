@@ -44,13 +44,11 @@ describe('SearchBar component', () => {
     expect(onSearchMock).toHaveBeenCalledWith('charmander');
   });
 
-  // Tests for specific lines that need coverage
   test('clears localStorage and calls onSearch with empty string when input is only whitespace', () => {
     const onSearchMock = vi.fn();
     render(<SearchBar onSearch={onSearchMock} />);
     const input = screen.getByPlaceholderText(/Search Pokémon/i);
 
-    // Test line 15-17: when value.trim() === ''
     fireEvent.change(input, { target: { value: '   ' } });
 
     expect(localStorage.getItem('searchTerm')).toBe('');
@@ -63,7 +61,6 @@ describe('SearchBar component', () => {
     const input = screen.getByPlaceholderText(/Search Pokémon/i);
     const button = screen.getByRole('button', { name: /Search/i });
 
-    // Test line 23-26: when trimmed === '' in handleSearch
     fireEvent.change(input, { target: { value: '   ' } });
     fireEvent.click(button);
 

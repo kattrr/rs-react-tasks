@@ -37,7 +37,6 @@ describe('main.tsx', () => {
   });
 
   it('should render App inside StrictMode and ErrorBoundary', async () => {
-    // Importamos el archivo luego de que el root existe
     await import('../main.tsx');
 
     const mockCreateRoot = ReactDOMClient.createRoot as Mock;
@@ -46,7 +45,6 @@ describe('main.tsx', () => {
     expect(mockCreateRoot).toHaveBeenCalledWith(root);
     expect(renderMock).toHaveBeenCalled();
 
-    // Obtenemos el árbol JSX renderizado
     const renderedTree = renderMock.mock.calls[0][0];
     expect(renderedTree.type).toBe(React.StrictMode);
 

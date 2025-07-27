@@ -20,19 +20,16 @@ describe('AboutPage', () => {
   it('displays contact links', () => {
     renderAboutPage();
 
-    // Check email link
     const emailLink = screen.getByText('Email');
     expect(emailLink).toBeInTheDocument();
     expect(emailLink).toHaveAttribute('href', 'mailto:katheriverar@gmail.com');
 
-    // Check GitHub link
     const githubLink = screen.getByText('GitHub');
     expect(githubLink).toBeInTheDocument();
     expect(githubLink).toHaveAttribute('href', 'https://github.com/kattrr');
     expect(githubLink).toHaveAttribute('target', '_blank');
     expect(githubLink).toHaveAttribute('rel', 'noopener noreferrer');
 
-    // Check LinkedIn link
     const linkedinLink = screen.getByText('LinkedIn');
     expect(linkedinLink).toBeInTheDocument();
     expect(linkedinLink).toHaveAttribute(
@@ -42,7 +39,6 @@ describe('AboutPage', () => {
     expect(linkedinLink).toHaveAttribute('target', '_blank');
     expect(linkedinLink).toHaveAttribute('rel', 'noopener noreferrer');
 
-    // Check Behance link
     const behanceLink = screen.getByText('Behance');
     expect(behanceLink).toBeInTheDocument();
     expect(behanceLink).toHaveAttribute(
