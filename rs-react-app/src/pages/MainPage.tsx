@@ -41,8 +41,18 @@ const MainPage = ({
     setSearchParams({ page: String(currentPage) });
   };
 
+  const handleContainerClick = (e: React.MouseEvent) => {
+    // Only close if clicking on the container itself, not on child elements
+    if (e.target === e.currentTarget) {
+      handleCloseDetails();
+    }
+  };
+
   return (
-    <div className="flex gap-6 min-w-screen px-[20%] items-center">
+    <div
+      className="flex gap-6 min-w-screen px-[20%] items-center"
+      onClick={detailsName ? handleContainerClick : undefined}
+    >
       <div className={`flex-1 ${detailsName ? 'w-2/3' : 'w-full'}`}>
         <h1 className="text-4xl font-bold mb-4 leading-tight">
           🔍 Pokémon Search

@@ -33,6 +33,7 @@ const PokemonDetailsPanel = ({
     <div
       className="w-1/3 bg-white rounded-2xl shadow-lg p-6 flex flex-col relative min-h-[725px]"
       data-testid="details-panel"
+      onClick={(e) => e.stopPropagation()}
     >
       <button
         onClick={onClose}
