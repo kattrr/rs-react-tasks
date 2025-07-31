@@ -4,6 +4,8 @@ import MainPage from './pages/MainPage';
 import AboutPage from './pages/AboutPage';
 import NotFoundPage from './pages/NotFoundPage';
 import Navbar from './components/Navbar';
+import SelectedItemsFlyout from './components/SelectedItemsFlyout';
+import { ThemeProvider, useTheme } from './contexts/ThemeContext';
 import {
   fetchPokemonByName,
   fetchPokemonList,
@@ -15,13 +17,14 @@ const PAGE_SIZE = 12;
 const TOTAL_POKEMONS = 1302;
 const TOTAL_PAGES = Math.ceil(TOTAL_POKEMONS / PAGE_SIZE);
 
-const App = () => {
+const AppContent = () => {
   const [pokemons, setPokemons] = useState<PokemonDetails[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm] = useLocalStorage('searchTerm', '');
   const [shouldThrow, setShouldThrow] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
+  const { theme } = useTheme();
 
   const pageParam = parseInt(searchParams.get('page') || '1', 10);
   const currentPage = isNaN(pageParam) || pageParam < 1 ? 1 : pageParam;
@@ -81,7 +84,7 @@ const App = () => {
   };
 
   return (
-    <>
+    <div className={`min-h-screen bg-gray-50 ${theme === 'dark' ? 'dark' : ''}`}>
       <Navbar />
       <Routes>
         <Route
@@ -103,7 +106,16 @@ const App = () => {
         <Route path="/about" element={<AboutPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
-    </>
+      <SelectedItemsFlyout />
+    </div>
+  );
+};
+
+const App = () => {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
   );
 };
 
