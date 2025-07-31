@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom';
+import ThemeSelector from './ThemeSelector';
 
 const Navbar = () => {
   return (
@@ -22,7 +23,10 @@ const Navbar = () => {
           About
         </NavLink>
       </div>
-      <span className="font-mono text-sm text-indigo-200">Pokédex SPA</span>
+      <div className="flex items-center gap-4">
+        <ThemeSelector />
+        <span className="font-mono text-sm text-indigo-200">Pokédex SPA</span>
+      </div>
     </nav>
   );
 };
