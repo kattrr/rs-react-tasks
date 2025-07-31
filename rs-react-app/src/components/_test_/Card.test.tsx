@@ -1,7 +1,15 @@
-import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
 import Card from '../Card';
 import type { PokemonDetails } from '../../api/pokeapi';
+
+// Mock the store
+vi.mock('../../store/selectedItemsStore', () => ({
+  useSelectedItemsStore: vi.fn()
+}));
+
+import { useSelectedItemsStore } from '../../store/selectedItemsStore';
+const mockUseSelectedItemsStore = useSelectedItemsStore as vi.MockedFunction<typeof useSelectedItemsStore>;
 
 describe('Card component', () => {
   const mockPokemon: PokemonDetails = {
@@ -15,6 +23,15 @@ describe('Card component', () => {
     forms: [{ name: 'pikachu' }],
     moves: [{ move: { name: 'thunder-shock' } }],
   };
+
+  beforeEach(() => {
+    // Default mock implementation
+    mockUseSelectedItemsStore.mockReturnValue({
+      addItem: vi.fn(),
+      removeItem: vi.fn(),
+      isSelected: () => false
+    });
+  });
 
   it('renders name, type, and image correctly', () => {
     render(<Card pokemon={mockPokemon} />);
@@ -46,5 +63,54 @@ describe('Card component', () => {
     render(<Card pokemon={mockPokemon} />);
     const image = screen.getByRole('img') as HTMLImageElement;
     expect(image.alt).toBe('pikachu');
+  });
+
+  it('renders checkbox for item selection', () => {
+    render(<Card pokemon={mockPokemon} />);
+    const checkbox = screen.getByRole('checkbox');
+    expect(checkbox).toBeInTheDocument();
+    expect(checkbox).not.toBeChecked();
+  });
+
+  it('shows checkbox as checked when item is selected', () => {
+    mockUseSelectedItemsStore.mockReturnValue({
+      addItem: vi.fn(),
+      removeItem: vi.fn(),
+      isSelected: () => true
+    });
+
+    render(<Card pokemon={mockPokemon} />);
+    const checkbox = screen.getByRole('checkbox');
+    expect(checkbox).toBeChecked();
+  });
+
+  it('calls addItem when checkbox is checked', () => {
+    const mockAddItem = vi.fn();
+    mockUseSelectedItemsStore.mockReturnValue({
+      addItem: mockAddItem,
+      removeItem: vi.fn(),
+      isSelected: () => false
+    });
+
+    render(<Card pokemon={mockPokemon} />);
+    const checkbox = screen.getByRole('checkbox');
+    fireEvent.click(checkbox);
+
+    expect(mockAddItem).toHaveBeenCalledWith(mockPokemon);
+  });
+
+  it('calls removeItem when checkbox is unchecked', () => {
+    const mockRemoveItem = vi.fn();
+    mockUseSelectedItemsStore.mockReturnValue({
+      addItem: vi.fn(),
+      removeItem: mockRemoveItem,
+      isSelected: () => true
+    });
+
+    render(<Card pokemon={mockPokemon} />);
+    const checkbox = screen.getByRole('checkbox');
+    fireEvent.click(checkbox);
+
+    expect(mockRemoveItem).toHaveBeenCalledWith('pikachu');
   });
 });
