@@ -5,7 +5,7 @@ import AboutPage from './pages/AboutPage';
 import NotFoundPage from './pages/NotFoundPage';
 import Navbar from './components/Navbar';
 import SelectedItemsFlyout from './components/SelectedItemsFlyout';
-import { useTheme } from './contexts/useTheme';
+import { useTheme } from './hooks/useTheme';
 import { PokemonService } from './services/PokemonService';
 import { usePokemonData } from './hooks/usePokemonData';
 import { useSearchTerm } from './hooks/useSearchTerm';

@@ -22,22 +22,19 @@ export const usePokemonData = ({ service }: UsePokemonDataConfig) => {
     error: null,
   });
 
-  const loadDefaultList = useCallback(
-    async (page: number) => {
-      setState((prev) => ({ ...prev, loading: true, error: null }));
-      try {
-        const pokemons = await serviceRef.current.loadDefaultList(page);
-        setState({ pokemons, loading: false, error: null });
-      } catch {
-        setState((prev) => ({
-          ...prev,
-          loading: false,
-          error: 'Error loading default Pokémon',
-        }));
-      }
-    },
-    []
-  );
+  const loadDefaultList = useCallback(async (page: number) => {
+    setState((prev) => ({ ...prev, loading: true, error: null }));
+    try {
+      const pokemons = await serviceRef.current.loadDefaultList(page);
+      setState({ pokemons, loading: false, error: null });
+    } catch {
+      setState((prev) => ({
+        ...prev,
+        loading: false,
+        error: 'Error loading default Pokémon',
+      }));
+    }
+  }, []);
 
   const searchByName = useCallback(
     async (term: string) => {

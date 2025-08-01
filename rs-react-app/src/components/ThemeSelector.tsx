@@ -1,4 +1,4 @@
-import { useTheme } from '../contexts/useTheme';
+import { useTheme } from '../hooks/useTheme';
 import { useEffect } from 'react';
 
 const ThemeSelector = () => {

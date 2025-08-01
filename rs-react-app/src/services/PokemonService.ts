@@ -10,14 +10,14 @@ export interface PokemonServiceConfig {
 }
 
 class RateLimiter {
-  private queue: Array<() => Promise<any>> = [];
+  private queue: Array<() => Promise<unknown>> = [];
   private processing = false;
   private delay = 100;
   async execute<T>(fn: () => Promise<T>): Promise<T> {
     return new Promise((resolve, reject) => {
       this.queue.push(async () => {
         try {
-          await new Promise(resolve => setTimeout(resolve, this.delay));
+          await new Promise((resolve) => setTimeout(resolve, this.delay));
           const result = await fn();
           resolve(result);
         } catch (error) {
@@ -54,7 +54,9 @@ export class PokemonService {
 
   async loadDefaultList(page: number): Promise<PokemonDetails[]> {
     const offset = (page - 1) * this.config.pageSize;
-    const list = await rateLimiter.execute(() => fetchPokemonList(offset, this.config.pageSize));
+    const list = await rateLimiter.execute(() =>
+      fetchPokemonList(offset, this.config.pageSize)
+    );
     const detailed = await Promise.all(
       list.map((p) => rateLimiter.execute(() => fetchPokemonByName(p.name)))
     );
@@ -65,7 +67,9 @@ export class PokemonService {
     if (!name.trim()) {
       return [];
     }
-    const pokemon = await rateLimiter.execute(() => fetchPokemonByName(name.toLowerCase()));
+    const pokemon = await rateLimiter.execute(() =>
+      fetchPokemonByName(name.toLowerCase())
+    );
     return [pokemon];
   }
 
