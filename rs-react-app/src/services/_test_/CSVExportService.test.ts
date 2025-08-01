@@ -35,8 +35,8 @@ describe('CSVExportService', () => {
       options: {},
       size: 0,
       type: '',
-    } as Blob;
-    global.Blob = vi.fn().mockImplementation((content, options) => {
+    } as unknown as Blob;
+    globalThis.Blob = vi.fn().mockImplementation((content, options) => {
       mockBlob.content = content;
       mockBlob.options = options;
       return mockBlob;
@@ -58,7 +58,7 @@ describe('CSVExportService', () => {
       setAttribute: vi.fn(),
       style: { visibility: 'hidden' },
       click: vi.fn(),
-    } as HTMLElement;
+    } as unknown as HTMLElement;
     vi.spyOn(document, 'createElement').mockImplementation((tagName) => {
       if (tagName === 'a') {
         return mockLink;
@@ -87,7 +87,7 @@ describe('CSVExportService', () => {
     it('should create CSV content with correct headers', () => {
       exportSelectedItems(mockItems, 'test.csv');
 
-      expect(global.Blob).toHaveBeenCalledWith(
+      expect(globalThis.Blob).toHaveBeenCalledWith(
         expect.arrayContaining([
           expect.stringContaining(
             'Name,Description,Details URL,Image URL,Types'
@@ -100,7 +100,7 @@ describe('CSVExportService', () => {
     it('should create CSV content with correct data rows', () => {
       exportSelectedItems(mockItems, 'test.csv');
 
-      const blobCall = (global.Blob as MockedBlob).mock.calls[0];
+      const blobCall = (globalThis.Blob as MockedBlob).mock.calls[0];
       const csvContent = blobCall[0][0];
 
       expect(csvContent).toContain(
@@ -114,7 +114,7 @@ describe('CSVExportService', () => {
     it('should create blob with correct type', () => {
       exportSelectedItems(mockItems, 'test.csv');
 
-      expect(global.Blob).toHaveBeenCalledWith(expect.any(Array), {
+      expect(globalThis.Blob).toHaveBeenCalledWith(expect.any(Array), {
         type: 'text/csv;charset=utf-8;',
       });
     });
@@ -170,7 +170,7 @@ describe('CSVExportService', () => {
 
       exportSelectedItems(itemsWithMultipleTypes, 'test.csv');
 
-      const blobCall = (global.Blob as MockedBlob).mock.calls[0];
+      const blobCall = (globalThis.Blob as MockedBlob).mock.calls[0];
       const csvContent = blobCall[0][0];
 
       expect(csvContent).toContain(
@@ -192,7 +192,7 @@ describe('CSVExportService', () => {
 
       exportSelectedItems(itemsWithSingleType, 'test.csv');
 
-      const blobCall = (global.Blob as MockedBlob).mock.calls[0];
+      const blobCall = (globalThis.Blob as MockedBlob).mock.calls[0];
       const csvContent = blobCall[0][0];
 
       expect(csvContent).toContain(
@@ -214,7 +214,7 @@ describe('CSVExportService', () => {
 
       exportSelectedItems(itemsWithSpecialChars, 'test.csv');
 
-      const blobCall = (global.Blob as MockedBlob).mock.calls[0];
+      const blobCall = (globalThis.Blob as MockedBlob).mock.calls[0];
       const csvContent = blobCall[0][0];
 
       expect(csvContent).toContain(

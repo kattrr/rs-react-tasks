@@ -3,7 +3,7 @@ import { useSelectedItemsStore } from '../selectedItemsStore';
 import type { PokemonDetails } from '../../api/pokeapi';
 
 describe('selectedItemsStore', () => {
-  let store: ReturnType<typeof useSelectedItemsStore>;
+  let store: ReturnType<typeof useSelectedItemsStore.getState>;
 
   beforeEach(() => {
     store = useSelectedItemsStore.getState();

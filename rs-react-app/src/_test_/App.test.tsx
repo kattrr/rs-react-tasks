@@ -31,25 +31,20 @@ describe('App Component', () => {
     moves: [{ move: { name: 'thunder-shock' } }],
   };
 
-  const mockPokemonList = {
-    count: 1302,
-    next: 'https://pokeapi.co/api/v2/pokemon?offset=20&limit=20',
-    previous: null,
-    results: [
-      { name: 'pikachu', url: 'https://pokeapi.co/api/v2/pokemon/25/' },
-      { name: 'bulbasaur', url: 'https://pokeapi.co/api/v2/pokemon/1/' },
-      { name: 'charmander', url: 'https://pokeapi.co/api/v2/pokemon/4/' },
-      { name: 'squirtle', url: 'https://pokeapi.co/api/v2/pokemon/7/' },
-      { name: 'caterpie', url: 'https://pokeapi.co/api/v2/pokemon/10/' },
-      { name: 'weedle', url: 'https://pokeapi.co/api/v2/pokemon/13/' },
-      { name: 'pidgey', url: 'https://pokeapi.co/api/v2/pokemon/16/' },
-      { name: 'rattata', url: 'https://pokeapi.co/api/v2/pokemon/19/' },
-      { name: 'spearow', url: 'https://pokeapi.co/api/v2/pokemon/21/' },
-      { name: 'ekans', url: 'https://pokeapi.co/api/v2/pokemon/23/' },
-      { name: 'sandshrew', url: 'https://pokeapi.co/api/v2/pokemon/27/' },
-      { name: 'nidoran-f', url: 'https://pokeapi.co/api/v2/pokemon/29/' },
-    ],
-  };
+  const mockPokemonList: PokemonListItem[] = [
+    { name: 'pikachu', url: 'https://pokeapi.co/api/v2/pokemon/25/' },
+    { name: 'bulbasaur', url: 'https://pokeapi.co/api/v2/pokemon/1/' },
+    { name: 'charmander', url: 'https://pokeapi.co/api/v2/pokemon/4/' },
+    { name: 'squirtle', url: 'https://pokeapi.co/api/v2/pokemon/7/' },
+    { name: 'caterpie', url: 'https://pokeapi.co/api/v2/pokemon/10/' },
+    { name: 'weedle', url: 'https://pokeapi.co/api/v2/pokemon/13/' },
+    { name: 'pidgey', url: 'https://pokeapi.co/api/v2/pokemon/16/' },
+    { name: 'rattata', url: 'https://pokeapi.co/api/v2/pokemon/19/' },
+    { name: 'spearow', url: 'https://pokeapi.co/api/v2/pokemon/21/' },
+    { name: 'ekans', url: 'https://pokeapi.co/api/v2/pokemon/23/' },
+    { name: 'sandshrew', url: 'https://pokeapi.co/api/v2/pokemon/27/' },
+    { name: 'nidoran-f', url: 'https://pokeapi.co/api/v2/pokemon/29/' },
+  ];
 
   it('renders without crashing', () => {
     render(
