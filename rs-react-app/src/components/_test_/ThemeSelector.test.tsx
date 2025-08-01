@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, beforeEach } from 'vitest';
 import ThemeSelector from '../ThemeSelector';
-import { ThemeProvider } from '../../contexts/ThemeContext';
+import { ThemeProvider } from '../../contexts/ThemeProvider';
 
 describe('ThemeSelector', () => {
   beforeEach(() => {

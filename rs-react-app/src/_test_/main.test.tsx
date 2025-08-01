@@ -10,7 +10,6 @@ import {
 import React from 'react';
 import * as ReactDOMClient from 'react-dom/client';
 
-// Mock de createRoot para interceptar el renderizado
 vi.mock('react-dom/client', async () => {
   const actual =
     await vi.importActual<typeof ReactDOMClient>('react-dom/client');
@@ -55,6 +54,6 @@ describe('main.tsx', () => {
     expect(errorBoundary.type.name).toBe('ErrorBoundary');
 
     const appInside = errorBoundary.props.children;
-    expect(appInside.type.name).toBe('App');
+    expect(appInside.type.name).toBe('ThemeProvider');
   });
 });

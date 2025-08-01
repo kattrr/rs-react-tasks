@@ -2,14 +2,22 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import SelectedItemsFlyout from '../SelectedItemsFlyout';
 
-// Mock the store
 vi.mock('../../store/selectedItemsStore', () => ({
   useSelectedItemsStore: vi.fn(),
 }));
 
+vi.mock('../../services/CSVExportService', () => ({
+  exportSelectedItems: vi.fn(),
+}));
+
 import { useSelectedItemsStore } from '../../store/selectedItemsStore';
+import { exportSelectedItems } from '../../services/CSVExportService';
+
 const mockUseSelectedItemsStore = useSelectedItemsStore as vi.MockedFunction<
   typeof useSelectedItemsStore
+>;
+const mockExportSelectedItems = exportSelectedItems as vi.MockedFunction<
+  typeof exportSelectedItems
 >;
 
 describe('SelectedItemsFlyout component', () => {
@@ -38,12 +46,13 @@ describe('SelectedItemsFlyout component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
-    // Default mock implementation
     mockUseSelectedItemsStore.mockReturnValue({
       selectedItems: [],
       clearAll: mockClearAll,
       getSelectedCount: mockGetSelectedCount,
     });
+
+    mockExportSelectedItems.mockImplementation(() => {});
   });
 
   describe('conditional rendering', () => {
@@ -138,17 +147,6 @@ describe('SelectedItemsFlyout component', () => {
     });
 
     it('should handle download button click without errors', () => {
-      // Mock Blob constructor to prevent errors
-      const mockBlob = vi.fn();
-      global.Blob = mockBlob;
-
-      // Mock URL.createObjectURL
-      const mockCreateObjectURL = vi.fn().mockReturnValue('blob:mock-url');
-      Object.defineProperty(URL, 'createObjectURL', {
-        value: mockCreateObjectURL,
-        writable: true,
-      });
-
       render(<SelectedItemsFlyout />);
 
       const downloadButton = screen.getByText('Download');
@@ -157,6 +155,11 @@ describe('SelectedItemsFlyout component', () => {
       expect(() => {
         fireEvent.click(downloadButton);
       }).not.toThrow();
+
+      expect(mockExportSelectedItems).toHaveBeenCalledWith(
+        mockSelectedItems,
+        '2_items.csv'
+      );
     });
 
     it('should handle items with multiple types correctly', () => {
@@ -177,17 +180,6 @@ describe('SelectedItemsFlyout component', () => {
         getSelectedCount: () => 1,
       });
 
-      // Mock Blob constructor
-      const mockBlob = vi.fn();
-      global.Blob = mockBlob;
-
-      // Mock URL.createObjectURL
-      const mockCreateObjectURL = vi.fn().mockReturnValue('blob:mock-url');
-      Object.defineProperty(URL, 'createObjectURL', {
-        value: mockCreateObjectURL,
-        writable: true,
-      });
-
       render(<SelectedItemsFlyout />);
 
       const downloadButton = screen.getByText('Download');
@@ -196,6 +188,11 @@ describe('SelectedItemsFlyout component', () => {
       expect(() => {
         fireEvent.click(downloadButton);
       }).not.toThrow();
+
+      expect(mockExportSelectedItems).toHaveBeenCalledWith(
+        itemsWithMultipleTypes,
+        '1_items.csv'
+      );
     });
   });
 });

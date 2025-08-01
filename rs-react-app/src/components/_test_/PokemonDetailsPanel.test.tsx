@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import PokemonDetailsPanel from '../PokemonDetailsPanel';
 import * as api from '../../api/pokeapi';
@@ -56,23 +56,31 @@ describe('PokemonDetailsPanel', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-
     vi.mocked(api.fetchPokemonByName).mockResolvedValue(mockPokemon);
   });
 
-  it('shows close button', () => {
-    renderDetailsPanel();
+  it('shows close button', async () => {
+    await act(async () => {
+      renderDetailsPanel();
+    });
+
     const closeButton = screen.getByText('✕');
     expect(closeButton).toBeInTheDocument();
     expect(closeButton).toHaveClass('absolute', 'top-2', 'right-2');
   });
 
-  it('calls onClose when close button is clicked', () => {
+  it('calls onClose when close button is clicked', async () => {
     const onClose = vi.fn();
-    renderDetailsPanel({ onClose });
+
+    await act(async () => {
+      renderDetailsPanel({ onClose });
+    });
 
     const closeButton = screen.getByText('✕');
-    closeButton.click();
+
+    await act(async () => {
+      closeButton.click();
+    });
 
     expect(onClose).toHaveBeenCalled();
   });
@@ -80,7 +88,9 @@ describe('PokemonDetailsPanel', () => {
   it('fetches pokemon details on mount', async () => {
     vi.mocked(api.fetchPokemonByName).mockResolvedValue(mockPokemon);
 
-    renderDetailsPanel();
+    await act(async () => {
+      renderDetailsPanel();
+    });
 
     expect(api.fetchPokemonByName).toHaveBeenCalledWith('pikachu');
   });
@@ -88,7 +98,9 @@ describe('PokemonDetailsPanel', () => {
   it('displays pokemon details when loaded successfully', async () => {
     vi.mocked(api.fetchPokemonByName).mockResolvedValue(mockPokemon);
 
-    renderDetailsPanel();
+    await act(async () => {
+      renderDetailsPanel();
+    });
 
     await waitFor(() => {
       expect(screen.getByText('pikachu')).toBeInTheDocument();
@@ -102,7 +114,9 @@ describe('PokemonDetailsPanel', () => {
   it('shows error message when API call fails', async () => {
     vi.mocked(api.fetchPokemonByName).mockRejectedValue(new Error('API Error'));
 
-    renderDetailsPanel();
+    await act(async () => {
+      renderDetailsPanel();
+    });
 
     await waitFor(() => {
       expect(screen.getByText('Could not load details')).toBeInTheDocument();
