@@ -11,7 +11,7 @@ import { defineConfig } from 'eslint/config';
 
 export default defineConfig([
   {
-    ignores: ['dist', 'coverage', '**/*.config.js'], // ignora archivos que no necesitas
+    ignores: ['dist', 'coverage', '**/*.config.js'],
   },
   {
     files: ['**/*.{js,cjs,mjs,ts,cts,mts,jsx,tsx}'],

@@ -28,7 +28,7 @@ export async function fetchPokemonList(
   }
 
   const data = await response.json();
-  return data.results; // Array de { name, url }
+  return data.results;
 }
 
 export async function fetchPokemonByName(
@@ -41,6 +41,5 @@ export async function fetchPokemonByName(
   }
 
   const data = await response.json();
-  console.log(data);
   return data;
 }
