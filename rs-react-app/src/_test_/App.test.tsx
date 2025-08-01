@@ -10,7 +10,7 @@ import { BrowserRouter } from 'react-router-dom';
 import App from '../App';
 import { ThemeProvider } from '../contexts/ThemeProvider';
 import ErrorBoundary from '../components/ErrorBoundary';
-import type { PokemonDetails } from '../api/pokeapi';
+import type { PokemonDetails, PokemonListItem } from '../api/pokeapi';
 import * as api from '../api/pokeapi';
 
 beforeEach(() => {

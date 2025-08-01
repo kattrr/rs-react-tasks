@@ -2,16 +2,14 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import Card from '../Card';
 import type { PokemonDetails } from '../../api/pokeapi';
+import { useSelectedItemsStore } from '../../store/selectedItemsStore';
 
-// Mock the store
 vi.mock('../../store/selectedItemsStore', () => ({
   useSelectedItemsStore: vi.fn(),
 }));
 
-import { useSelectedItemsStore } from '../../store/selectedItemsStore';
-const mockUseSelectedItemsStore = useSelectedItemsStore as vi.MockedFunction<
-  typeof useSelectedItemsStore
->;
+
+const mockUseSelectedItemsStore = vi.mocked(useSelectedItemsStore);
 
 describe('Card component', () => {
   const mockPokemon: PokemonDetails = {
@@ -27,7 +25,6 @@ describe('Card component', () => {
   };
 
   beforeEach(() => {
-    // Default mock implementation
     mockUseSelectedItemsStore.mockReturnValue({
       addItem: vi.fn(),
       removeItem: vi.fn(),

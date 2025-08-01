@@ -13,12 +13,8 @@ vi.mock('../../services/CSVExportService', () => ({
 import { useSelectedItemsStore } from '../../store/selectedItemsStore';
 import { exportSelectedItems } from '../../services/CSVExportService';
 
-const mockUseSelectedItemsStore = useSelectedItemsStore as vi.MockedFunction<
-  typeof useSelectedItemsStore
->;
-const mockExportSelectedItems = exportSelectedItems as vi.MockedFunction<
-  typeof exportSelectedItems
->;
+const mockUseSelectedItemsStore = vi.mocked(useSelectedItemsStore);
+const mockExportSelectedItems = vi.mocked(exportSelectedItems);
 
 describe('SelectedItemsFlyout component', () => {
   const mockSelectedItems = [
