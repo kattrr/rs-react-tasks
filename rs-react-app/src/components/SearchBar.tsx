@@ -1,30 +1,31 @@
 import type { ChangeEvent, KeyboardEvent } from 'react';
-import { useLocalStorage } from '../hooks/useLocalStorage';
+import { useSearchTerm } from '../hooks/useSearchTerm';
 
 interface SearchBarProps {
   onSearch: (term: string) => void;
 }
 
 const SearchBar = ({ onSearch }: SearchBarProps) => {
-  const [searchTerm, setSearchTerm] = useLocalStorage('searchTerm', '');
+  const { searchTerm, updateSearchTerm, clearSearchTerm } = useSearchTerm();
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    setSearchTerm(value);
     if (value.trim() === '') {
-      setSearchTerm(''); // Limpiar localStorage
-      onSearch(''); // Mostrar lista inicial
+      clearSearchTerm();
+      onSearch('');
+    } else {
+      updateSearchTerm(value);
     }
   };
 
   const handleSearch = () => {
     const trimmed = searchTerm.trim();
     if (trimmed === '') {
-      setSearchTerm(''); // Limpiar localStorage
-      onSearch(''); // Mostrar lista inicial
+      clearSearchTerm();
+      onSearch('');
       return;
     }
-    setSearchTerm(trimmed);
+    updateSearchTerm(trimmed);
     onSearch(trimmed);
   };
 

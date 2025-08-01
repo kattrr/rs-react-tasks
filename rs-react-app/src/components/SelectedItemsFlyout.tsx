@@ -1,4 +1,5 @@
 import { useSelectedItemsStore } from '../store/selectedItemsStore';
+import { exportSelectedItems } from '../services/CSVExportService';
 
 const SelectedItemsFlyout = () => {
   const { selectedItems, clearAll, getSelectedCount } = useSelectedItemsStore();
@@ -6,31 +7,7 @@ const SelectedItemsFlyout = () => {
 
   const handleDownload = () => {
     if (selectedCount === 0) return;
-
-    // Convertir los items seleccionados a formato CSV
-    const csvContent = [
-      ['Name', 'Description', 'Details URL', 'Image URL', 'Types'].join(','),
-      ...selectedItems.map((item) =>
-        [
-          item.name,
-          item.description,
-          item.detailsUrl,
-          item.imageUrl,
-          item.types.join(';'),
-        ].join(',')
-      ),
-    ].join('\n');
-
-    // Crear y descargar el archivo CSV
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    const url = URL.createObjectURL(blob);
-    link.setAttribute('href', url);
-    link.setAttribute('download', `${selectedCount}_items.csv`);
-    link.style.visibility = 'hidden';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    exportSelectedItems(selectedItems, `${selectedCount}_items.csv`);
   };
 
   if (selectedCount === 0) return null;

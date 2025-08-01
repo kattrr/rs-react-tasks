@@ -42,7 +42,6 @@ const MainPage = ({
   };
 
   const handleContainerClick = (e: React.MouseEvent) => {
-    // Only close if clicking on the container itself, not on child elements
     if (e.target === e.currentTarget) {
       handleCloseDetails();
     }
