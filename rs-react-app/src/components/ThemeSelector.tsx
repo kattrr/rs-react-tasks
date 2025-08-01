@@ -1,4 +1,4 @@
-import { useTheme } from '../contexts/ThemeContext';
+import { useTheme } from '../contexts/useTheme';
 import { useEffect } from 'react';
 
 const ThemeSelector = () => {
@@ -37,4 +37,4 @@ const ThemeSelector = () => {
   );
 };
 
-export default ThemeSelector; 
+export default ThemeSelector;

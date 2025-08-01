@@ -10,13 +10,15 @@ const SelectedItemsFlyout = () => {
     // Convertir los items seleccionados a formato CSV
     const csvContent = [
       ['Name', 'Description', 'Details URL', 'Image URL', 'Types'].join(','),
-      ...selectedItems.map(item => [
-        item.name,
-        item.description,
-        item.detailsUrl,
-        item.imageUrl,
-        item.types.join(';')
-      ].join(','))
+      ...selectedItems.map((item) =>
+        [
+          item.name,
+          item.description,
+          item.detailsUrl,
+          item.imageUrl,
+          item.types.join(';'),
+        ].join(',')
+      ),
     ].join('\n');
 
     // Crear y descargar el archivo CSV
@@ -38,7 +40,8 @@ const SelectedItemsFlyout = () => {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <span className="text-lg font-semibold">
-            {selectedCount} {selectedCount === 1 ? 'item is' : 'items are'} selected
+            {selectedCount} {selectedCount === 1 ? 'item is' : 'items are'}{' '}
+            selected
           </span>
         </div>
         <div className="flex items-center space-x-3">
@@ -60,4 +63,4 @@ const SelectedItemsFlyout = () => {
   );
 };
 
-export default SelectedItemsFlyout; 
+export default SelectedItemsFlyout;

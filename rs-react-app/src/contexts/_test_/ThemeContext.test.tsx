@@ -1,16 +1,23 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import { ThemeProvider, useTheme } from '../ThemeContext';
+import { ThemeProvider } from '../ThemeContext';
+import { useTheme } from '../useTheme';
 
 const TestComponent = () => {
   const { theme, toggleTheme, setTheme } = useTheme();
-  
+
   return (
     <div>
       <span data-testid="theme">{theme}</span>
-      <button onClick={toggleTheme} data-testid="toggle">Toggle</button>
-      <button onClick={() => setTheme('dark')} data-testid="set-dark">Set Dark</button>
-      <button onClick={() => setTheme('light')} data-testid="set-light">Set Light</button>
+      <button onClick={toggleTheme} data-testid="toggle">
+        Toggle
+      </button>
+      <button onClick={() => setTheme('dark')} data-testid="set-dark">
+        Set Dark
+      </button>
+      <button onClick={() => setTheme('light')} data-testid="set-light">
+        Set Light
+      </button>
     </div>
   );
 };
@@ -22,7 +29,7 @@ describe('ThemeContext', () => {
         <TestComponent />
       </ThemeProvider>
     );
-    
+
     expect(screen.getByTestId('theme')).toHaveTextContent('light');
   });
 
@@ -32,10 +39,10 @@ describe('ThemeContext', () => {
         <TestComponent />
       </ThemeProvider>
     );
-    
+
     const toggleButton = screen.getByTestId('toggle');
     fireEvent.click(toggleButton);
-    
+
     expect(screen.getByTestId('theme')).toHaveTextContent('dark');
   });
 
@@ -45,10 +52,10 @@ describe('ThemeContext', () => {
         <TestComponent />
       </ThemeProvider>
     );
-    
+
     const setDarkButton = screen.getByTestId('set-dark');
     fireEvent.click(setDarkButton);
-    
+
     expect(screen.getByTestId('theme')).toHaveTextContent('dark');
   });
 
@@ -58,20 +65,20 @@ describe('ThemeContext', () => {
         <TestComponent />
       </ThemeProvider>
     );
-    
+
     const setLightButton = screen.getByTestId('set-light');
     fireEvent.click(setLightButton);
-    
+
     expect(screen.getByTestId('theme')).toHaveTextContent('light');
   });
 
   it('should throw error when useTheme is used outside provider', () => {
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    
+
     expect(() => {
       render(<TestComponent />);
     }).toThrow('useTheme must be used within a ThemeProvider');
-    
+
     consoleSpy.mockRestore();
   });
-}); 
+});

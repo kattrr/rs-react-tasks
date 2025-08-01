@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { useSelectedItemsStore } from '../selectedItemsStore';
 import type { PokemonDetails } from '../../api/pokeapi';
 
@@ -67,10 +67,7 @@ describe('selectedItemsStore', () => {
         sprites: {
           front_default: 'https://example.com/charizard.png',
         },
-        types: [
-          { type: { name: 'fire' } },
-          { type: { name: 'flying' } }
-        ],
+        types: [{ type: { name: 'fire' } }, { type: { name: 'flying' } }],
         height: 17,
         abilities: [{ ability: { name: 'blaze' } }],
         forms: [{ name: 'charizard' }],
@@ -359,4 +356,4 @@ describe('selectedItemsStore', () => {
       expect(useSelectedItemsStore.getState().selectedItems).toHaveLength(0);
     });
   });
-}); 
+});

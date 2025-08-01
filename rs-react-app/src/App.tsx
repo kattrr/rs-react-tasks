@@ -5,7 +5,8 @@ import AboutPage from './pages/AboutPage';
 import NotFoundPage from './pages/NotFoundPage';
 import Navbar from './components/Navbar';
 import SelectedItemsFlyout from './components/SelectedItemsFlyout';
-import { ThemeProvider, useTheme } from './contexts/ThemeContext';
+import { ThemeProvider } from './contexts/ThemeContext';
+import { useTheme } from './contexts/useTheme';
 import {
   fetchPokemonByName,
   fetchPokemonList,
@@ -84,7 +85,9 @@ const AppContent = () => {
   };
 
   return (
-    <div className={`min-h-screen bg-gray-50 ${theme === 'dark' ? 'dark' : ''}`}>
+    <div
+      className={`min-h-screen bg-gray-50 ${theme === 'dark' ? 'dark' : ''}`}
+    >
       <Navbar />
       <Routes>
         <Route

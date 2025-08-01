@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import ThemeSelector from '../ThemeSelector';
 import { ThemeProvider } from '../../contexts/ThemeContext';
 
@@ -15,7 +15,7 @@ describe('ThemeSelector', () => {
         <ThemeSelector />
       </ThemeProvider>
     );
-    
+
     expect(screen.getByText('Theme:')).toBeInTheDocument();
     expect(screen.getByText('Light')).toBeInTheDocument();
     expect(screen.getByText('Dark')).toBeInTheDocument();
@@ -27,13 +27,17 @@ describe('ThemeSelector', () => {
         <ThemeSelector />
       </ThemeProvider>
     );
-    
+
     const lightButton = screen.getByText('Light');
     const darkButton = screen.getByText('Dark');
-    
+
     // Check that light button has active styling
     expect(lightButton).toHaveClass('bg-white', 'text-gray-900', 'shadow-sm');
-    expect(darkButton).not.toHaveClass('bg-white', 'text-gray-900', 'shadow-sm');
+    expect(darkButton).not.toHaveClass(
+      'bg-white',
+      'text-gray-900',
+      'shadow-sm'
+    );
   });
 
   it('should switch to dark theme when dark button is clicked', () => {
@@ -42,13 +46,13 @@ describe('ThemeSelector', () => {
         <ThemeSelector />
       </ThemeProvider>
     );
-    
+
     const darkButton = screen.getByText('Dark');
     fireEvent.click(darkButton);
-    
+
     // Check that dark button now has active styling
     expect(darkButton).toHaveClass('bg-white', 'text-gray-900', 'shadow-sm');
-    
+
     // Check that document.body has dark class
     expect(document.body.className).toBe('dark');
   });
@@ -59,14 +63,14 @@ describe('ThemeSelector', () => {
         <ThemeSelector />
       </ThemeProvider>
     );
-    
+
     const lightButton = screen.getByText('Light');
     const darkButton = screen.getByText('Dark');
-    
+
     // First click dark
     fireEvent.click(darkButton);
     expect(document.body.className).toBe('dark');
-    
+
     // Then click light
     fireEvent.click(lightButton);
     expect(document.body.className).toBe('');
@@ -78,10 +82,10 @@ describe('ThemeSelector', () => {
         <ThemeSelector />
       </ThemeProvider>
     );
-    
+
     const darkButton = screen.getByText('Dark');
     fireEvent.click(darkButton);
-    
+
     expect(document.body.className).toBe('dark');
   });
-}); 
+});

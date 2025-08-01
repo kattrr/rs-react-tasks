@@ -4,11 +4,13 @@ import SelectedItemsFlyout from '../SelectedItemsFlyout';
 
 // Mock the store
 vi.mock('../../store/selectedItemsStore', () => ({
-  useSelectedItemsStore: vi.fn()
+  useSelectedItemsStore: vi.fn(),
 }));
 
 import { useSelectedItemsStore } from '../../store/selectedItemsStore';
-const mockUseSelectedItemsStore = useSelectedItemsStore as vi.MockedFunction<typeof useSelectedItemsStore>;
+const mockUseSelectedItemsStore = useSelectedItemsStore as vi.MockedFunction<
+  typeof useSelectedItemsStore
+>;
 
 describe('SelectedItemsFlyout component', () => {
   const mockSelectedItems = [
@@ -18,7 +20,7 @@ describe('SelectedItemsFlyout component', () => {
       description: 'Type: electric',
       detailsUrl: 'https://pokeapi.co/api/v2/pokemon/pikachu',
       imageUrl: 'https://example.com/pikachu.png',
-      types: ['electric']
+      types: ['electric'],
     },
     {
       id: 'charizard',
@@ -26,8 +28,8 @@ describe('SelectedItemsFlyout component', () => {
       description: 'Type: fire, flying',
       detailsUrl: 'https://pokeapi.co/api/v2/pokemon/charizard',
       imageUrl: 'https://example.com/charizard.png',
-      types: ['fire', 'flying']
-    }
+      types: ['fire', 'flying'],
+    },
   ];
 
   const mockClearAll = vi.fn();
@@ -35,19 +37,19 @@ describe('SelectedItemsFlyout component', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    
+
     // Default mock implementation
     mockUseSelectedItemsStore.mockReturnValue({
       selectedItems: [],
       clearAll: mockClearAll,
-      getSelectedCount: mockGetSelectedCount
+      getSelectedCount: mockGetSelectedCount,
     });
   });
 
   describe('conditional rendering', () => {
     it('should not render when selectedCount is 0', () => {
       mockGetSelectedCount.mockReturnValue(0);
-      
+
       const { container } = render(<SelectedItemsFlyout />);
       expect(container.firstChild).toBeNull();
     });
@@ -57,9 +59,9 @@ describe('SelectedItemsFlyout component', () => {
       mockUseSelectedItemsStore.mockReturnValue({
         selectedItems: mockSelectedItems,
         clearAll: mockClearAll,
-        getSelectedCount: mockGetSelectedCount
+        getSelectedCount: mockGetSelectedCount,
       });
-      
+
       render(<SelectedItemsFlyout />);
       expect(screen.getByText('2 items are selected')).toBeInTheDocument();
     });
@@ -69,9 +71,9 @@ describe('SelectedItemsFlyout component', () => {
       mockUseSelectedItemsStore.mockReturnValue({
         selectedItems: [mockSelectedItems[0]],
         clearAll: mockClearAll,
-        getSelectedCount: mockGetSelectedCount
+        getSelectedCount: mockGetSelectedCount,
       });
-      
+
       render(<SelectedItemsFlyout />);
       expect(screen.getByText('1 item is selected')).toBeInTheDocument();
     });
@@ -83,22 +85,22 @@ describe('SelectedItemsFlyout component', () => {
       mockUseSelectedItemsStore.mockReturnValue({
         selectedItems: mockSelectedItems,
         clearAll: mockClearAll,
-        getSelectedCount: mockGetSelectedCount
+        getSelectedCount: mockGetSelectedCount,
       });
     });
 
     it('should call clearAll when unselect button is clicked', () => {
       render(<SelectedItemsFlyout />);
-      
+
       const unselectButton = screen.getByText('Unselect all');
       fireEvent.click(unselectButton);
-      
+
       expect(mockClearAll).toHaveBeenCalledTimes(1);
     });
 
     it('should render both buttons', () => {
       render(<SelectedItemsFlyout />);
-      
+
       expect(screen.getByText('Unselect all')).toBeInTheDocument();
       expect(screen.getByText('Download')).toBeInTheDocument();
     });
@@ -110,7 +112,7 @@ describe('SelectedItemsFlyout component', () => {
       mockUseSelectedItemsStore.mockReturnValue({
         selectedItems: mockSelectedItems,
         clearAll: mockClearAll,
-        getSelectedCount: mockGetSelectedCount
+        getSelectedCount: mockGetSelectedCount,
       });
     });
 
@@ -119,18 +121,18 @@ describe('SelectedItemsFlyout component', () => {
       mockUseSelectedItemsStore.mockReturnValue({
         selectedItems: [],
         clearAll: mockClearAll,
-        getSelectedCount: mockGetSelectedCount
+        getSelectedCount: mockGetSelectedCount,
       });
-      
+
       render(<SelectedItemsFlyout />);
-      
+
       // Component should not render, so no download functionality
       expect(screen.queryByText('Download')).not.toBeInTheDocument();
     });
 
     it('should render download button when items are selected', () => {
       render(<SelectedItemsFlyout />);
-      
+
       const downloadButton = screen.getByText('Download');
       expect(downloadButton).toBeInTheDocument();
     });
@@ -139,18 +141,18 @@ describe('SelectedItemsFlyout component', () => {
       // Mock Blob constructor to prevent errors
       const mockBlob = vi.fn();
       global.Blob = mockBlob;
-      
+
       // Mock URL.createObjectURL
       const mockCreateObjectURL = vi.fn().mockReturnValue('blob:mock-url');
       Object.defineProperty(URL, 'createObjectURL', {
         value: mockCreateObjectURL,
         writable: true,
       });
-      
+
       render(<SelectedItemsFlyout />);
-      
+
       const downloadButton = screen.getByText('Download');
-      
+
       // This should not throw an error
       expect(() => {
         fireEvent.click(downloadButton);
@@ -165,35 +167,35 @@ describe('SelectedItemsFlyout component', () => {
           description: 'Type: fire, flying',
           detailsUrl: 'https://pokeapi.co/api/v2/pokemon/charizard',
           imageUrl: 'https://example.com/charizard.png',
-          types: ['fire', 'flying']
-        }
+          types: ['fire', 'flying'],
+        },
       ];
-      
+
       mockUseSelectedItemsStore.mockReturnValue({
         selectedItems: itemsWithMultipleTypes,
         clearAll: mockClearAll,
-        getSelectedCount: () => 1
+        getSelectedCount: () => 1,
       });
 
       // Mock Blob constructor
       const mockBlob = vi.fn();
       global.Blob = mockBlob;
-      
+
       // Mock URL.createObjectURL
       const mockCreateObjectURL = vi.fn().mockReturnValue('blob:mock-url');
       Object.defineProperty(URL, 'createObjectURL', {
         value: mockCreateObjectURL,
         writable: true,
       });
-      
+
       render(<SelectedItemsFlyout />);
-      
+
       const downloadButton = screen.getByText('Download');
-      
+
       // This should not throw an error
       expect(() => {
         fireEvent.click(downloadButton);
       }).not.toThrow();
     });
   });
-}); 
+});

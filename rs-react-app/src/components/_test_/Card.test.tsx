@@ -5,11 +5,13 @@ import type { PokemonDetails } from '../../api/pokeapi';
 
 // Mock the store
 vi.mock('../../store/selectedItemsStore', () => ({
-  useSelectedItemsStore: vi.fn()
+  useSelectedItemsStore: vi.fn(),
 }));
 
 import { useSelectedItemsStore } from '../../store/selectedItemsStore';
-const mockUseSelectedItemsStore = useSelectedItemsStore as vi.MockedFunction<typeof useSelectedItemsStore>;
+const mockUseSelectedItemsStore = useSelectedItemsStore as vi.MockedFunction<
+  typeof useSelectedItemsStore
+>;
 
 describe('Card component', () => {
   const mockPokemon: PokemonDetails = {
@@ -29,7 +31,7 @@ describe('Card component', () => {
     mockUseSelectedItemsStore.mockReturnValue({
       addItem: vi.fn(),
       removeItem: vi.fn(),
-      isSelected: () => false
+      isSelected: () => false,
     });
   });
 
@@ -76,7 +78,7 @@ describe('Card component', () => {
     mockUseSelectedItemsStore.mockReturnValue({
       addItem: vi.fn(),
       removeItem: vi.fn(),
-      isSelected: () => true
+      isSelected: () => true,
     });
 
     render(<Card pokemon={mockPokemon} />);
@@ -89,7 +91,7 @@ describe('Card component', () => {
     mockUseSelectedItemsStore.mockReturnValue({
       addItem: mockAddItem,
       removeItem: vi.fn(),
-      isSelected: () => false
+      isSelected: () => false,
     });
 
     render(<Card pokemon={mockPokemon} />);
@@ -104,7 +106,7 @@ describe('Card component', () => {
     mockUseSelectedItemsStore.mockReturnValue({
       addItem: vi.fn(),
       removeItem: mockRemoveItem,
-      isSelected: () => true
+      isSelected: () => true,
     });
 
     render(<Card pokemon={mockPokemon} />);

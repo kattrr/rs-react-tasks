@@ -5,6 +5,7 @@ A React + TypeScript application to search and display Pokémon information usin
 ## Features
 
 ### Core Features
+
 - **Search Pokémon by name**: Enter a Pokémon name to fetch and display its details (name, type, image).
 - **Default Pokémon list**: Shows a default set of Pokémon on first load.
 - **Persistent search**: Remembers your last search using localStorage.
@@ -14,6 +15,7 @@ A React + TypeScript application to search and display Pokémon information usin
 - **Unit tests**: Includes tests for main components and API logic using Vitest and Testing Library.
 
 ### State Management Features
+
 - **Item Selection**: Checkboxes on each Pokémon card for selection
 - **Selected Items Flyout**: Dynamic flyout that appears when items are selected
 - **CSV Download**: Download selected Pokémon data as CSV files
@@ -21,6 +23,7 @@ A React + TypeScript application to search and display Pokémon information usin
 - **Bulk Actions**: "Unselect all" functionality
 
 ### Theme Features
+
 - **Light/Dark Mode**: Toggle between light and dark themes
 - **Theme Selector**: Easy theme switching in the navbar
 - **Persistent Theme**: Theme preference is saved
@@ -72,16 +75,19 @@ yarn test
 ## How to Use
 
 ### Selecting Pokémon
+
 1. Click the checkboxes on Pokémon cards to select them
 2. The flyout will appear automatically when items are selected
 3. Use "Unselect all" to clear all selections
 
 ### Downloading Data
+
 1. Select one or more Pokémon using the checkboxes
 2. Click "Download" in the flyout to get a CSV file
 3. The file will be named with the number of selected items (e.g., "3_items.csv")
 
 ### Changing Theme
+
 1. Use the Light/Dark buttons in the navbar
 2. The theme will apply immediately to the entire application
 3. Your theme preference will be saved for future visits
@@ -115,44 +121,50 @@ src/
 ## Technologies Used
 
 ### Core Technologies
+
 - [React](https://react.dev/) - UI library
 - [TypeScript](https://www.typescriptlang.org/) - Type safety
 - [Vite](https://vitejs.dev/) - Build tool
 - [Tailwind CSS](https://tailwindcss.com/) - Styling
 
 ### State Management
+
 - [Zustand](https://zustand-demo.pmnd.rs/) - Lightweight state management
 - [Context API](https://react.dev/reference/react/createContext) - Theme management
 
 ### Testing
+
 - [Vitest](https://vitest.dev/) - Test runner
 - [Testing Library](https://testing-library.com/) - Component testing
 
 ### APIs
+
 - [PokéAPI](https://pokeapi.co/) - Pokémon data
 
 ## State Management Architecture
 
 ### Zustand Store
+
 The application uses Zustand for managing selected Pokémon items:
 
 ```typescript
 // Store features
-- addItem(pokemon)     // Add Pokémon to selection
-- removeItem(id)       // Remove Pokémon from selection
-- clearAll()          // Clear all selections
-- isSelected(id)      // Check if Pokémon is selected
-- getSelectedCount()  // Get number of selected items
+-addItem(pokemon) - // Add Pokémon to selection
+  removeItem(id) - // Remove Pokémon from selection
+  clearAll() - // Clear all selections
+  isSelected(id) - // Check if Pokémon is selected
+  getSelectedCount(); // Get number of selected items
 ```
 
 ### Context API
+
 Theme management is handled through React Context:
 
 ```typescript
 // Theme context features
-- theme               // Current theme (light/dark)
-- toggleTheme()       // Switch between themes
-- setTheme(theme)     // Set specific theme
+-theme - // Current theme (light/dark)
+  toggleTheme() - // Switch between themes
+  setTheme(theme); // Set specific theme
 ```
 
 ## Testing
@@ -166,6 +178,7 @@ The project includes comprehensive tests covering:
 - ✅ **API Logic**: Pokémon data fetching
 
 Run tests with:
+
 ```bash
 npm test
 ```
