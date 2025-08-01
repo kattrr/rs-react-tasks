@@ -1,72 +1,32 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Routes, Route, useSearchParams } from 'react-router-dom';
 import MainPage from './pages/MainPage';
 import AboutPage from './pages/AboutPage';
 import NotFoundPage from './pages/NotFoundPage';
 import Navbar from './components/Navbar';
 import SelectedItemsFlyout from './components/SelectedItemsFlyout';
-import { ThemeProvider } from './contexts/ThemeContext';
 import { useTheme } from './contexts/useTheme';
-import {
-  fetchPokemonByName,
-  fetchPokemonList,
-  type PokemonDetails,
-} from './api/pokeapi';
-import { useLocalStorage } from './hooks/useLocalStorage';
+import { PokemonService } from './services/PokemonService';
+import { usePokemonData } from './hooks/usePokemonData';
+import { useSearchTerm } from './hooks/useSearchTerm';
 
-const PAGE_SIZE = 12;
-const TOTAL_POKEMONS = 1302;
-const TOTAL_PAGES = Math.ceil(TOTAL_POKEMONS / PAGE_SIZE);
+const POKEMON_CONFIG = {
+  pageSize: 12,
+  totalPokemons: 1302,
+};
 
-const AppContent = () => {
-  const [pokemons, setPokemons] = useState<PokemonDetails[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [searchTerm] = useLocalStorage('searchTerm', '');
+const App = () => {
   const [shouldThrow, setShouldThrow] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const { theme } = useTheme();
+  const { searchTerm } = useSearchTerm();
+
+  const pokemonService = useMemo(() => new PokemonService(POKEMON_CONFIG), []);
+  const { pokemons, loading, error, loadDefaultList, searchByName } =
+    usePokemonData({ service: pokemonService });
 
   const pageParam = parseInt(searchParams.get('page') || '1', 10);
   const currentPage = isNaN(pageParam) || pageParam < 1 ? 1 : pageParam;
-
-  const loadDefaultList = async (page: number) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const offset = (page - 1) * PAGE_SIZE;
-      const list = await fetchPokemonList(offset, PAGE_SIZE);
-      const detailed = await Promise.all(
-        list.map((p) => fetchPokemonByName(p.name))
-      );
-      setPokemons(detailed);
-      setLoading(false);
-    } catch {
-      setLoading(false);
-      setError('Error loading default Pokémon');
-    }
-  };
-
-  const handleSearch = useCallback(
-    async (term: string) => {
-      if (!term) {
-        loadDefaultList(currentPage);
-        return;
-      }
-      setLoading(true);
-      setError(null);
-      setPokemons([]);
-      try {
-        const pokemon = await fetchPokemonByName(term.toLowerCase());
-        setPokemons([pokemon]);
-        setLoading(false);
-      } catch {
-        setError(`No Pokémon found named "${term}"`);
-        setLoading(false);
-      }
-    },
-    [currentPage]
-  );
 
   useEffect(() => {
     if (shouldThrow) throw new Error('error Test');
@@ -74,11 +34,11 @@ const AppContent = () => {
 
   useEffect(() => {
     if (searchTerm.trim() !== '') {
-      handleSearch(searchTerm);
+      searchByName(searchTerm);
     } else {
       loadDefaultList(currentPage);
     }
-  }, [currentPage, searchTerm, handleSearch]);
+  }, [currentPage, searchTerm, searchByName, loadDefaultList]);
 
   const handlePageChange = (page: number) => {
     setSearchParams({ page: String(page) });
@@ -99,8 +59,8 @@ const AppContent = () => {
               error={error}
               searchTerm={searchTerm}
               currentPage={currentPage}
-              totalPages={TOTAL_PAGES}
-              onSearch={handleSearch}
+              totalPages={pokemonService.getTotalPages()}
+              onSearch={searchByName}
               onPageChange={handlePageChange}
               onThrowError={() => setShouldThrow(true)}
             />
@@ -111,14 +71,6 @@ const AppContent = () => {
       </Routes>
       <SelectedItemsFlyout />
     </div>
-  );
-};
-
-const App = () => {
-  return (
-    <ThemeProvider>
-      <AppContent />
-    </ThemeProvider>
   );
 };
 

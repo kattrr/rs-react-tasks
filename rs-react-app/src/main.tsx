@@ -4,6 +4,7 @@ import './index.css';
 import App from './App.tsx';
 import ErrorBoundary from './components/ErrorBoundary.tsx';
 import { BrowserRouter } from 'react-router-dom';
+import { ThemeProvider } from './contexts/ThemeContext';
 
 const rootEl = document.getElementById('root');
 if (rootEl) {
@@ -11,7 +12,9 @@ if (rootEl) {
     <StrictMode>
       <BrowserRouter>
         <ErrorBoundary>
-          <App />
+          <ThemeProvider>
+            <App />
+          </ThemeProvider>
         </ErrorBoundary>
       </BrowserRouter>
     </StrictMode>
