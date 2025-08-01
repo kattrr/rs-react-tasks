@@ -73,7 +73,6 @@ describe('SearchBar component', () => {
     render(<SearchBar onSearch={onSearchMock} />);
     const input = screen.getByPlaceholderText(/Search Pokémon/i);
 
-    // Test lines 32-35: handleKeyDown with Enter key
     fireEvent.change(input, { target: { value: 'pikachu' } });
     fireEvent.keyDown(input, { key: 'Enter' });
 

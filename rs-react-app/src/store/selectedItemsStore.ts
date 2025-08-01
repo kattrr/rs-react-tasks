@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { PokemonDetails } from '../api/pokeapi';
 
-interface SelectedItem {
+export interface SelectedItem {
   id: string;
   name: string;
   description: string;
@@ -62,7 +62,7 @@ export const useSelectedItemsStore = create<SelectedItemsState>()(
     }),
     {
       name: 'selected-items-storage',
-      skipHydration: true, // Add this to fix test issues
+      skipHydration: true,
     }
   )
 );

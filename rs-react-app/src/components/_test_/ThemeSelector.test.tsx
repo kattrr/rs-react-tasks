@@ -5,7 +5,6 @@ import { ThemeProvider } from '../../contexts/ThemeContext';
 
 describe('ThemeSelector', () => {
   beforeEach(() => {
-    // Reset document.body.className
     document.body.className = '';
   });
 
@@ -31,7 +30,6 @@ describe('ThemeSelector', () => {
     const lightButton = screen.getByText('Light');
     const darkButton = screen.getByText('Dark');
 
-    // Check that light button has active styling
     expect(lightButton).toHaveClass('bg-white', 'text-gray-900', 'shadow-sm');
     expect(darkButton).not.toHaveClass(
       'bg-white',
@@ -50,10 +48,8 @@ describe('ThemeSelector', () => {
     const darkButton = screen.getByText('Dark');
     fireEvent.click(darkButton);
 
-    // Check that dark button now has active styling
     expect(darkButton).toHaveClass('bg-white', 'text-gray-900', 'shadow-sm');
 
-    // Check that document.body has dark class
     expect(document.body.className).toBe('dark');
   });
 
@@ -67,11 +63,9 @@ describe('ThemeSelector', () => {
     const lightButton = screen.getByText('Light');
     const darkButton = screen.getByText('Dark');
 
-    // First click dark
     fireEvent.click(darkButton);
     expect(document.body.className).toBe('dark');
 
-    // Then click light
     fireEvent.click(lightButton);
     expect(document.body.className).toBe('');
   });

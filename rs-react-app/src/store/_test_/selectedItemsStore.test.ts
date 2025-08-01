@@ -6,7 +6,6 @@ describe('selectedItemsStore', () => {
   let store: ReturnType<typeof useSelectedItemsStore>;
 
   beforeEach(() => {
-    // Reset the store before each test
     store = useSelectedItemsStore.getState();
     store.clearAll();
   });
@@ -52,7 +51,6 @@ describe('selectedItemsStore', () => {
         moves: [{ move: { name: 'thunder-shock' } }],
       };
 
-      // Add the same item twice
       store.addItem(mockPokemon);
       store.addItem(mockPokemon);
 
