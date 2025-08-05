@@ -13,6 +13,7 @@ interface MainPageProps {
   totalPages: number;
   onPageChange: (page: number) => void;
   onRefresh: () => void;
+  onSearch: (term: string) => void;
   onThrowError: () => void;
 }
 
@@ -25,6 +26,7 @@ const MainPage = ({
   totalPages,
   onPageChange,
   onRefresh,
+  onSearch,
   onThrowError,
 }: MainPageProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -56,7 +58,7 @@ const MainPage = ({
         <h1 className="text-4xl font-bold mb-4 leading-tight">
           🔍 Pokémon Search
         </h1>
-        <SearchBar />
+        <SearchBar onSearch={onSearch} searchTerm={searchTerm} />
         {loading && <Spinner />}
         {error && <p className="mt-4 text-red-600 font-semibold">{error}</p>}
         {!loading && !error && pokemons.length > 0 && (
@@ -76,7 +78,7 @@ const MainPage = ({
             onClick={onRefresh}
             className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 outline-none border border-transparent hover:outline-blue-400 hover:border-blue-400 focus:outline-4 focus:outline-blue-400 transition-colors text-base font-medium"
           >
-            Refresh Cache
+            🏠 Go to Home & Clear Cache
           </button>
           <button
             onClick={onThrowError}
