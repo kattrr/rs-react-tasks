@@ -24,9 +24,10 @@ export const usePokemonList = (page: number) => {
 
 export const usePokemonSearch = (searchTerm: string, searchTrigger: string) => {
   // Extract the actual search term from the trigger (remove timestamp)
-  const actualSearchTerm = searchTrigger && searchTrigger.includes('-') 
-    ? searchTrigger.split('-')[0] 
-    : searchTerm;
+  const actualSearchTerm =
+    searchTrigger && searchTrigger.includes('-')
+      ? searchTrigger.split('-')[0]
+      : searchTerm;
 
   return useQuery({
     queryKey: ['pokemon-search', actualSearchTerm, searchTrigger],
