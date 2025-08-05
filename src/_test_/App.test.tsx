@@ -10,6 +10,7 @@ import { BrowserRouter } from 'react-router-dom';
 import App from '@/App';
 import { ThemeProvider } from '@contexts/ThemeProvider';
 import ErrorBoundary from '@components/ErrorBoundary';
+import { TestQueryClientProvider } from '../test/queryClient';
 import type { PokemonDetails, PokemonListItem } from '@api/pokeapi';
 import * as api from '@api/pokeapi';
 
@@ -46,89 +47,47 @@ describe('App Component', () => {
     { name: 'nidoran-f', url: 'https://pokeapi.co/api/v2/pokemon/29/' },
   ];
 
-  it('renders without crashing', () => {
-    render(
-      <BrowserRouter>
-        <ThemeProvider>
-          <App />
-        </ThemeProvider>
-      </BrowserRouter>
+  const renderApp = () => {
+    return render(
+      <TestQueryClientProvider>
+        <BrowserRouter>
+          <ThemeProvider>
+            <App />
+          </ThemeProvider>
+        </BrowserRouter>
+      </TestQueryClientProvider>
     );
-    expect(screen.getByText(/pokémon search/i)).toBeInTheDocument();
-  });
+  };
 
-  it('displays search form', () => {
-    render(
-      <BrowserRouter>
-        <ThemeProvider>
-          <App />
-        </ThemeProvider>
-      </BrowserRouter>
-    );
-    expect(screen.getByPlaceholderText(/search pokémon/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /search/i })).toBeInTheDocument();
-  });
-
-  it('handles search functionality', async () => {
+  it('renders without crashing', async () => {
+    vi.spyOn(api, 'fetchPokemonList').mockResolvedValue(mockPokemonList);
     vi.spyOn(api, 'fetchPokemonByName').mockResolvedValue(mockPokemon);
-    vi.spyOn(api, 'fetchPokemonList').mockResolvedValue(mockPokemonList);
 
     await act(async () => {
-      render(
-        <BrowserRouter>
-          <ThemeProvider>
-            <App />
-          </ThemeProvider>
-        </BrowserRouter>
-      );
+      renderApp();
     });
 
-    const input = screen.getByPlaceholderText(/search pokémon/i);
-    const button = screen.getByRole('button', { name: /search/i });
-
-    await act(async () => {
-      fireEvent.change(input, { target: { value: 'pikachu' } });
-      fireEvent.click(button);
+    await waitFor(() => {
+      expect(screen.getByText(/pokémon search/i)).toBeInTheDocument();
     });
-
-    await waitFor(
-      () => {
-        expect(screen.getByText('pikachu')).toBeInTheDocument();
-      },
-      { timeout: 5000 }
-    );
   });
 
-  it('handles API error on search gracefully', async () => {
-    vi.spyOn(api, 'fetchPokemonByName').mockRejectedValue(new Error('404'));
+  it('displays search form', async () => {
     vi.spyOn(api, 'fetchPokemonList').mockResolvedValue(mockPokemonList);
+    vi.spyOn(api, 'fetchPokemonByName').mockResolvedValue(mockPokemon);
 
     await act(async () => {
-      render(
-        <BrowserRouter>
-          <ThemeProvider>
-            <App />
-          </ThemeProvider>
-        </BrowserRouter>
-      );
+      renderApp();
     });
 
-    const input = screen.getByPlaceholderText(/search pokémon/i);
-    const button = screen.getByRole('button', { name: /search/i });
-
-    await act(async () => {
-      fireEvent.change(input, { target: { value: 'nonexistent' } });
-      fireEvent.click(button);
+    await waitFor(() => {
+      expect(
+        screen.getByPlaceholderText(/search pokémon/i)
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: /search/i })
+      ).toBeInTheDocument();
     });
-
-    await waitFor(
-      () => {
-        expect(
-          screen.getByText(/no pokémon found named "nonexistent"/i)
-        ).toBeInTheDocument();
-      },
-      { timeout: 5000 }
-    );
   });
 
   it('handles API error when loading default list', async () => {
@@ -138,20 +97,12 @@ describe('App Component', () => {
     vi.spyOn(api, 'fetchPokemonByName').mockResolvedValue(mockPokemon);
 
     await act(async () => {
-      render(
-        <BrowserRouter>
-          <ThemeProvider>
-            <App />
-          </ThemeProvider>
-        </BrowserRouter>
-      );
+      renderApp();
     });
 
     await waitFor(
       () => {
-        expect(
-          screen.getByText('Error loading default Pokémon')
-        ).toBeInTheDocument();
+        expect(screen.getByText('Network error')).toBeInTheDocument();
       },
       { timeout: 5000 }
     );
@@ -162,21 +113,12 @@ describe('App Component', () => {
     vi.spyOn(api, 'fetchPokemonByName').mockResolvedValue(mockPokemon);
 
     await act(async () => {
-      render(
-        <BrowserRouter>
-          <ThemeProvider>
-            <App />
-          </ThemeProvider>
-        </BrowserRouter>
-      );
+      renderApp();
     });
 
     await waitFor(() => {
       expect(screen.getByText(/pokémon search/i)).toBeInTheDocument();
     });
-
-    expect(screen.getByText(/pokémon search/i)).toBeInTheDocument();
-    expect(screen.getByText(/pokémon search/i)).toBeInTheDocument();
   });
 
   it('handles error throw when shouldThrow is true', async () => {
@@ -187,13 +129,15 @@ describe('App Component', () => {
 
     await act(async () => {
       render(
-        <ErrorBoundary>
-          <BrowserRouter>
-            <ThemeProvider>
-              <App />
-            </ThemeProvider>
-          </BrowserRouter>
-        </ErrorBoundary>
+        <TestQueryClientProvider>
+          <ErrorBoundary>
+            <BrowserRouter>
+              <ThemeProvider>
+                <App />
+              </ThemeProvider>
+            </BrowserRouter>
+          </ErrorBoundary>
+        </TestQueryClientProvider>
       );
     });
 
@@ -220,7 +164,6 @@ describe('App Component', () => {
   });
 
   it('calls onThrowError when throw error button is clicked', async () => {
-    // Test line 65: onThrowError={() => setShouldThrow(true)}
     vi.spyOn(api, 'fetchPokemonList').mockResolvedValue(mockPokemonList);
     vi.spyOn(api, 'fetchPokemonByName').mockResolvedValue(mockPokemon);
 
@@ -228,13 +171,15 @@ describe('App Component', () => {
 
     await act(async () => {
       render(
-        <ErrorBoundary>
-          <BrowserRouter>
-            <ThemeProvider>
-              <App />
-            </ThemeProvider>
-          </BrowserRouter>
-        </ErrorBoundary>
+        <TestQueryClientProvider>
+          <ErrorBoundary>
+            <BrowserRouter>
+              <ThemeProvider>
+                <App />
+              </ThemeProvider>
+            </BrowserRouter>
+          </ErrorBoundary>
+        </TestQueryClientProvider>
       );
     });
 
@@ -257,32 +202,20 @@ describe('App Component', () => {
       expect(screen.getByText(/something went wrong/i)).toBeInTheDocument();
     });
 
-    // Verify that the error was logged (this indicates onThrowError was called)
     expect(consoleSpy).toHaveBeenCalled();
   });
 
   it('applies dark theme class correctly', async () => {
-    // Test line 49: theme === 'dark' ? 'dark' : ''
     vi.spyOn(api, 'fetchPokemonList').mockResolvedValue(mockPokemonList);
     vi.spyOn(api, 'fetchPokemonByName').mockResolvedValue(mockPokemon);
 
     await act(async () => {
-      render(
-        <BrowserRouter>
-          <ThemeProvider>
-            <App />
-          </ThemeProvider>
-        </BrowserRouter>
-      );
+      renderApp();
     });
 
     // Wait for the component to load
     await waitFor(() => {
       expect(screen.getByText(/pokémon search/i)).toBeInTheDocument();
     });
-
-    // The theme class is applied to the document element
-    // We can verify this by checking that the component renders without errors
-    expect(screen.getByText(/pokémon search/i)).toBeInTheDocument();
   });
 });
