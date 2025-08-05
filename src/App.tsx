@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { Routes, Route, useSearchParams } from 'react-router-dom';
 import MainPage from '@pages/MainPage';
 import AboutPage from '@pages/AboutPage';
@@ -6,14 +6,13 @@ import NotFoundPage from '@pages/NotFoundPage';
 import Navbar from '@components/Navbar';
 import SelectedItemsFlyout from '@components/SelectedItemsFlyout';
 import { useTheme } from '@hooks/useTheme';
-import { PokemonService } from '@services/PokemonService';
-import { usePokemonData } from '@hooks/usePokemonData';
 import { useSearchTerm } from '@hooks/useSearchTerm';
-
-const POKEMON_CONFIG = {
-  pageSize: 12,
-  totalPokemons: 1302,
-};
+import {
+  usePokemonList,
+  usePokemonSearch,
+  useInvalidatePokemonCache,
+  getTotalPages,
+} from '@hooks/usePokemonQueries';
 
 const App = () => {
   const [shouldThrow, setShouldThrow] = useState(false);
@@ -21,27 +20,26 @@ const App = () => {
   const { theme } = useTheme();
   const { searchTerm } = useSearchTerm();
 
-  const pokemonService = useMemo(() => new PokemonService(POKEMON_CONFIG), []);
-  const { pokemons, loading, error, loadDefaultList, searchByName } =
-    usePokemonData({ service: pokemonService });
-
   const pageParam = parseInt(searchParams.get('page') || '1', 10);
   const currentPage = isNaN(pageParam) || pageParam < 1 ? 1 : pageParam;
+
+  const pokemonListQuery = usePokemonList(currentPage);
+  const pokemonSearchQuery = usePokemonSearch(searchTerm);
+  const { invalidateAll } = useInvalidatePokemonCache();
+
+  const isSearching = searchTerm.trim() !== '';
+  const activeQuery = isSearching ? pokemonSearchQuery : pokemonListQuery;
 
   useEffect(() => {
     if (shouldThrow) throw new Error('error Test');
   }, [shouldThrow]);
 
-  useEffect(() => {
-    if (searchTerm.trim() !== '') {
-      searchByName(searchTerm);
-    } else {
-      loadDefaultList(currentPage);
-    }
-  }, [currentPage, searchTerm, searchByName, loadDefaultList]);
-
   const handlePageChange = (page: number) => {
     setSearchParams({ page: String(page) });
+  };
+
+  const handleRefresh = () => {
+    invalidateAll();
   };
 
   return (
@@ -54,14 +52,14 @@ const App = () => {
           path="/"
           element={
             <MainPage
-              pokemons={pokemons}
-              loading={loading}
-              error={error}
+              pokemons={activeQuery.data || []}
+              loading={activeQuery.isLoading}
+              error={activeQuery.error?.message || null}
               searchTerm={searchTerm}
               currentPage={currentPage}
-              totalPages={pokemonService.getTotalPages()}
-              onSearch={searchByName}
+              totalPages={getTotalPages()}
               onPageChange={handlePageChange}
+              onRefresh={handleRefresh}
               onThrowError={() => setShouldThrow(true)}
             />
           }
