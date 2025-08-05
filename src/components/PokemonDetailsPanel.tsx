@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import { fetchPokemonByName, type PokemonDetails } from '@api/pokeapi';
+import { usePokemonDetails } from '@hooks/usePokemonQueries';
 import Spinner from './Spinner';
 
 interface PokemonDetailsPanelProps {
@@ -11,23 +10,11 @@ const PokemonDetailsPanel = ({
   detailsName,
   onClose,
 }: PokemonDetailsPanelProps) => {
-  const [details, setDetails] = useState<PokemonDetails | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    setLoading(true);
-    setError(null);
-    fetchPokemonByName(detailsName)
-      .then((data) => {
-        setDetails(data);
-        setLoading(false);
-      })
-      .catch(() => {
-        setError('Could not load details');
-        setLoading(false);
-      });
-  }, [detailsName]);
+  const {
+    data: details,
+    isLoading: loading,
+    error,
+  } = usePokemonDetails(detailsName);
 
   return (
     <div
@@ -42,7 +29,7 @@ const PokemonDetailsPanel = ({
         ✕
       </button>
       {loading && <Spinner />}
-      {error && <p className="text-red-600 font-semibold">{error}</p>}
+      {error && <p className="text-red-600 font-semibold">{error.message}</p>}
       {details && !loading && !error && (
         <div className="flex flex-col items-center text-indigo-950">
           <img
