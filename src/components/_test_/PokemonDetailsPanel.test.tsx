@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor, act } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import PokemonDetailsPanel from '../PokemonDetailsPanel';
+import { TestQueryClientProvider } from '../../test/queryClient';
 import * as api from '@api/pokeapi';
 import type { PokemonDetails } from '@api/pokeapi';
 
@@ -48,9 +49,11 @@ describe('PokemonDetailsPanel', () => {
 
   const renderDetailsPanel = (props = {}) => {
     return render(
-      <BrowserRouter>
-        <PokemonDetailsPanel {...defaultProps} {...props} />
-      </BrowserRouter>
+      <TestQueryClientProvider>
+        <BrowserRouter>
+          <PokemonDetailsPanel {...defaultProps} {...props} />
+        </BrowserRouter>
+      </TestQueryClientProvider>
     );
   };
 
@@ -119,7 +122,7 @@ describe('PokemonDetailsPanel', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByText('Could not load details')).toBeInTheDocument();
+      expect(screen.getByText('API Error')).toBeInTheDocument();
     });
   });
 });
