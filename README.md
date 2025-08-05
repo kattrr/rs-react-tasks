@@ -41,7 +41,7 @@ A React + TypeScript application to search and display Pokémon information usin
 1. Clone the repository:
    ```bash
    git clone <repo-url>
-   cd rs-react-app
+   cd rs-react-tasks
    ```
 2. Install dependencies:
    ```bash
