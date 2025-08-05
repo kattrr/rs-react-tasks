@@ -25,3 +25,6 @@ if (!globalThis.localStorage) {
     configurable: true,
   });
 }
+
+// Mock fetch for TanStack Query tests
+global.fetch = vi.fn();
