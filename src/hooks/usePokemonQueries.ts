@@ -22,17 +22,22 @@ export const usePokemonList = (page: number) => {
   });
 };
 
-export const usePokemonSearch = (searchTerm: string) => {
+export const usePokemonSearch = (searchTerm: string, searchTrigger: string) => {
+  // Extract the actual search term from the trigger (remove timestamp)
+  const actualSearchTerm = searchTrigger && searchTrigger.includes('-') 
+    ? searchTrigger.split('-')[0] 
+    : searchTerm;
+
   return useQuery({
-    queryKey: ['pokemon-search', searchTerm],
+    queryKey: ['pokemon-search', actualSearchTerm, searchTrigger],
     queryFn: async () => {
-      if (!searchTerm.trim()) {
+      if (!actualSearchTerm.trim()) {
         return [];
       }
-      const pokemon = await fetchPokemonByName(searchTerm.toLowerCase());
+      const pokemon = await fetchPokemonByName(actualSearchTerm.toLowerCase());
       return [pokemon];
     },
-    enabled: searchTerm.trim().length > 0,
+    enabled: actualSearchTerm.trim().length > 0 && searchTrigger !== '',
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
   });
