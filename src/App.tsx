@@ -26,12 +26,10 @@ const App = () => {
   const currentPage = isNaN(pageParam) || pageParam < 1 ? 1 : pageParam;
   const urlSearchTerm = searchParams.get('search') || '';
 
-  // Restore search term from URL on mount
   useEffect(() => {
     if (!isInitialized) {
       if (urlSearchTerm) {
         updateSearchTerm(urlSearchTerm);
-        // Trigger search if there's a search term in URL
         if (urlSearchTerm.trim() !== '') {
           setSearchTrigger(`${urlSearchTerm}-${Date.now()}`);
         }
@@ -58,14 +56,9 @@ const App = () => {
   };
 
   const handleRefresh = () => {
-    // Invalidate all cache
     invalidateAll();
-
-    // Clear search and go back to default list
     clearSearchTerm();
     setSearchTrigger('');
-
-    // Reset URL to show default list
     setSearchParams({ page: '1' });
   };
 
@@ -75,12 +68,11 @@ const App = () => {
     if (term.trim() === '') {
       setSearchTrigger('');
       newParams.delete('search');
-      newParams.set('page', '1'); // Reset to first page when clearing search
+      newParams.set('page', '1');
     } else {
-      // Use a combination of term and timestamp to ensure uniqueness
       setSearchTrigger(`${term}-${Date.now()}`);
       newParams.set('search', term);
-      newParams.set('page', '1'); // Reset to first page when searching
+      newParams.set('page', '1');
     }
 
     setSearchParams(newParams);

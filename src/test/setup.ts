@@ -1,4 +1,5 @@
 import '@testing-library/jest-dom';
+import { vi } from 'vitest';
 
 if (!globalThis.localStorage) {
   const localStorageMock = (() => {
@@ -26,5 +27,4 @@ if (!globalThis.localStorage) {
   });
 }
 
-// Mock fetch for TanStack Query tests
-global.fetch = vi.fn();
+globalThis.fetch = vi.fn();
