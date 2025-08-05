@@ -18,16 +18,33 @@ const App = () => {
   const [shouldThrow, setShouldThrow] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const { theme } = useTheme();
-  const { searchTerm } = useSearchTerm();
+  const { searchTerm, updateSearchTerm, clearSearchTerm } = useSearchTerm();
+  const [searchTrigger, setSearchTrigger] = useState('');
+  const [isInitialized, setIsInitialized] = useState(false);
 
   const pageParam = parseInt(searchParams.get('page') || '1', 10);
   const currentPage = isNaN(pageParam) || pageParam < 1 ? 1 : pageParam;
+  const urlSearchTerm = searchParams.get('search') || '';
+
+  // Restore search term from URL on mount
+  useEffect(() => {
+    if (!isInitialized) {
+      if (urlSearchTerm) {
+        updateSearchTerm(urlSearchTerm);
+        // Trigger search if there's a search term in URL
+        if (urlSearchTerm.trim() !== '') {
+          setSearchTrigger(`${urlSearchTerm}-${Date.now()}`);
+        }
+      }
+      setIsInitialized(true);
+    }
+  }, [urlSearchTerm, updateSearchTerm, isInitialized]);
 
   const pokemonListQuery = usePokemonList(currentPage);
-  const pokemonSearchQuery = usePokemonSearch(searchTerm);
+  const pokemonSearchQuery = usePokemonSearch(searchTerm, searchTrigger);
   const { invalidateAll } = useInvalidatePokemonCache();
 
-  const isSearching = searchTerm.trim() !== '';
+  const isSearching = searchTerm.trim() !== '' && searchTrigger !== '';
   const activeQuery = isSearching ? pokemonSearchQuery : pokemonListQuery;
 
   useEffect(() => {
@@ -35,11 +52,38 @@ const App = () => {
   }, [shouldThrow]);
 
   const handlePageChange = (page: number) => {
-    setSearchParams({ page: String(page) });
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set('page', String(page));
+    setSearchParams(newParams);
   };
 
   const handleRefresh = () => {
+    // Invalidate all cache
     invalidateAll();
+
+    // Clear search and go back to default list
+    clearSearchTerm();
+    setSearchTrigger('');
+
+    // Reset URL to show default list
+    setSearchParams({ page: '1' });
+  };
+
+  const handleSearch = (term: string) => {
+    const newParams = new URLSearchParams(searchParams);
+
+    if (term.trim() === '') {
+      setSearchTrigger('');
+      newParams.delete('search');
+      newParams.set('page', '1'); // Reset to first page when clearing search
+    } else {
+      // Use a combination of term and timestamp to ensure uniqueness
+      setSearchTrigger(`${term}-${Date.now()}`);
+      newParams.set('search', term);
+      newParams.set('page', '1'); // Reset to first page when searching
+    }
+
+    setSearchParams(newParams);
   };
 
   return (
@@ -60,6 +104,7 @@ const App = () => {
               totalPages={getTotalPages()}
               onPageChange={handlePageChange}
               onRefresh={handleRefresh}
+              onSearch={handleSearch}
               onThrowError={() => setShouldThrow(true)}
             />
           }
