@@ -11,8 +11,8 @@ interface MainPageProps {
   searchTerm: string;
   currentPage: number;
   totalPages: number;
-  onSearch: (term: string) => void;
   onPageChange: (page: number) => void;
+  onRefresh: () => void;
   onThrowError: () => void;
 }
 
@@ -23,8 +23,8 @@ const MainPage = ({
   searchTerm,
   currentPage,
   totalPages,
-  onSearch,
   onPageChange,
+  onRefresh,
   onThrowError,
 }: MainPageProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -56,7 +56,7 @@ const MainPage = ({
         <h1 className="text-4xl font-bold mb-4 leading-tight">
           🔍 Pokémon Search
         </h1>
-        <SearchBar onSearch={onSearch} />
+        <SearchBar />
         {loading && <Spinner />}
         {error && <p className="mt-4 text-red-600 font-semibold">{error}</p>}
         {!loading && !error && pokemons.length > 0 && (
@@ -71,12 +71,20 @@ const MainPage = ({
             )}
           </>
         )}
-        <button
-          onClick={onThrowError}
-          className="mt-4 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 outline-none border border-transparent hover:outline-red-400 hover:border-red-400 focus:outline-4 focus:outline-blue-400 transition-colors text-base font-medium"
-        >
-          Throw error
-        </button>
+        <div className="mt-4 flex gap-2">
+          <button
+            onClick={onRefresh}
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 outline-none border border-transparent hover:outline-blue-400 hover:border-blue-400 focus:outline-4 focus:outline-blue-400 transition-colors text-base font-medium"
+          >
+            Refresh Cache
+          </button>
+          <button
+            onClick={onThrowError}
+            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 outline-none border border-transparent hover:outline-red-400 hover:border-red-400 focus:outline-4 focus:outline-blue-400 transition-colors text-base font-medium"
+          >
+            Throw error
+          </button>
+        </div>
       </div>
       {detailsName && (
         <PokemonDetailsPanel
