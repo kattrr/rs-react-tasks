@@ -1,4 +1,4 @@
-import type { PokemonDetails} from '@api/pokeapi';
+import type { PokemonDetails } from '@api/pokeapi';
 import { fetchPokemonList, fetchPokemonByName } from '@api/pokeapi';
 
 export interface PokemonServiceConfig {
