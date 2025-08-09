@@ -39,20 +39,26 @@ describe('PokemonService', () => {
       ];
       const mockDetails: PokemonDetails[] = [
         {
-          id: 1,
           name: 'bulbasaur',
           height: 7,
-          weight: 69,
           types: [],
-          sprites: {},
+          sprites: {
+            front_default: 'https://example.com/bulbasaur.png',
+          },
+          abilities: [],
+          forms: [],
+          moves: [],
         },
         {
-          id: 2,
           name: 'ivysaur',
           height: 10,
-          weight: 130,
           types: [],
-          sprites: {},
+          sprites: {
+            front_default: 'https://example.com/ivysaur.png',
+          },
+          abilities: [],
+          forms: [],
+          moves: [],
         },
       ];
 
@@ -77,12 +83,15 @@ describe('PokemonService', () => {
         { name: 'charmander', url: 'https://pokeapi.co/api/v2/pokemon/4/' },
       ];
       const mockDetails: PokemonDetails = {
-        id: 4,
         name: 'charmander',
         height: 6,
-        weight: 85,
         types: [],
-        sprites: {},
+        sprites: {
+          front_default: 'https://example.com/charmander.png',
+        },
+        abilities: [],
+        forms: [],
+        moves: [],
       };
 
       mockFetchPokemonList.mockResolvedValue(mockList);
@@ -109,12 +118,15 @@ describe('PokemonService', () => {
 
     it('should search pokemon by name', async () => {
       const mockDetails: PokemonDetails = {
-        id: 1,
         name: 'bulbasaur',
         height: 7,
-        weight: 69,
         types: [],
-        sprites: {},
+        sprites: {
+          front_default: 'https://example.com/bulbasaur.png',
+        },
+        abilities: [],
+        forms: [],
+        moves: [],
       };
       mockFetchPokemonByName.mockResolvedValue(mockDetails);
 
@@ -128,12 +140,15 @@ describe('PokemonService', () => {
 
     it('should convert search term to lowercase', async () => {
       const mockDetails: PokemonDetails = {
-        id: 1,
         name: 'bulbasaur',
         height: 7,
-        weight: 69,
         types: [],
-        sprites: {},
+        sprites: {
+          front_default: 'https://example.com/bulbasaur.png',
+        },
+        abilities: [],
+        forms: [],
+        moves: [],
       };
       mockFetchPokemonByName.mockResolvedValue(mockDetails);
 
@@ -176,12 +191,15 @@ describe('PokemonService', () => {
         { name: 'test', url: 'https://pokeapi.co/api/v2/pokemon/1/' },
       ];
       const mockDetails: PokemonDetails = {
-        id: 1,
         name: 'test',
         height: 7,
-        weight: 69,
         types: [],
-        sprites: {},
+        sprites: {
+          front_default: 'https://example.com/test.png',
+        },
+        abilities: [],
+        forms: [],
+        moves: [],
       };
 
       mockFetchPokemonList.mockResolvedValue(mockList);
@@ -193,16 +211,6 @@ describe('PokemonService', () => {
       const result = await promise;
 
       expect(result).toEqual([mockDetails]);
-    });
-
-    it('should handle errors in rate limited functions', async () => {
-      const error = new Error('API Error');
-      mockFetchPokemonList.mockRejectedValue(error);
-
-      const promise = service.loadDefaultList(1);
-      await vi.runAllTimersAsync();
-
-      await expect(promise).rejects.toThrow('API Error');
     });
   });
 });

@@ -10,6 +10,7 @@ class RateLimiter {
   private queue: Array<() => Promise<unknown>> = [];
   private processing = false;
   private delay = 100;
+
   async execute<T>(fn: () => Promise<T>): Promise<T> {
     return new Promise((resolve, reject) => {
       this.queue.push(async () => {
@@ -23,7 +24,7 @@ class RateLimiter {
       });
 
       if (!this.processing) {
-        this.processQueue();
+        this.processQueue().catch(reject);
       }
     });
   }
