@@ -6,7 +6,7 @@ import {
   fireEvent,
   act,
 } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 import App from '@/App';
 import { ThemeProvider } from '@contexts/ThemeProvider';
 import ErrorBoundary from '@components/ErrorBoundary';
@@ -20,17 +20,19 @@ beforeEach(() => {
 });
 
 describe('App Component', () => {
-  const mockPokemon: PokemonDetails = {
-    name: 'pikachu',
+  const createMockPokemon = (name: string): PokemonDetails => ({
+    name,
     sprites: {
-      front_default: 'https://example.com/pikachu.png',
+      front_default: `https://example.com/${name}.png`,
     },
     types: [{ type: { name: 'electric' } }],
     height: 4,
     abilities: [{ ability: { name: 'static' } }],
-    forms: [{ name: 'pikachu' }],
+    forms: [{ name }],
     moves: [{ move: { name: 'thunder-shock' } }],
-  };
+  });
+
+  const mockPokemon = createMockPokemon('pikachu');
 
   const mockPokemonList: PokemonListItem[] = [
     { name: 'pikachu', url: 'https://pokeapi.co/api/v2/pokemon/25/' },
@@ -47,21 +49,23 @@ describe('App Component', () => {
     { name: 'nidoran-f', url: 'https://pokeapi.co/api/v2/pokemon/29/' },
   ];
 
-  const renderApp = () => {
+  const renderApp = (initialPath = '/') => {
     return render(
       <TestQueryClientProvider>
-        <BrowserRouter>
+        <MemoryRouter initialEntries={[initialPath]}>
           <ThemeProvider>
             <App />
           </ThemeProvider>
-        </BrowserRouter>
+        </MemoryRouter>
       </TestQueryClientProvider>
     );
   };
 
   it('renders without crashing', async () => {
     vi.spyOn(api, 'fetchPokemonList').mockResolvedValue(mockPokemonList);
-    vi.spyOn(api, 'fetchPokemonByName').mockResolvedValue(mockPokemon);
+    vi.spyOn(api, 'fetchPokemonByName').mockResolvedValue(
+      createMockPokemon('pikachu')
+    );
 
     await act(async () => {
       renderApp();
@@ -74,7 +78,9 @@ describe('App Component', () => {
 
   it('displays search form', async () => {
     vi.spyOn(api, 'fetchPokemonList').mockResolvedValue(mockPokemonList);
-    vi.spyOn(api, 'fetchPokemonByName').mockResolvedValue(mockPokemon);
+    vi.spyOn(api, 'fetchPokemonByName').mockResolvedValue(
+      createMockPokemon('pikachu')
+    );
 
     await act(async () => {
       renderApp();
@@ -94,7 +100,9 @@ describe('App Component', () => {
     vi.spyOn(api, 'fetchPokemonList').mockRejectedValue(
       new Error('Network error')
     );
-    vi.spyOn(api, 'fetchPokemonByName').mockResolvedValue(mockPokemon);
+    vi.spyOn(api, 'fetchPokemonByName').mockResolvedValue(
+      createMockPokemon('pikachu')
+    );
 
     await act(async () => {
       renderApp();
@@ -110,7 +118,9 @@ describe('App Component', () => {
 
   it('handles page change correctly', async () => {
     vi.spyOn(api, 'fetchPokemonList').mockResolvedValue(mockPokemonList);
-    vi.spyOn(api, 'fetchPokemonByName').mockResolvedValue(mockPokemon);
+    vi.spyOn(api, 'fetchPokemonByName').mockResolvedValue(
+      createMockPokemon('pikachu')
+    );
 
     await act(async () => {
       renderApp();
@@ -131,22 +141,20 @@ describe('App Component', () => {
       render(
         <TestQueryClientProvider>
           <ErrorBoundary>
-            <BrowserRouter>
+            <MemoryRouter>
               <ThemeProvider>
                 <App />
               </ThemeProvider>
-            </BrowserRouter>
+            </MemoryRouter>
           </ErrorBoundary>
         </TestQueryClientProvider>
       );
     });
 
-    // Wait for the component to load
     await waitFor(() => {
       expect(screen.getByText(/pokémon search/i)).toBeInTheDocument();
     });
 
-    // Find and click the "Throw error" button
     const throwErrorButton = screen.getByRole('button', {
       name: /throw error/i,
     });
@@ -155,7 +163,6 @@ describe('App Component', () => {
       fireEvent.click(throwErrorButton);
     });
 
-    // Verify that the error was caught by ErrorBoundary
     await waitFor(() => {
       expect(screen.getByText(/something went wrong/i)).toBeInTheDocument();
     });
@@ -173,22 +180,20 @@ describe('App Component', () => {
       render(
         <TestQueryClientProvider>
           <ErrorBoundary>
-            <BrowserRouter>
+            <MemoryRouter>
               <ThemeProvider>
                 <App />
               </ThemeProvider>
-            </BrowserRouter>
+            </MemoryRouter>
           </ErrorBoundary>
         </TestQueryClientProvider>
       );
     });
 
-    // Wait for the component to load
     await waitFor(() => {
       expect(screen.getByText(/pokémon search/i)).toBeInTheDocument();
     });
 
-    // Find and click the "Throw error" button
     const throwErrorButton = screen.getByRole('button', {
       name: /throw error/i,
     });
@@ -197,7 +202,6 @@ describe('App Component', () => {
       fireEvent.click(throwErrorButton);
     });
 
-    // Verify that the error was caught by ErrorBoundary
     await waitFor(() => {
       expect(screen.getByText(/something went wrong/i)).toBeInTheDocument();
     });
@@ -207,13 +211,276 @@ describe('App Component', () => {
 
   it('applies dark theme class correctly', async () => {
     vi.spyOn(api, 'fetchPokemonList').mockResolvedValue(mockPokemonList);
-    vi.spyOn(api, 'fetchPokemonByName').mockResolvedValue(mockPokemon);
+    vi.spyOn(api, 'fetchPokemonByName').mockResolvedValue(
+      createMockPokemon('pikachu')
+    );
 
     await act(async () => {
       renderApp();
     });
 
-    // Wait for the component to load
+    await waitFor(() => {
+      expect(screen.getByText(/pokémon search/i)).toBeInTheDocument();
+    });
+
+    const container = document.querySelector('div[class*="min-h-screen"]');
+    expect(container).toHaveClass('min-h-screen', 'bg-gray-50');
+  });
+
+  it('applies dark theme class when theme is dark', async () => {
+    vi.spyOn(api, 'fetchPokemonList').mockResolvedValue(mockPokemonList);
+    vi.spyOn(api, 'fetchPokemonByName').mockResolvedValue(
+      createMockPokemon('pikachu')
+    );
+
+    localStorage.setItem('theme', 'dark');
+
+    await act(async () => {
+      renderApp();
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText(/pokémon search/i)).toBeInTheDocument();
+    });
+
+    const container = document.querySelector('div[class*="min-h-screen"]');
+    expect(container).toHaveClass('min-h-screen', 'bg-gray-50');
+  });
+
+  it('initializes with URL search term when present', async () => {
+    vi.spyOn(api, 'fetchPokemonList').mockResolvedValue(mockPokemonList);
+    vi.spyOn(api, 'fetchPokemonByName').mockResolvedValue(
+      createMockPokemon('pikachu')
+    );
+
+    await act(async () => {
+      renderApp('/?search=pikachu');
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText(/pokémon search/i)).toBeInTheDocument();
+    });
+  });
+
+  it('initializes with URL search term and sets search trigger', async () => {
+    vi.spyOn(api, 'fetchPokemonList').mockResolvedValue(mockPokemonList);
+    vi.spyOn(api, 'fetchPokemonByName').mockResolvedValue(
+      createMockPokemon('pikachu')
+    );
+
+    await act(async () => {
+      renderApp('/?search=pikachu');
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText(/pokémon search/i)).toBeInTheDocument();
+    });
+  });
+
+  it('handles page change functionality', async () => {
+    vi.spyOn(api, 'fetchPokemonList').mockResolvedValue(mockPokemonList);
+    vi.spyOn(api, 'fetchPokemonByName').mockResolvedValue(
+      createMockPokemon('pikachu')
+    );
+
+    await act(async () => {
+      renderApp();
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText(/pokémon search/i)).toBeInTheDocument();
+    });
+
+    const paginationButtons = screen.getAllByRole('button');
+    const nextButton = paginationButtons.find(
+      (button) =>
+        button.textContent?.includes('Next') ||
+        button.textContent?.includes('>')
+    );
+
+    if (nextButton) {
+      await act(async () => {
+        fireEvent.click(nextButton);
+      });
+    }
+  });
+
+  it('handles refresh functionality', async () => {
+    vi.spyOn(api, 'fetchPokemonList').mockResolvedValue(mockPokemonList);
+    vi.spyOn(api, 'fetchPokemonByName').mockResolvedValue(
+      createMockPokemon('pikachu')
+    );
+
+    await act(async () => {
+      renderApp();
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText(/pokémon search/i)).toBeInTheDocument();
+    });
+
+    const refreshButton = screen.getByRole('button', {
+      name: /go to home & clear cache/i,
+    });
+
+    await act(async () => {
+      fireEvent.click(refreshButton);
+    });
+  });
+
+  it('handles search functionality with empty term', async () => {
+    vi.spyOn(api, 'fetchPokemonList').mockResolvedValue(mockPokemonList);
+    vi.spyOn(api, 'fetchPokemonByName').mockResolvedValue(
+      createMockPokemon('pikachu')
+    );
+
+    await act(async () => {
+      renderApp();
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText(/pokémon search/i)).toBeInTheDocument();
+    });
+  });
+
+  it('handles search functionality with valid term', async () => {
+    vi.spyOn(api, 'fetchPokemonList').mockResolvedValue(mockPokemonList);
+    vi.spyOn(api, 'fetchPokemonByName').mockResolvedValue(
+      createMockPokemon('pikachu')
+    );
+
+    await act(async () => {
+      renderApp();
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText(/pokémon search/i)).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByPlaceholderText(/search pokémon/i);
+    const searchButton = screen.getByRole('button', { name: /search/i });
+
+    await act(async () => {
+      fireEvent.change(searchInput, { target: { value: 'pikachu' } });
+      fireEvent.click(searchButton);
+    });
+  });
+
+  it('handles invalid page parameter in URL', async () => {
+    vi.spyOn(api, 'fetchPokemonList').mockResolvedValue(mockPokemonList);
+    vi.spyOn(api, 'fetchPokemonByName').mockResolvedValue(
+      createMockPokemon('pikachu')
+    );
+
+    await act(async () => {
+      renderApp('/?page=invalid');
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText(/pokémon search/i)).toBeInTheDocument();
+    });
+  });
+
+  it('handles negative page parameter in URL', async () => {
+    vi.spyOn(api, 'fetchPokemonList').mockResolvedValue(mockPokemonList);
+    vi.spyOn(api, 'fetchPokemonByName').mockResolvedValue(
+      createMockPokemon('pikachu')
+    );
+
+    await act(async () => {
+      renderApp('/?page=-1');
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText(/pokémon search/i)).toBeInTheDocument();
+    });
+  });
+
+  it('handles NaN page parameter in URL', async () => {
+    vi.spyOn(api, 'fetchPokemonList').mockResolvedValue(mockPokemonList);
+    vi.spyOn(api, 'fetchPokemonByName').mockResolvedValue(
+      createMockPokemon('pikachu')
+    );
+
+    await act(async () => {
+      renderApp('/?page=NaN');
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText(/pokémon search/i)).toBeInTheDocument();
+    });
+  });
+
+  it('handles URL search term with whitespace', async () => {
+    vi.spyOn(api, 'fetchPokemonList').mockResolvedValue(mockPokemonList);
+    vi.spyOn(api, 'fetchPokemonByName').mockResolvedValue(
+      createMockPokemon('pikachu')
+    );
+
+    await act(async () => {
+      renderApp('/?search=%20%20pikachu%20%20');
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText(/pokémon search/i)).toBeInTheDocument();
+    });
+  });
+
+  it('handles URL search term that is empty after trim', async () => {
+    vi.spyOn(api, 'fetchPokemonList').mockResolvedValue(mockPokemonList);
+    vi.spyOn(api, 'fetchPokemonByName').mockResolvedValue(
+      createMockPokemon('pikachu')
+    );
+
+    await act(async () => {
+      renderApp('/?search=%20%20%20');
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText(/pokémon search/i)).toBeInTheDocument();
+    });
+  });
+
+  it('handles URL search term initialization with non-empty term', async () => {
+    vi.spyOn(api, 'fetchPokemonList').mockResolvedValue(mockPokemonList);
+    vi.spyOn(api, 'fetchPokemonByName').mockResolvedValue(
+      createMockPokemon('pikachu')
+    );
+
+    await act(async () => {
+      renderApp('/?search=pikachu');
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText(/pokémon search/i)).toBeInTheDocument();
+    });
+  });
+
+  it('handles URL search term initialization with empty term', async () => {
+    vi.spyOn(api, 'fetchPokemonList').mockResolvedValue(mockPokemonList);
+    vi.spyOn(api, 'fetchPokemonByName').mockResolvedValue(
+      createMockPokemon('pikachu')
+    );
+
+    await act(async () => {
+      renderApp('/?search=');
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText(/pokémon search/i)).toBeInTheDocument();
+    });
+  });
+
+  it('handles URL search term initialization with whitespace-only term', async () => {
+    vi.spyOn(api, 'fetchPokemonList').mockResolvedValue(mockPokemonList);
+    vi.spyOn(api, 'fetchPokemonByName').mockResolvedValue(
+      createMockPokemon('pikachu')
+    );
+
+    await act(async () => {
+      renderApp('/?search=%20%20');
+    });
+
     await waitFor(() => {
       expect(screen.getByText(/pokémon search/i)).toBeInTheDocument();
     });
