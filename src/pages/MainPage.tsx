@@ -51,7 +51,7 @@ const MainPage = ({
 
   return (
     <div
-      className="flex gap-6 min-w-screen px-[20%] items-center"
+      className="flex gap-6 max-w-screen-2xl mx-auto px-4 items-center"
       onClick={detailsName ? handleContainerClick : undefined}
     >
       <div className={`flex-1 ${detailsName ? 'w-2/3' : 'w-full'}`}>
