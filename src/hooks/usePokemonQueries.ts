@@ -22,7 +22,10 @@ export const usePokemonList = (page: number) => {
   });
 };
 
-export const usePokemonSearch = (searchTerm: string, searchTrigger: string) => {
+export const usePokemonSearch = (
+  searchTerm: string,
+  searchTrigger?: string
+) => {
   // Extract the actual search term from the trigger (remove timestamp)
   const actualSearchTerm =
     searchTrigger && searchTrigger.includes('-')

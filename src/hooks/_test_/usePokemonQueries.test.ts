@@ -15,7 +15,7 @@ import type { PokemonDetails } from '@api/pokeapi';
 vi.mock('../../api/pokeapi');
 
 const wrapper = ({ children }: { children: React.ReactNode }) => {
-  return React.createElement(TestQueryClientProvider, {}, children);
+  return React.createElement(TestQueryClientProvider, null, children);
 };
 
 describe('usePokemonQueries', () => {

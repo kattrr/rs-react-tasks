@@ -1,3 +1,4 @@
+// tsconfig.json
 {
   "files": [],
   "references": [
@@ -8,11 +9,16 @@
     "types": ["vitest/globals", "jest-dom", "node"],
     "baseUrl": "./src",
     "paths": {
+      "@/*": ["*"],
+      "@api/*": ["api/*"],
+      "@components": ["components/index.ts"],
       "@components/*": ["components/*"],
-      "@pages/*": ["pages/*"],
-      "@assets/*": ["assets/*"],
+      "@contexts/*": ["contexts/*"],
       "@hooks/*": ["hooks/*"],
-      "@utils/*": ["utils/*"]
+      "@pages/*": ["pages/*"],
+      "@services/*": ["services/*"],
+      "@store/*": ["store/*"],
+      "@test/*": ["_test_/*"]
     }
   }
 }

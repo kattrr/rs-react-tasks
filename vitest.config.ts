@@ -1,7 +1,12 @@
+// vite.config.ts
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
@@ -9,7 +14,7 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, './src'),
       '@api': path.resolve(__dirname, './src/api'),
-      '@components': path.resolve(__dirname, 'src/components'),
+      '@components': path.resolve(__dirname, './src/components'),
       '@contexts': path.resolve(__dirname, './src/contexts'),
       '@hooks': path.resolve(__dirname, './src/hooks'),
       '@pages': path.resolve(__dirname, './src/pages'),

@@ -111,6 +111,7 @@ describe('MainPage', () => {
     onSearch: vi.fn(),
     onPageChange: vi.fn(),
     onThrowError: vi.fn(),
+    onRefresh: vi.fn(),
   };
 
   const renderMainPage = (props = {}) => {
