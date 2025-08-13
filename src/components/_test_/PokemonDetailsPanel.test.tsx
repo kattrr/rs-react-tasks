@@ -1,7 +1,14 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor, act } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import {
+  render,
+  screen,
+  waitFor,
+  act,
+  fireEvent,
+} from '@testing-library/react';
+import { BrowserRouter } from 'react-router';
 import PokemonDetailsPanel from '../PokemonDetailsPanel';
+import { TestQueryClientProvider } from '../../test/queryClient';
 import * as api from '@api/pokeapi';
 import type { PokemonDetails } from '@api/pokeapi';
 
@@ -41,6 +48,18 @@ describe('PokemonDetailsPanel', () => {
     ],
   };
 
+  const mockPokemonWithManyMoves = {
+    ...mockPokemon,
+    moves: Array.from({ length: 15 }, (_, i) => ({
+      move: { name: `move-${i + 1}` },
+    })),
+  };
+
+  const mockPokemonWithoutAbilities = {
+    ...mockPokemon,
+    abilities: [],
+  };
+
   const defaultProps = {
     detailsName: 'pikachu',
     onClose: vi.fn(),
@@ -48,9 +67,11 @@ describe('PokemonDetailsPanel', () => {
 
   const renderDetailsPanel = (props = {}) => {
     return render(
-      <BrowserRouter>
-        <PokemonDetailsPanel {...defaultProps} {...props} />
-      </BrowserRouter>
+      <TestQueryClientProvider>
+        <BrowserRouter>
+          <PokemonDetailsPanel {...defaultProps} {...props} />
+        </BrowserRouter>
+      </TestQueryClientProvider>
     );
   };
 
@@ -108,6 +129,9 @@ describe('PokemonDetailsPanel', () => {
         'src',
         mockPokemon.sprites.front_default
       );
+      expect(screen.getByText('electric, flying')).toBeInTheDocument();
+      expect(screen.getByText('0.4 m')).toBeInTheDocument();
+      expect(screen.getByText('static, lightning-rod')).toBeInTheDocument();
     });
   });
 
@@ -119,7 +143,102 @@ describe('PokemonDetailsPanel', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByText('Could not load details')).toBeInTheDocument();
+      expect(screen.getByText('API Error')).toBeInTheDocument();
+      expect(
+        screen.getByText('Please try again or select a different Pokémon')
+      ).toBeInTheDocument();
+    });
+  });
+
+  it('displays fallback image when sprite fails to load', async () => {
+    vi.mocked(api.fetchPokemonByName).mockResolvedValue(mockPokemon);
+
+    const { container } = await act(async () => {
+      return renderDetailsPanel();
+    });
+
+    await waitFor(() => {
+      const img = container.querySelector('img');
+      expect(img).toBeInTheDocument();
+    });
+
+    const img = container.querySelector('img');
+    if (img) {
+      // Simular error de carga de imagen
+      fireEvent.error(img, {
+        target: {
+          src: 'https://example.com/pikachu.png',
+        },
+      });
+    }
+
+    await waitFor(() => {
+      expect(img?.getAttribute('src')).toBe('/fallback-pokemon.png');
+    });
+  });
+
+  it('displays "+X more" when there are more than 12 moves', async () => {
+    vi.mocked(api.fetchPokemonByName).mockResolvedValue(
+      mockPokemonWithManyMoves
+    );
+
+    await act(async () => {
+      renderDetailsPanel();
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText('+3 more')).toBeInTheDocument();
+    });
+
+    expect(screen.getAllByRole('listitem')).toHaveLength(13); // 12 moves + "+3 more"
+  });
+
+  it('does not render abilities section when abilities array is empty', async () => {
+    vi.mocked(api.fetchPokemonByName).mockResolvedValue(
+      mockPokemonWithoutAbilities
+    );
+
+    await act(async () => {
+      renderDetailsPanel();
+    });
+
+    await waitFor(() => {
+      expect(screen.queryByText('Abilities')).not.toBeInTheDocument();
+    });
+  });
+
+  it('shows loading spinner while fetching data', async () => {
+    vi.mocked(api.fetchPokemonByName).mockImplementation(
+      () => new Promise(() => {}) // Never resolves
+    );
+
+    await act(async () => {
+      renderDetailsPanel();
+    });
+
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+  });
+
+  it('capitalizes pokemon name and moves', async () => {
+    vi.mocked(api.fetchPokemonByName).mockResolvedValue({
+      ...mockPokemon,
+      name: 'charizard',
+      moves: [{ move: { name: 'fire-blast' } }],
+      types: [{ type: { name: 'fire' } }],
+      abilities: [{ ability: { name: 'blaze' } }],
+    });
+
+    await act(async () => {
+      renderDetailsPanel({ detailsName: 'charizard' });
+    });
+
+    await waitFor(() => {
+      // Verificar que el nombre está capitalizado visualmente
+      const nameElement = screen.getByText('charizard');
+      expect(nameElement).toHaveClass('capitalize');
+
+      // Verificar que el movimiento está formateado
+      expect(screen.getByText('fire blast')).toBeInTheDocument();
     });
   });
 });

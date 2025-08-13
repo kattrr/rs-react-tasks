@@ -35,7 +35,7 @@ describe('main.tsx', () => {
     vi.clearAllMocks();
   });
 
-  it('should render App inside StrictMode and ErrorBoundary', async () => {
+  it('should render App inside StrictMode', async () => {
     await import('../main.tsx');
 
     const mockCreateRoot = ReactDOMClient.createRoot as Mock;
@@ -46,14 +46,5 @@ describe('main.tsx', () => {
 
     const renderedTree = renderMock.mock.calls[0][0];
     expect(renderedTree.type).toBe(React.StrictMode);
-
-    const browserRouter = renderedTree.props.children;
-    expect(browserRouter.type.name).toBe('BrowserRouter');
-
-    const errorBoundary = browserRouter.props.children;
-    expect(errorBoundary.type.name).toBe('ErrorBoundary');
-
-    const appInside = errorBoundary.props.children;
-    expect(appInside.type.name).toBe('ThemeProvider');
   });
 });

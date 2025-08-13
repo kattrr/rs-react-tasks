@@ -1,4 +1,5 @@
 import '@testing-library/jest-dom';
+import { vi } from 'vitest';
 
 if (!globalThis.localStorage) {
   const localStorageMock = (() => {
@@ -25,3 +26,5 @@ if (!globalThis.localStorage) {
     configurable: true,
   });
 }
+
+globalThis.fetch = vi.fn();

@@ -4,12 +4,12 @@ const AboutPage = () => (
       <div className="bg-gradient-to-br from-indigo-600 to-purple-700 shadow-2xl rounded-3xl p-8 text-white text-center relative overflow-hidden z-50">
         {/* Wave effects */}
         <div className="absolute w-[150%] h-[500%] opacity-60 left-0 top-0 bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 rounded-[40%] animate-spin [animation-duration:15s] -z-10"></div>
-        <div className="absolute w-[150%] h-[500%] opacity-60 left-0 top-0 bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 rounded-[40%] animate-spin [animation-duration:15s] delay-100 -z-10"></div>
-        <div className="absolute w-[150%] h-[500%] opacity-60 left-0 top-0 bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 rounded-[40%] animate-spin [animation-duration:15s] delay-200 -z-10"></div>
+        <div className="absolute w-[150%] h-[500%] opacity-60 left-0 top-0 bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 rounded-[40%] animate-spin [animation-duration:18s] delay-100 -z-10"></div>
+        <div className="absolute w-[150%] h-[500%] opacity-60 left-0 top-0 bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 rounded-[40%] animate-spin [animation-duration:20s] delay-200 -z-10"></div>
 
         <h1 className="text-4xl font-bold mb-6 mt-2 z-50">About Me</h1>
 
-        <div className="space-y-4 bg-transparent z-50">
+        <div className="flex flex-col gap-4 bg-transparent z-50">
           <h2 className="text-2xl font-semibold text-white break-words z-50">
             Kathering Rivera Rodriguez
           </h2>

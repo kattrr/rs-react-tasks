@@ -1,32 +1,31 @@
 import type { ChangeEvent, KeyboardEvent } from 'react';
-import { useSearchTerm } from '@hooks/useSearchTerm';
+import { useState, useEffect } from 'react';
+import { twMerge } from 'tailwind-merge';
 
 interface SearchBarProps {
   onSearch: (term: string) => void;
+  searchTerm?: string;
 }
 
-const SearchBar = ({ onSearch }: SearchBarProps) => {
-  const { searchTerm, updateSearchTerm, clearSearchTerm } = useSearchTerm();
+const SearchBar = ({
+  onSearch,
+  searchTerm: propSearchTerm = '',
+}: SearchBarProps) => {
+  const [inputValue, setInputValue] = useState(propSearchTerm);
+
+  // Sync input value when propSearchTerm changes
+  useEffect(() => {
+    setInputValue(propSearchTerm);
+  }, [propSearchTerm]);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    if (value.trim() === '') {
-      clearSearchTerm();
-      onSearch('');
-    } else {
-      updateSearchTerm(value);
-    }
+    setInputValue(value);
   };
 
   const handleSearch = () => {
-    const trimmed = searchTerm.trim();
-    if (trimmed === '') {
-      clearSearchTerm();
-      onSearch('');
-      return;
-    }
-    updateSearchTerm(trimmed);
-    onSearch(trimmed);
+    const trimmed = inputValue.trim();
+    onSearch(trimmed); // Always trigger search with current input
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -39,15 +38,28 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
     <div className="flex w-full justify-between gap-4">
       <input
         type="text"
-        value={searchTerm}
+        value={inputValue}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
-        className="bg-white/10 py-2 pl-4 rounded-2xl flex-grow mr-4 text-base text-black placeholder:text-gray-400 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        className={twMerge(
+          'bg-white/10 flex-grow',
+          'py-2 pl-4 mr-4 rounded-2xl',
+          'text-base text-black placeholder:text-gray-400',
+          'border border-gray-300',
+          'focus:outline-none focus:ring-2 focus:ring-blue-400'
+        )}
         placeholder="Search Pokémon..."
       />
       <button
         onClick={handleSearch}
-        className="rounded-lg border border-transparent px-[1.2em] py-[0.6em] text-base font-medium font-inherit bg-[#1a1a1a] text-white cursor-pointer transition-colors duration-200 hover:border-[#646cff] focus:outline focus:outline-4 focus:outline-blue-400"
+        className={twMerge(
+          'bg-[#1a1a1a] cursor-pointer transition-colors duration-200',
+          'px-[1.2em] py-[0.6em] rounded-lg',
+          'text-base font-medium font-inherit text-white',
+          'border border-transparent hover:border-[#646cff]',
+          'focus:outline-4 focus:outline-blue-400'
+        )}
+        disabled={inputValue.trim() === propSearchTerm} // Disable if no change
       >
         Search
       </button>

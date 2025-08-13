@@ -28,6 +28,7 @@
     "paths": {
       "@/*": ["src/*"],
       "@api/*": ["src/api/*"],
+      "@components": ["src/components/index.ts"],
       "@components/*": ["src/components/*"],
       "@contexts/*": ["src/contexts/*"],
       "@hooks/*": ["src/hooks/*"],
