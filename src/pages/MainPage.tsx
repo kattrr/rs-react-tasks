@@ -76,7 +76,20 @@ const MainPage = ({
         <div className="mt-4 flex gap-2">
           <button
             onClick={onRefresh}
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 outline-none border border-transparent hover:outline-blue-400 hover:border-blue-400 focus:outline-4 focus:outline-blue-400 transition-colors text-base font-medium"
+// Improved version with twMerge
+className={twMerge(
+  // Layout & Spacing
+  'px-4 py-2 rounded-lg',
+  // Typography
+  'text-base font-medium text-white',
+  // Background & Colors
+  'bg-blue-500 hover:bg-blue-600',
+  // Border & Outline States
+  'border border-transparent hover:border-blue-400',
+  'outline-none hover:outline-blue-400 focus:outline-4 focus:outline-blue-400',
+  // Transitions
+  'transition-colors'
+)}
           >
             🏠 Go to Home & Clear Cache
           </button>
