@@ -31,17 +31,18 @@ export const usePokemonSearch = (
     searchTrigger && searchTrigger.includes('-')
       ? searchTrigger.split('-')[0]
       : searchTerm;
-
+  const shouldExecuteSearch =
+    actualSearchTerm.trim().length > 0 && searchTrigger !== '';
   return useQuery({
     queryKey: ['pokemon-search', actualSearchTerm, searchTrigger],
     queryFn: async () => {
-      if (!actualSearchTerm.trim()) {
+      if (!shouldExecuteSearch) {
         return [];
       }
       const pokemon = await fetchPokemonByName(actualSearchTerm.toLowerCase());
       return [pokemon];
     },
-    enabled: actualSearchTerm.trim().length > 0 && searchTrigger !== '',
+    enabled: shouldExecuteSearch,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
   });
