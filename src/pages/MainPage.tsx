@@ -3,6 +3,7 @@ import Pagination from '@components/Pagination';
 import { useSearchParams } from 'react-router';
 import PokemonDetailsPanel from '@components/PokemonDetailsPanel';
 import type { PokemonDetails } from '@api/pokeapi';
+import { twMerge } from 'tailwind-merge';
 
 interface MainPageProps {
   pokemons: PokemonDetails[];
@@ -76,26 +77,36 @@ const MainPage = ({
         <div className="mt-4 flex gap-2">
           <button
             onClick={onRefresh}
-// Improved version with twMerge
-className={twMerge(
-  // Layout & Spacing
-  'px-4 py-2 rounded-lg',
-  // Typography
-  'text-base font-medium text-white',
-  // Background & Colors
-  'bg-blue-500 hover:bg-blue-600',
-  // Border & Outline States
-  'border border-transparent hover:border-blue-400',
-  'outline-none hover:outline-blue-400 focus:outline-4 focus:outline-blue-400',
-  // Transitions
-  'transition-colors'
-)}
+            // Improved version with twMerge
+            className={twMerge(
+              // Layout & Spacing
+              'px-4 py-2 rounded-lg',
+              // Typography
+              'text-base font-medium text-white',
+              // Background & Colors
+              'bg-blue-500 hover:bg-blue-600',
+              // Border & Outline States
+              'border border-transparent hover:border-blue-400',
+              'outline-none hover:outline-blue-400 focus:outline-4 focus:outline-blue-400',
+              // Transitions
+              'transition-colors'
+            )}
           >
             🏠 Go to Home & Clear Cache
           </button>
           <button
             onClick={onThrowError}
-            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 outline-none border border-transparent hover:outline-red-400 hover:border-red-400 focus:outline-4 focus:outline-blue-400 transition-colors text-base font-medium"
+            className={twMerge(
+              // Background & Layout
+              'bg-red-500 hover:bg-red-600 transition-colors',
+              // Spacing & Shape
+              'px-4 py-2 rounded-lg',
+              // Typography
+              'text-base font-medium text-white',
+              // Border & States
+              'border border-transparent hover:border-red-400',
+              'outline-none hover:outline-red-400 focus:outline-4 focus:outline-blue-400'
+            )}
           >
             Throw error
           </button>
