@@ -1,12 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, act } from '@testing-library/react';
-import { BrowserRouter, useSearchParams } from 'react-router-dom';
+import { BrowserRouter, useSearchParams } from 'react-router';
 import MainPage from '../MainPage';
 import type { PokemonDetails } from '@api/pokeapi';
 
 // Mock useSearchParams
-vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom');
+vi.mock('react-router', async () => {
+  const actual = await vi.importActual('react-router');
   return {
     ...actual,
     useSearchParams: vi.fn(),

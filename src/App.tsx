@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Routes, Route, useSearchParams } from 'react-router-dom';
+import { Routes, Route, useSearchParams } from 'react-router';
 import MainPage from '@pages/MainPage';
 import AboutPage from '@pages/AboutPage';
 import NotFoundPage from '@pages/NotFoundPage';

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor, act } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import PokemonDetailsPanel from '../PokemonDetailsPanel';
 import { TestQueryClientProvider } from '../../test/queryClient';
 import * as api from '@api/pokeapi';

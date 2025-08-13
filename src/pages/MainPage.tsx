@@ -1,6 +1,6 @@
 import { SearchBar, CardList, Spinner } from '@components';
 import Pagination from '@components/Pagination';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 import PokemonDetailsPanel from '@components/PokemonDetailsPanel';
 import type { PokemonDetails } from '@api/pokeapi';
 

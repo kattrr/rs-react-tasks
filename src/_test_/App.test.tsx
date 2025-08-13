@@ -6,7 +6,7 @@ import {
   fireEvent,
   act,
 } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router';
 import App from '@/App';
 import { ThemeProvider } from '@contexts/ThemeProvider';
 import ErrorBoundary from '@components/ErrorBoundary';
