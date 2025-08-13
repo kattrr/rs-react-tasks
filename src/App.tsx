@@ -19,7 +19,6 @@ const App = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { theme } = useTheme();
   const { searchTerm, updateSearchTerm, clearSearchTerm } = useSearchTerm();
-  const [searchTrigger, setSearchTrigger] = useState('');
   const [isInitialized, setIsInitialized] = useState(false);
 
   const pageParam = parseInt(searchParams.get('page') || '1', 10);
@@ -30,19 +29,16 @@ const App = () => {
     if (!isInitialized) {
       if (urlSearchTerm) {
         updateSearchTerm(urlSearchTerm);
-        if (urlSearchTerm.trim() !== '') {
-          setSearchTrigger(`${urlSearchTerm}-${Date.now()}`);
-        }
       }
       setIsInitialized(true);
     }
   }, [urlSearchTerm, updateSearchTerm, isInitialized]);
 
   const pokemonListQuery = usePokemonList(currentPage);
-  const pokemonSearchQuery = usePokemonSearch(searchTerm, searchTrigger);
+  const pokemonSearchQuery = usePokemonSearch(searchTerm);
   const { invalidateAll } = useInvalidatePokemonCache();
 
-  const isSearching = searchTerm.trim() !== '' && searchTrigger !== '';
+  const isSearching = searchTerm.trim() !== '';
   const activeQuery = isSearching ? pokemonSearchQuery : pokemonListQuery;
 
   useEffect(() => {
@@ -58,23 +54,19 @@ const App = () => {
   const handleRefresh = () => {
     invalidateAll();
     clearSearchTerm();
-    setSearchTrigger('');
     setSearchParams({ page: '1' });
   };
 
   const handleSearch = (term: string) => {
     const newParams = new URLSearchParams(searchParams);
+    updateSearchTerm(term);
 
     if (term.trim() === '') {
-      setSearchTrigger('');
       newParams.delete('search');
-      newParams.set('page', '1');
     } else {
-      setSearchTrigger(`${term}-${Date.now()}`);
       newParams.set('search', term);
-      newParams.set('page', '1');
     }
-
+    newParams.set('page', '1');
     setSearchParams(newParams);
   };
 

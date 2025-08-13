@@ -1,5 +1,6 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchPokemonList, fetchPokemonByName } from '@api/pokeapi';
+import type { PokemonDetails } from '@api/pokeapi';
 
 const POKEMON_CONFIG = {
   pageSize: 12,
@@ -7,59 +8,56 @@ const POKEMON_CONFIG = {
 };
 
 export const usePokemonList = (page: number) => {
-  return useQuery({
+  return useQuery<PokemonDetails[], Error>({
     queryKey: ['pokemon-list', page],
     queryFn: async () => {
       const offset = (page - 1) * POKEMON_CONFIG.pageSize;
       const list = await fetchPokemonList(offset, POKEMON_CONFIG.pageSize);
-      const detailed = await Promise.all(
+
+      const detailedResults = await Promise.allSettled(
         list.map((p) => fetchPokemonByName(p.name))
       );
-      return detailed;
+
+      return detailedResults
+        .filter(
+          (result): result is PromiseFulfilledResult<PokemonDetails> =>
+            result.status === 'fulfilled'
+        )
+        .map((result) => result.value);
     },
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    gcTime: 10 * 60 * 1000, // 10 minutes
+    placeholderData: (keepPreviousData) => keepPreviousData, // Correct way to maintain previous data
   });
 };
 
-export const usePokemonSearch = (
-  searchTerm: string,
-  searchTrigger?: string
-) => {
-  // Extract the actual search term from the trigger (remove timestamp)
-  const actualSearchTerm =
-    searchTrigger && searchTrigger.includes('-')
-      ? searchTrigger.split('-')[0]
-      : searchTerm;
-  const shouldExecuteSearch =
-    actualSearchTerm.trim().length > 0 && searchTrigger !== '';
-  return useQuery({
-    queryKey: ['pokemon-search', actualSearchTerm, searchTrigger],
+export const usePokemonSearch = (searchTerm: string) => {
+  return useQuery<PokemonDetails[], Error>({
+    queryKey: ['pokemon-search', searchTerm],
     queryFn: async () => {
-      if (!shouldExecuteSearch) {
-        return [];
+      if (!searchTerm.trim()) return [];
+      try {
+        const pokemon = await fetchPokemonByName(searchTerm.toLowerCase());
+        return [pokemon];
+      } catch (error) {
+        throw error instanceof Error
+          ? error
+          : new Error(`Pokémon "${searchTerm}" not found`);
       }
-      const pokemon = await fetchPokemonByName(actualSearchTerm.toLowerCase());
-      return [pokemon];
     },
-    enabled: shouldExecuteSearch,
-    staleTime: 5 * 60 * 1000,
-    gcTime: 10 * 60 * 1000,
+    enabled: !!searchTerm.trim(),
+    retry: false,
   });
 };
 
 export const usePokemonDetails = (name: string | null) => {
-  return useQuery({
+  return useQuery<PokemonDetails, Error>({
     queryKey: ['pokemon-details', name],
     queryFn: () => {
-      if (!name) {
-        throw new Error('Name is required');
-      }
+      if (!name) throw new Error('Name is required');
       return fetchPokemonByName(name);
     },
     enabled: !!name,
-    staleTime: 10 * 60 * 1000, // 10 minutes for details
-    gcTime: 15 * 60 * 1000, // 15 minutes
+    staleTime: 10 * 60 * 1000,
+    gcTime: 15 * 60 * 1000,
   });
 };
 
@@ -70,15 +68,6 @@ export const useInvalidatePokemonCache = () => {
     invalidateAll: () => {
       queryClient.invalidateQueries({ queryKey: ['pokemon-list'] });
       queryClient.invalidateQueries({ queryKey: ['pokemon-search'] });
-      queryClient.invalidateQueries({ queryKey: ['pokemon-details'] });
-    },
-    invalidateList: () => {
-      queryClient.invalidateQueries({ queryKey: ['pokemon-list'] });
-    },
-    invalidateSearch: () => {
-      queryClient.invalidateQueries({ queryKey: ['pokemon-search'] });
-    },
-    invalidateDetails: () => {
       queryClient.invalidateQueries({ queryKey: ['pokemon-details'] });
     },
   };

@@ -1,6 +1,5 @@
 import type { ChangeEvent, KeyboardEvent } from 'react';
 import { useState, useEffect } from 'react';
-import { useSearchTerm } from '@hooks/useSearchTerm';
 import { twMerge } from 'tailwind-merge';
 
 interface SearchBarProps {
@@ -10,45 +9,23 @@ interface SearchBarProps {
 
 const SearchBar = ({
   onSearch,
-  searchTerm: propSearchTerm,
+  searchTerm: propSearchTerm = '',
 }: SearchBarProps) => {
-  const {
-    searchTerm: hookSearchTerm,
-    updateSearchTerm,
-    clearSearchTerm,
-  } = useSearchTerm();
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState(propSearchTerm);
 
-  // Use prop searchTerm if provided, otherwise use hook searchTerm
-  const searchTerm =
-    propSearchTerm !== undefined ? propSearchTerm : hookSearchTerm;
-
-  // Update input value when searchTerm changes externally
+  // Sync input value when propSearchTerm changes
   useEffect(() => {
-    setInputValue(searchTerm || '');
-  }, [searchTerm]);
+    setInputValue(propSearchTerm);
+  }, [propSearchTerm]);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setInputValue(value);
-
-    if (value.trim() === '') {
-      clearSearchTerm();
-      onSearch('');
-    } else {
-      updateSearchTerm(value);
-    }
   };
 
   const handleSearch = () => {
     const trimmed = inputValue.trim();
-    if (trimmed === '') {
-      clearSearchTerm();
-      onSearch('');
-      return;
-    }
-    updateSearchTerm(trimmed);
-    onSearch(trimmed);
+    onSearch(trimmed); // Always trigger search with current input
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -65,13 +42,9 @@ const SearchBar = ({
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         className={twMerge(
-          // Background & Layout
           'bg-white/10 flex-grow',
-          // Spacing & Shape
           'py-2 pl-4 mr-4 rounded-2xl',
-          // Typography
           'text-base text-black placeholder:text-gray-400',
-          // Border & States
           'border border-gray-300',
           'focus:outline-none focus:ring-2 focus:ring-blue-400'
         )}
@@ -80,16 +53,13 @@ const SearchBar = ({
       <button
         onClick={handleSearch}
         className={twMerge(
-          // Background & Layout
           'bg-[#1a1a1a] cursor-pointer transition-colors duration-200',
-          // Spacing & Shape
           'px-[1.2em] py-[0.6em] rounded-lg',
-          // Typography
           'text-base font-medium font-inherit text-white',
-          // Border & States
           'border border-transparent hover:border-[#646cff]',
           'focus:outline-4 focus:outline-blue-400'
         )}
+        disabled={inputValue.trim() === propSearchTerm} // Disable if no change
       >
         Search
       </button>
