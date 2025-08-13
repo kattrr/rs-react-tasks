@@ -6,7 +6,6 @@ describe('SearchBar component', () => {
   const mockOnSearch = vi.fn();
 
   beforeEach(() => {
-    localStorage.clear();
     vi.clearAllMocks();
   });
 
@@ -16,13 +15,12 @@ describe('SearchBar component', () => {
     expect(screen.getByRole('button', { name: /Search/i })).toBeInTheDocument();
   });
 
-  test('shows previously saved search term from localStorage on mount', () => {
-    localStorage.setItem('searchTerm', 'pikachu');
-    render(<SearchBar onSearch={mockOnSearch} />);
+  test('shows initial search term from props', () => {
+    render(<SearchBar onSearch={mockOnSearch} searchTerm="pikachu" />);
     expect(screen.getByDisplayValue('pikachu')).toBeInTheDocument();
   });
 
-  test('shows empty input when no saved term exists', () => {
+  test('shows empty input when no search term is provided', () => {
     render(<SearchBar onSearch={mockOnSearch} />);
     expect(screen.getByPlaceholderText(/Search Pokémon/i)).toHaveValue('');
   });
@@ -34,7 +32,7 @@ describe('SearchBar component', () => {
     expect(input).toHaveValue('bulbasaur');
   });
 
-  test('calls onSearch when search button is clicked with valid term', () => {
+  test('calls onSearch when search button is clicked with trimmed term', () => {
     render(<SearchBar onSearch={mockOnSearch} />);
     const input = screen.getByPlaceholderText(/Search Pokémon/i);
     const button = screen.getByRole('button', { name: /Search/i });
@@ -42,11 +40,10 @@ describe('SearchBar component', () => {
     fireEvent.change(input, { target: { value: ' charmander  ' } });
     fireEvent.click(button);
 
-    expect(localStorage.getItem('searchTerm')).toBe('charmander');
     expect(mockOnSearch).toHaveBeenCalledWith('charmander');
   });
 
-  test('calls onSearch with empty string when search button is clicked with empty term', () => {
+  test('does not call onSearch when search button is clicked with empty term', () => {
     render(<SearchBar onSearch={mockOnSearch} />);
     const input = screen.getByPlaceholderText(/Search Pokémon/i);
     const button = screen.getByRole('button', { name: /Search/i });
@@ -54,18 +51,16 @@ describe('SearchBar component', () => {
     fireEvent.change(input, { target: { value: '   ' } });
     fireEvent.click(button);
 
-    expect(localStorage.getItem('searchTerm')).toBe('');
-    expect(mockOnSearch).toHaveBeenCalledWith('');
+    expect(mockOnSearch).not.toHaveBeenCalled();
   });
 
-  test('calls onSearch when Enter key is pressed with valid term', () => {
+  test('calls onSearch when Enter key is pressed with trimmed term', () => {
     render(<SearchBar onSearch={mockOnSearch} />);
     const input = screen.getByPlaceholderText(/Search Pokémon/i);
 
-    fireEvent.change(input, { target: { value: 'pikachu' } });
+    fireEvent.change(input, { target: { value: '  pikachu  ' } });
     fireEvent.keyDown(input, { key: 'Enter' });
 
-    expect(localStorage.getItem('searchTerm')).toBe('pikachu');
     expect(mockOnSearch).toHaveBeenCalledWith('pikachu');
   });
 
@@ -76,7 +71,21 @@ describe('SearchBar component', () => {
     fireEvent.change(input, { target: { value: '   ' } });
     fireEvent.keyDown(input, { key: 'Enter' });
 
-    expect(localStorage.getItem('searchTerm')).toBe('');
     expect(mockOnSearch).toHaveBeenCalledWith('');
+  });
+
+  test('disables search button when input value matches current search term', () => {
+    render(<SearchBar onSearch={mockOnSearch} searchTerm="pikachu" />);
+    const button = screen.getByRole('button', { name: /Search/i });
+    expect(button).toBeDisabled();
+  });
+
+  test('enables search button when input value changes', () => {
+    render(<SearchBar onSearch={mockOnSearch} searchTerm="pikachu" />);
+    const input = screen.getByPlaceholderText(/Search Pokémon/i);
+    const button = screen.getByRole('button', { name: /Search/i });
+
+    fireEvent.change(input, { target: { value: 'raichu' } });
+    expect(button).not.toBeDisabled();
   });
 });

@@ -70,6 +70,15 @@ export const useInvalidatePokemonCache = () => {
       queryClient.invalidateQueries({ queryKey: ['pokemon-search'] });
       queryClient.invalidateQueries({ queryKey: ['pokemon-details'] });
     },
+    invalidateList: () => {
+      queryClient.invalidateQueries({ queryKey: ['pokemon-list'] });
+    },
+    invalidateSearch: () => {
+      queryClient.invalidateQueries({ queryKey: ['pokemon-search'] });
+    },
+    invalidateDetails: () => {
+      queryClient.invalidateQueries({ queryKey: ['pokemon-details'] });
+    },
   };
 };
 
