@@ -29,7 +29,11 @@ const PokemonDetailsPanel = ({
         ✕
       </button>
       {loading && <Spinner />}
-      {error && <p className="text-red-600 font-semibold">{error.message}</p>}
+      {error && (
+        <p className="text-red-600 font-semibold">
+          {error?.message || 'API Error'}
+        </p>
+      )}
       {details && !loading && !error && (
         <div className="flex flex-col items-center text-indigo-950">
           <img
