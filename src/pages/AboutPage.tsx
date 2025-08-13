@@ -3,9 +3,9 @@ const AboutPage = () => (
     <div className="max-w-2xl mx-auto">
       <div className="bg-gradient-to-br from-indigo-600 to-purple-700 shadow-2xl rounded-3xl p-8 text-white text-center relative overflow-hidden z-50">
         {/* Wave effects */}
-        <div className="absolute w-[150%] h-[500%] opacity-60 left-0 top-0 bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 rounded-[40%] animate-spin [animation-duration:15s] -z-10"></div>
-        <div className="absolute w-[150%] h-[500%] opacity-60 left-0 top-0 bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 rounded-[40%] animate-spin [animation-duration:18s] delay-100 -z-10"></div>
-        <div className="absolute w-[150%] h-[500%] opacity-60 left-0 top-0 bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 rounded-[40%] animate-spin [animation-duration:20s] delay-200 -z-10"></div>
+        <div className="absolute w-[150%] h-[400%] opacity-60 left-0 top-0 bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 rounded-[40%] animate-spin [animation-duration:10s] -z-10"></div>
+        <div className="absolute w-[150%] h-[400%] opacity-60 left-0 top-0 bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 rounded-[40%] animate-spin delay-150 [animation-duration:15s] -z-10"></div>
+        <div className="absolute w-[150%] h-[400%] opacity-60 left-0 top-0 bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 rounded-[40%] animate-spin delay-300 [animation-duration:20s] -z-10"></div>
 
         <h1 className="text-4xl font-bold mb-6 mt-2 z-50">About Me</h1>
 
