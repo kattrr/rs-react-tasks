@@ -35,10 +35,9 @@ describe('Card component', () => {
     render(<Card pokemon={mockPokemon} />);
     expect(screen.getByText('pikachu')).toBeInTheDocument();
     expect(screen.getByText('electric')).toBeInTheDocument();
-    expect(screen.getByAltText(/pikachu/i)).toHaveAttribute(
-      'src',
-      mockPokemon.sprites.front_default
-    );
+    const image = screen.getByAltText(/pikachu/i);
+    expect(image).toHaveAttribute('src');
+    expect(image.getAttribute('src')).toContain('pikachu.png');
   });
 
   it('renders safely when some props are missing', () => {

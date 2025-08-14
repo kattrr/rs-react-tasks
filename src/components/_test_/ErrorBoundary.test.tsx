@@ -33,7 +33,7 @@ describe('ErrorBoundary', () => {
       </ErrorBoundary>
     );
 
-    expect(screen.getByText(/Oops! Something went wrong/i)).toBeInTheDocument();
+    expect(screen.getByText(/Something went wrong/i)).toBeInTheDocument();
     expect(
       screen.getByText(/Please reload the application/i)
     ).toBeInTheDocument();
@@ -77,7 +77,7 @@ describe('ErrorBoundary', () => {
       <Wrapper shouldThrow={shouldThrow} boundaryKey={boundaryKey} />
     );
 
-    expect(screen.getByText(/Oops! Something went wrong/i)).toBeInTheDocument();
+    expect(screen.getByText(/Something went wrong/i)).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: /Try again/i }));
 

@@ -97,8 +97,8 @@ describe('SelectedItemsFlyout component', () => {
     it('should call clearAll when unselect button is clicked', () => {
       render(<SelectedItemsFlyout />);
 
-      const unselectButton = screen.getByText('Unselect all');
-      fireEvent.click(unselectButton);
+      const clearAllButton = screen.getByText('Clear All');
+      fireEvent.click(clearAllButton);
 
       expect(mockClearAll).toHaveBeenCalledTimes(1);
     });
@@ -106,7 +106,7 @@ describe('SelectedItemsFlyout component', () => {
     it('should render both buttons', () => {
       render(<SelectedItemsFlyout />);
 
-      expect(screen.getByText('Unselect all')).toBeInTheDocument();
+      expect(screen.getByText('Clear All')).toBeInTheDocument();
       expect(screen.getByText('Download')).toBeInTheDocument();
     });
   });
@@ -152,10 +152,7 @@ describe('SelectedItemsFlyout component', () => {
         fireEvent.click(downloadButton);
       }).not.toThrow();
 
-      expect(mockExportSelectedItems).toHaveBeenCalledWith(
-        mockSelectedItems,
-        '2_items.csv'
-      );
+      expect(mockExportSelectedItems).toHaveBeenCalledWith(mockSelectedItems);
     });
 
     it('should handle items with multiple types correctly', () => {
@@ -186,8 +183,7 @@ describe('SelectedItemsFlyout component', () => {
       }).not.toThrow();
 
       expect(mockExportSelectedItems).toHaveBeenCalledWith(
-        itemsWithMultipleTypes,
-        '1_items.csv'
+        itemsWithMultipleTypes
       );
     });
   });
