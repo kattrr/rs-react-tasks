@@ -1,5 +1,8 @@
+'use client';
+
+import Image from 'next/image';
 import { usePokemonDetails } from '@hooks/usePokemonQueries';
-import Spinner from './Spinner';
+import { Spinner } from '@components';
 
 interface PokemonDetailsPanelProps {
   detailsName: string;
@@ -50,13 +53,12 @@ const PokemonDetailsPanel = ({
 
       {details && !loading && !error && (
         <div className="flex flex-col items-center text-indigo-950">
-          <img
+          <Image
             src={details.sprites.front_default}
             alt={details.name}
+            width={128}
+            height={128}
             className="w-32 h-32 mb-4"
-            onError={(e) => {
-              (e.target as HTMLImageElement).src = '/fallback-pokemon.png';
-            }}
           />
           <h2 className="text-2xl font-bold mb-2 text-indigo-950 capitalize">
             {details.name}

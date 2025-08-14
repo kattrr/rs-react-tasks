@@ -1,3 +1,6 @@
+'use client';
+
+import Image from 'next/image';
 import { type PokemonDetails } from '@api/pokeapi';
 import { useSelectedItemsStore } from '@store/selectedItemsStore';
 
@@ -29,9 +32,11 @@ const Card = ({ pokemon }: CardProps) => {
           className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
         />
       </div>
-      <img
+      <Image
         src={sprites.front_default}
         alt={name}
+        width={96}
+        height={96}
         className="w-24 h-24 object-contain mb-2"
       />
       <h2 className="text-black text-lg font-semibold">{name}</h2>

@@ -1,10 +1,7 @@
 import type { SelectedItem } from '@store/selectedItemsStore';
 
-export const exportSelectedItems = (
-  items: SelectedItem[],
-  filename: string
-): void => {
-  if (items.length === 0) return;
+export const exportSelectedItems = (items: SelectedItem[]): string => {
+  if (items.length === 0) return '';
 
   const csvContent = [
     ['Name', 'Description', 'Details URL', 'Image URL', 'Types'].join(','),
@@ -19,13 +16,5 @@ export const exportSelectedItems = (
     ),
   ].join('\n');
 
-  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-  const link = document.createElement('a');
-  const url = URL.createObjectURL(blob);
-  link.setAttribute('href', url);
-  link.setAttribute('download', filename);
-  link.style.visibility = 'hidden';
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+  return csvContent;
 };

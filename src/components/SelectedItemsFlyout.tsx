@@ -1,13 +1,35 @@
+'use client';
 import { useSelectedItemsStore } from '@store/selectedItemsStore';
-import { exportSelectedItems } from '@services/CSVExportService';
+import { exportCSVAction } from '@/app/actions';
 
 const SelectedItemsFlyout = () => {
   const { selectedItems, clearAll, getSelectedCount } = useSelectedItemsStore();
   const selectedCount = getSelectedCount();
 
-  const handleDownload = () => {
+  const handleDownload = async () => {
     if (selectedCount === 0) return;
-    exportSelectedItems(selectedItems, `${selectedCount}_items.csv`);
+
+    try {
+      const result = await exportCSVAction(
+        selectedItems,
+        `${selectedCount}_pokemon_export.csv`
+      );
+
+      if (result.success && result.data) {
+        // Create and download the CSV file
+        const blob = new Blob([result.data], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = result.filename || 'pokemon_export.csv';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      }
+    } catch (error) {
+      console.error('Error exporting CSV:', error);
+    }
   };
 
   if (selectedCount === 0) return null;
@@ -26,7 +48,7 @@ const SelectedItemsFlyout = () => {
             onClick={clearAll}
             className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
           >
-            Unselect all
+            Clear All
           </button>
           <button
             onClick={handleDownload}

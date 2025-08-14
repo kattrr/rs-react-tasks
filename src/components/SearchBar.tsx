@@ -1,5 +1,8 @@
+'use client';
+
 import type { ChangeEvent, KeyboardEvent } from 'react';
 import { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import { twMerge } from 'tailwind-merge';
 
 interface SearchBarProps {
@@ -12,6 +15,7 @@ const SearchBar = ({
   searchTerm: propSearchTerm = '',
 }: SearchBarProps) => {
   const [inputValue, setInputValue] = useState(propSearchTerm);
+  const t = useTranslations();
 
   // Sync input value when propSearchTerm changes
   useEffect(() => {
@@ -21,11 +25,16 @@ const SearchBar = ({
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setInputValue(value);
+
+    // Automatically search when input is cleared or changed
+    if (value === '') {
+      onSearch(''); // Clear search
+    }
   };
 
   const handleSearch = () => {
     const trimmed = inputValue.trim();
-    onSearch(trimmed); // Always trigger search with current input
+    onSearch(trimmed);
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -48,7 +57,7 @@ const SearchBar = ({
           'border border-gray-300',
           'focus:outline-none focus:ring-2 focus:ring-blue-400'
         )}
-        placeholder="Search Pokémon..."
+        placeholder={t('pokemon.noResults')}
       />
       <button
         onClick={handleSearch}
@@ -59,9 +68,8 @@ const SearchBar = ({
           'border border-transparent hover:border-[#646cff]',
           'focus:outline-4 focus:outline-blue-400'
         )}
-        disabled={inputValue.trim() === propSearchTerm} // Disable if no change
       >
-        Search
+        {t('common.search')}
       </button>
     </div>
   );

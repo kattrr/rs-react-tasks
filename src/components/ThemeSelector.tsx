@@ -1,8 +1,12 @@
+'use client';
+
 import { useTheme } from '@hooks/useTheme';
+import { useTranslations } from 'next-intl';
 import { useEffect } from 'react';
 
 const ThemeSelector = () => {
   const { theme, setTheme } = useTheme();
+  const t = useTranslations();
 
   useEffect(() => {
     document.body.className = theme === 'dark' ? 'dark' : '';
@@ -20,17 +24,17 @@ const ThemeSelector = () => {
               : 'text-gray-600 hover:text-gray-900'
           }`}
         >
-          Light
+          {t('common.theme.light')}
         </button>
         <button
           onClick={() => setTheme('dark')}
           className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
             theme === 'dark'
               ? 'bg-white text-gray-900 shadow-sm'
-              : 'text-gray-600 hover:text-gray-900'
+              : 'text-gray-900 shadow-sm'
           }`}
         >
-          Dark
+          {t('common.theme.dark')}
         </button>
       </div>
     </div>

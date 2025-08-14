@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { exportSelectedItems } from '../CSVExportService';
 import type { SelectedItem } from '@store/selectedItemsStore';
 
@@ -22,139 +22,47 @@ describe('CSVExportService', () => {
     },
   ];
 
-  let mockLink: HTMLElement;
-  let mockBlob: Blob;
-  let mockCreateObjectURL: (blob: Blob) => string;
-  let mockRevokeObjectURL: (url: string) => void;
-  let mockBlobConstructor: ReturnType<typeof vi.fn>;
-
   beforeEach(() => {
-    mockBlob = {
-      size: 0,
-      type: '',
-    } as Blob;
-
-    mockBlobConstructor = vi.fn().mockImplementation((content, options) => {
-      return {
-        ...mockBlob,
-        content,
-        options,
-      };
-    });
-    globalThis.Blob = mockBlobConstructor;
-
-    mockCreateObjectURL = vi.fn().mockReturnValue('blob:mock-url');
-    Object.defineProperty(URL, 'createObjectURL', {
-      value: mockCreateObjectURL,
-      writable: true,
-    });
-
-    mockRevokeObjectURL = vi.fn();
-    Object.defineProperty(URL, 'revokeObjectURL', {
-      value: mockRevokeObjectURL,
-      writable: true,
-    });
-
-    mockLink = {
-      setAttribute: vi.fn(),
-      style: { visibility: 'hidden' },
-      click: vi.fn(),
-    } as unknown as HTMLElement;
-    vi.spyOn(document, 'createElement').mockImplementation((tagName) => {
-      if (tagName === 'a') {
-        return mockLink;
-      }
-      return document.createElement(tagName);
-    });
-
-    vi.spyOn(document.body, 'appendChild').mockImplementation(() => mockLink);
-    vi.spyOn(document.body, 'removeChild').mockImplementation(() => mockLink);
-  });
-
-  afterEach(() => {
-    vi.restoreAllMocks();
+    // No setup needed for the new CSV string-based approach
   });
 
   describe('exportSelectedItems', () => {
-    it('should return early when items array is empty', () => {
-      expect(() => {
-        exportSelectedItems([], 'test.csv');
-      }).not.toThrow();
-
-      expect(document.createElement).not.toHaveBeenCalled();
-      expect(mockCreateObjectURL).not.toHaveBeenCalled();
+    it('should return empty string when items array is empty', () => {
+      const result = exportSelectedItems([], 'test.csv');
+      expect(result).toBe('');
     });
 
     it('should create CSV content with correct headers', () => {
-      exportSelectedItems(mockItems, 'test.csv');
+      const result = exportSelectedItems(mockItems, 'test.csv');
 
-      expect(mockBlobConstructor).toHaveBeenCalledWith(
-        expect.arrayContaining([
-          expect.stringContaining(
-            'Name,Description,Details URL,Image URL,Types'
-          ),
-        ]),
-        { type: 'text/csv;charset=utf-8;' }
-      );
-    });
-
-    it('should create CSV content with correct data rows', () => {
-      exportSelectedItems(mockItems, 'test.csv');
-
-      const blobCall = mockBlobConstructor.mock.calls[0];
-      const csvContent = blobCall[0][0];
-
-      expect(csvContent).toContain(
+      expect(result).toContain('Name,Description,Details URL,Image URL,Types');
+      expect(result).toContain(
         'pikachu,Type: electric,https://pokeapi.co/api/v2/pokemon/pikachu,https://example.com/pikachu.png,electric'
       );
-      expect(csvContent).toContain(
+      expect(result).toContain(
         'charizard,Type: fire, flying,https://pokeapi.co/api/v2/pokemon/charizard,https://example.com/charizard.png,fire;flying'
       );
     });
 
-    it('should create blob with correct type', () => {
-      exportSelectedItems(mockItems, 'test.csv');
+    it('should create CSV content with correct data rows', () => {
+      const result = exportSelectedItems(mockItems, 'test.csv');
 
-      expect(mockBlobConstructor).toHaveBeenCalledWith(expect.any(Array), {
-        type: 'text/csv;charset=utf-8;',
-      });
-    });
-
-    it('should create download link with correct attributes', () => {
-      exportSelectedItems(mockItems, 'test.csv');
-
-      expect(mockLink.setAttribute).toHaveBeenCalledWith(
-        'href',
-        'blob:mock-url'
+      expect(result).toContain(
+        'pikachu,Type: electric,https://pokeapi.co/api/v2/pokemon/pikachu,https://example.com/pikachu.png,electric'
       );
-      expect(mockLink.setAttribute).toHaveBeenCalledWith(
-        'download',
-        'test.csv'
+      expect(result).toContain(
+        'charizard,Type: fire, flying,https://pokeapi.co/api/v2/pokemon/charizard,https://example.com/charizard.png,fire;flying'
       );
     });
 
-    it('should set link style to hidden', () => {
-      exportSelectedItems(mockItems, 'test.csv');
+    it('should return CSV string with correct format', () => {
+      const result = exportSelectedItems(mockItems, 'test.csv');
 
-      expect(mockLink.style.visibility).toBe('hidden');
-    });
-
-    it('should append link to document body', () => {
-      exportSelectedItems(mockItems, 'test.csv');
-
-      expect(document.body.appendChild).toHaveBeenCalledWith(mockLink);
-    });
-
-    it('should click the link', () => {
-      exportSelectedItems(mockItems, 'test.csv');
-
-      expect(mockLink.click).toHaveBeenCalledTimes(1);
-    });
-
-    it('should remove link from document body', () => {
-      exportSelectedItems(mockItems, 'test.csv');
-
-      expect(document.body.removeChild).toHaveBeenCalledWith(mockLink);
+      const lines = result.split('\n');
+      expect(lines).toHaveLength(3); // Header + 2 data rows
+      expect(lines[0]).toBe('Name,Description,Details URL,Image URL,Types');
+      expect(lines[1]).toContain('pikachu');
+      expect(lines[2]).toContain('charizard');
     });
 
     it('should handle items with multiple types correctly', () => {
@@ -169,12 +77,9 @@ describe('CSVExportService', () => {
         },
       ];
 
-      exportSelectedItems(itemsWithMultipleTypes, 'test.csv');
+      const result = exportSelectedItems(itemsWithMultipleTypes, 'test.csv');
 
-      const blobCall = mockBlobConstructor.mock.calls[0];
-      const csvContent = blobCall[0][0];
-
-      expect(csvContent).toContain(
+      expect(result).toContain(
         'venusaur,Type: grass, poison,https://pokeapi.co/api/v2/pokemon/venusaur,https://example.com/venusaur.png,grass;poison'
       );
     });
@@ -191,12 +96,9 @@ describe('CSVExportService', () => {
         },
       ];
 
-      exportSelectedItems(itemsWithSingleType, 'test.csv');
+      const result = exportSelectedItems(itemsWithSingleType, 'test.csv');
 
-      const blobCall = mockBlobConstructor.mock.calls[0];
-      const csvContent = blobCall[0][0];
-
-      expect(csvContent).toContain(
+      expect(result).toContain(
         'pikachu,Type: electric,https://pokeapi.co/api/v2/pokemon/pikachu,https://example.com/pikachu.png,electric'
       );
     });
@@ -213,23 +115,18 @@ describe('CSVExportService', () => {
         },
       ];
 
-      exportSelectedItems(itemsWithSpecialChars, 'test.csv');
+      const result = exportSelectedItems(itemsWithSpecialChars, 'test.csv');
 
-      const blobCall = mockBlobConstructor.mock.calls[0];
-      const csvContent = blobCall[0][0];
-
-      expect(csvContent).toContain(
+      expect(result).toContain(
         'mewtwo,Type: psychic (Legendary),https://pokeapi.co/api/v2/pokemon/mewtwo,https://example.com/mewtwo.png,psychic'
       );
     });
 
-    it('should use provided filename for download', () => {
-      exportSelectedItems(mockItems, 'pokemon_list.csv');
+    it('should return CSV string with proper formatting', () => {
+      const result = exportSelectedItems(mockItems, 'pokemon_list.csv');
 
-      expect(mockLink.setAttribute).toHaveBeenCalledWith(
-        'download',
-        'pokemon_list.csv'
-      );
+      expect(result).toContain('Name,Description,Details URL,Image URL,Types');
+      expect(result.split('\n')).toHaveLength(3);
     });
   });
 });
