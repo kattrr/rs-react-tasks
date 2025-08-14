@@ -1,7 +1,6 @@
 import '@testing-library/jest-dom';
 import { vi } from 'vitest';
 
-// Mock Next.js router
 const mockRouter = {
   push: vi.fn(),
   replace: vi.fn(),
@@ -17,13 +16,11 @@ vi.mock('next/navigation', () => ({
   useSearchParams: () => new URLSearchParams(),
 }));
 
-// Mock next-intl
 vi.mock('next-intl', async () => {
   const actual = await vi.importActual('next-intl');
   return {
     ...actual,
     useTranslations: () => (key: string) => {
-      // Return actual translations for common keys
       const translations: Record<string, string> = {
         'common.search': 'Search',
         'common.loading': 'Loading...',
@@ -49,7 +46,6 @@ vi.mock('next-intl/server', async () => {
   };
 });
 
-// Mock next-intl/navigation
 vi.mock('next-intl/navigation', () => ({
   createNavigation: () => ({
     Link: ({
@@ -70,7 +66,6 @@ vi.mock('next-intl/navigation', () => ({
   }),
 }));
 
-// Mock localStorage
 if (!globalThis.localStorage) {
   const localStorageMock = (() => {
     let store: Record<string, string | undefined> = {};
@@ -97,21 +92,51 @@ if (!globalThis.localStorage) {
   });
 }
 
-// Mock fetch
 globalThis.fetch = vi.fn();
 
-// Mock IntersectionObserver
 globalThis.IntersectionObserver = vi.fn().mockImplementation(() => ({
   observe: vi.fn(),
   unobserve: vi.fn(),
   disconnect: vi.fn(),
 }));
 
-// Mock ResizeObserver
 globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
   observe: vi.fn(),
   unobserve: vi.fn(),
   disconnect: vi.fn(),
 }));
+
+
+
+if (typeof window !== 'undefined') {
+  Object.defineProperty(window, 'URL', {
+    value: {
+      createObjectURL: vi.fn(() => 'blob:mock-url'),
+      revokeObjectURL: vi.fn(),
+    },
+    writable: true,
+    configurable: true,
+  });
+
+  // Mock navigation API to suppress JSDOM warnings
+  try {
+    const nav = (window as unknown as Record<string, unknown>).navigation;
+    if (nav && typeof nav === 'object') {
+      Object.defineProperty(nav, 'navigate', {
+        value: vi.fn(),
+        writable: true,
+        configurable: true,
+      });
+    }
+  } catch {
+    // Navigation API not available, skip
+  }
+
+  // Mock HTMLAnchorElement.prototype.click to suppress navigation warnings
+  HTMLAnchorElement.prototype.click = function () {
+    // Suppress navigation warnings by doing nothing
+    return;
+  };
+}
 
 export { mockRouter };

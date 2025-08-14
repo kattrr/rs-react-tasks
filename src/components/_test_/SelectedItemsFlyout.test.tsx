@@ -6,15 +6,15 @@ vi.mock('../../store/selectedItemsStore', () => ({
   useSelectedItemsStore: vi.fn(),
 }));
 
-vi.mock('../../services/CSVExportService', () => ({
-  exportSelectedItems: vi.fn(),
+vi.mock('../../app/actions', () => ({
+  exportCSVAction: vi.fn(),
 }));
 
 import { useSelectedItemsStore } from '@store/selectedItemsStore';
-import { exportSelectedItems } from '@services/CSVExportService';
+import { exportCSVAction } from '../../app/actions';
 
 const mockUseSelectedItemsStore = vi.mocked(useSelectedItemsStore);
-const mockExportSelectedItems = vi.mocked(exportSelectedItems);
+const mockExportCSVAction = vi.mocked(exportCSVAction);
 
 describe('SelectedItemsFlyout component', () => {
   const mockSelectedItems = [
@@ -26,14 +26,6 @@ describe('SelectedItemsFlyout component', () => {
       imageUrl: 'https://example.com/pikachu.png',
       types: ['electric'],
     },
-    {
-      id: 'charizard',
-      name: 'charizard',
-      description: 'Type: fire, flying',
-      detailsUrl: 'https://pokeapi.co/api/v2/pokemon/charizard',
-      imageUrl: 'https://example.com/charizard.png',
-      types: ['fire', 'flying'],
-    },
   ];
 
   const mockClearAll = vi.fn();
@@ -41,150 +33,151 @@ describe('SelectedItemsFlyout component', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+  });
 
+  it('should not render when selectedCount is 0', () => {
+    mockGetSelectedCount.mockReturnValue(0);
     mockUseSelectedItemsStore.mockReturnValue({
       selectedItems: [],
       clearAll: mockClearAll,
       getSelectedCount: mockGetSelectedCount,
     });
 
-    mockExportSelectedItems.mockImplementation(() => {});
+    const { container } = render(<SelectedItemsFlyout />);
+    expect(container.firstChild).toBeNull();
   });
 
-  describe('conditional rendering', () => {
-    it('should not render when selectedCount is 0', () => {
-      mockGetSelectedCount.mockReturnValue(0);
-
-      const { container } = render(<SelectedItemsFlyout />);
-      expect(container.firstChild).toBeNull();
+  it('should render when items are selected', () => {
+    mockGetSelectedCount.mockReturnValue(1);
+    mockUseSelectedItemsStore.mockReturnValue({
+      selectedItems: mockSelectedItems,
+      clearAll: mockClearAll,
+      getSelectedCount: mockGetSelectedCount,
     });
 
-    it('should render when items are selected', () => {
-      mockGetSelectedCount.mockReturnValue(2);
-      mockUseSelectedItemsStore.mockReturnValue({
-        selectedItems: mockSelectedItems,
-        clearAll: mockClearAll,
-        getSelectedCount: mockGetSelectedCount,
-      });
-
-      render(<SelectedItemsFlyout />);
-      expect(screen.getByText('2 items are selected')).toBeInTheDocument();
-    });
-
-    it('should render singular text for one item', () => {
-      mockGetSelectedCount.mockReturnValue(1);
-      mockUseSelectedItemsStore.mockReturnValue({
-        selectedItems: [mockSelectedItems[0]],
-        clearAll: mockClearAll,
-        getSelectedCount: mockGetSelectedCount,
-      });
-
-      render(<SelectedItemsFlyout />);
-      expect(screen.getByText('1 item is selected')).toBeInTheDocument();
-    });
+    render(<SelectedItemsFlyout />);
+    expect(screen.getByText('1 item is selected')).toBeInTheDocument();
   });
 
-  describe('button interactions', () => {
-    beforeEach(() => {
-      mockGetSelectedCount.mockReturnValue(2);
-      mockUseSelectedItemsStore.mockReturnValue({
-        selectedItems: mockSelectedItems,
-        clearAll: mockClearAll,
-        getSelectedCount: mockGetSelectedCount,
-      });
+  it('should handle successful CSV download', async () => {
+    const mockResult = {
+      success: true,
+      data: 'Name,Description,Details URL,Image URL,Types\npikachu,Type: electric,https://pokeapi.co/api/v2/pokemon/pikachu,https://example.com/pikachu.png,electric',
+      filename: '1_pokemon_export.csv',
+    };
+
+    mockGetSelectedCount.mockReturnValue(1);
+    mockUseSelectedItemsStore.mockReturnValue({
+      selectedItems: mockSelectedItems,
+      clearAll: mockClearAll,
+      getSelectedCount: mockGetSelectedCount,
     });
+    mockExportCSVAction.mockResolvedValue(mockResult);
 
-    it('should call clearAll when unselect button is clicked', () => {
-      render(<SelectedItemsFlyout />);
+    render(<SelectedItemsFlyout />);
 
-      const clearAllButton = screen.getByText('Clear All');
-      fireEvent.click(clearAllButton);
+    const downloadButton = screen.getByText('Download');
+    await fireEvent.click(downloadButton);
 
-      expect(mockClearAll).toHaveBeenCalledTimes(1);
-    });
-
-    it('should render both buttons', () => {
-      render(<SelectedItemsFlyout />);
-
-      expect(screen.getByText('Clear All')).toBeInTheDocument();
-      expect(screen.getByText('Download')).toBeInTheDocument();
-    });
+    expect(mockExportCSVAction).toHaveBeenCalledWith(
+      mockSelectedItems,
+      '1_pokemon_export.csv'
+    );
   });
 
-  describe('CSV download functionality', () => {
-    beforeEach(() => {
-      mockGetSelectedCount.mockReturnValue(2);
-      mockUseSelectedItemsStore.mockReturnValue({
-        selectedItems: mockSelectedItems,
-        clearAll: mockClearAll,
-        getSelectedCount: mockGetSelectedCount,
-      });
+  it('should handle CSV download with success but no data', async () => {
+    const mockResult = {
+      success: true,
+      data: '',
+      filename: '1_pokemon_export.csv',
+    };
+
+    mockGetSelectedCount.mockReturnValue(1);
+    mockUseSelectedItemsStore.mockReturnValue({
+      selectedItems: mockSelectedItems,
+      clearAll: mockClearAll,
+      getSelectedCount: mockGetSelectedCount,
+    });
+    mockExportCSVAction.mockResolvedValue(mockResult);
+
+    render(<SelectedItemsFlyout />);
+
+    const downloadButton = screen.getByText('Download');
+    await fireEvent.click(downloadButton);
+
+    expect(mockExportCSVAction).toHaveBeenCalledWith(
+      mockSelectedItems,
+      '1_pokemon_export.csv'
+    );
+  });
+
+  it('should handle CSV download failure', async () => {
+    const mockResult = {
+      success: false,
+      data: '',
+      filename: '',
+    };
+
+    mockGetSelectedCount.mockReturnValue(1);
+    mockUseSelectedItemsStore.mockReturnValue({
+      selectedItems: mockSelectedItems,
+      clearAll: mockClearAll,
+      getSelectedCount: mockGetSelectedCount,
+    });
+    mockExportCSVAction.mockResolvedValue(mockResult);
+
+    render(<SelectedItemsFlyout />);
+
+    const downloadButton = screen.getByText('Download');
+    await fireEvent.click(downloadButton);
+
+    expect(mockExportCSVAction).toHaveBeenCalledWith(
+      mockSelectedItems,
+      '1_pokemon_export.csv'
+    );
+  });
+
+  it('should handle CSV download error', async () => {
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    mockGetSelectedCount.mockReturnValue(1);
+    mockUseSelectedItemsStore.mockReturnValue({
+      selectedItems: mockSelectedItems,
+      clearAll: mockClearAll,
+      getSelectedCount: mockGetSelectedCount,
+    });
+    mockExportCSVAction.mockRejectedValue(new Error('Network error'));
+
+    render(<SelectedItemsFlyout />);
+
+    const downloadButton = screen.getByText('Download');
+    await fireEvent.click(downloadButton);
+
+    expect(mockExportCSVAction).toHaveBeenCalledWith(
+      mockSelectedItems,
+      '1_pokemon_export.csv'
+    );
+    expect(consoleSpy).toHaveBeenCalledWith(
+      'Error exporting CSV:',
+      expect.any(Error)
+    );
+
+    consoleSpy.mockRestore();
+  });
+
+  it('should call clearAll when clear button is clicked', () => {
+    mockGetSelectedCount.mockReturnValue(1);
+    mockUseSelectedItemsStore.mockReturnValue({
+      selectedItems: mockSelectedItems,
+      clearAll: mockClearAll,
+      getSelectedCount: mockGetSelectedCount,
     });
 
-    it('should handle early return when count is 0', () => {
-      mockGetSelectedCount.mockReturnValue(0);
-      mockUseSelectedItemsStore.mockReturnValue({
-        selectedItems: [],
-        clearAll: mockClearAll,
-        getSelectedCount: mockGetSelectedCount,
-      });
+    render(<SelectedItemsFlyout />);
 
-      render(<SelectedItemsFlyout />);
+    const clearAllButton = screen.getByText('Clear All');
+    fireEvent.click(clearAllButton);
 
-      // Component should not render, so no download functionality
-      expect(screen.queryByText('Download')).not.toBeInTheDocument();
-    });
-
-    it('should render download button when items are selected', () => {
-      render(<SelectedItemsFlyout />);
-
-      const downloadButton = screen.getByText('Download');
-      expect(downloadButton).toBeInTheDocument();
-    });
-
-    it('should handle download button click without errors', () => {
-      render(<SelectedItemsFlyout />);
-
-      const downloadButton = screen.getByText('Download');
-
-      // This should not throw an error
-      expect(() => {
-        fireEvent.click(downloadButton);
-      }).not.toThrow();
-
-      expect(mockExportSelectedItems).toHaveBeenCalledWith(mockSelectedItems);
-    });
-
-    it('should handle items with multiple types correctly', () => {
-      const itemsWithMultipleTypes = [
-        {
-          id: 'charizard',
-          name: 'charizard',
-          description: 'Type: fire, flying',
-          detailsUrl: 'https://pokeapi.co/api/v2/pokemon/charizard',
-          imageUrl: 'https://example.com/charizard.png',
-          types: ['fire', 'flying'],
-        },
-      ];
-
-      mockUseSelectedItemsStore.mockReturnValue({
-        selectedItems: itemsWithMultipleTypes,
-        clearAll: mockClearAll,
-        getSelectedCount: () => 1,
-      });
-
-      render(<SelectedItemsFlyout />);
-
-      const downloadButton = screen.getByText('Download');
-
-      // This should not throw an error
-      expect(() => {
-        fireEvent.click(downloadButton);
-      }).not.toThrow();
-
-      expect(mockExportSelectedItems).toHaveBeenCalledWith(
-        itemsWithMultipleTypes
-      );
-    });
+    expect(mockClearAll).toHaveBeenCalledTimes(1);
   });
 });
