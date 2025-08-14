@@ -1,0 +1,27 @@
+{
+  "navigation": {
+    "home": "Inicio",
+    "about": "Acerca de",
+    "pokemon": "Pokemon"
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Ocurrió un error",
+    "search": "Buscar",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "export": "Exportar CSV",
+    "theme": {
+      "light": "Claro",
+      "dark": "Oscuro"
+    }
+  },
+  "pokemon": {
+    "height": "Altura",
+    "weight": "Peso",
+    "types": "Tipos",
+    "abilities": "Habilidades",
+    "stats": "Estadísticas",
+    "noResults": "No se encontraron Pokemon"
+  }
+}
