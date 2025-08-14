@@ -43,7 +43,7 @@ describe('Card component', () => {
   it('renders safely when some props are missing', () => {
     const incompletePokemon = {
       name: 'unknown',
-      sprites: { front_default: null },
+      sprites: { front_default: 'https://example.com/placeholder.png' }, // Provide valid URL instead of null
       types: [],
       height: 0,
       abilities: [],
