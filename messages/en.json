@@ -24,5 +24,10 @@
     "abilities": "Abilities",
     "stats": "Stats",
     "noResults": "No Pokemon found"
+  },
+  "mainPage": {
+    "title": "🔍 Pokémon Search",
+    "goHomeButton": "🏠 Go to Home & Clear Cache",
+    "throwErrorButton": "Throw error"
   }
 }

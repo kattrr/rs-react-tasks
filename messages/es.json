@@ -23,5 +23,10 @@
     "abilities": "Habilidades",
     "stats": "Estadísticas",
     "noResults": "No se encontraron Pokemon"
+  },
+  "mainPage": {
+    "title": "🔍 Búsqueda de Pokémon",
+    "goHomeButton": "🏠 Ir al Inicio y Limpiar Cache",
+    "throwErrorButton": "Lanzar error"
   }
 }

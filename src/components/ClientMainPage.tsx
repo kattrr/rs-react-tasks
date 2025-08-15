@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import { useTranslations } from 'next-intl';
 import { CardList, Spinner, SearchBar } from '@components';
 import Pagination from '@components/Pagination';
 import PokemonDetailsPanel from '@components/PokemonDetailsPanel';
@@ -13,6 +14,7 @@ interface ClientMainPageProps {
 }
 
 const ClientMainPage = ({ initialPokemonList }: ClientMainPageProps) => {
+  const t = useTranslations();
   const [pokemons, setPokemons] =
     useState<PokemonDetails[]>(initialPokemonList);
   const [searchTerm, setSearchTerm] = useState('');
@@ -115,7 +117,7 @@ const ClientMainPage = ({ initialPokemonList }: ClientMainPageProps) => {
     >
       <div className={`flex-1 ${detailsName ? 'w-2/3' : 'w-full'}`}>
         <h1 className="text-4xl font-bold mb-4 leading-tight">
-          🔍 Pokémon Search
+          {t('mainPage.title')}
         </h1>
         <SearchBar onSearch={handleSearch} searchTerm={searchTerm} />
         {loading && <Spinner />}
@@ -144,7 +146,7 @@ const ClientMainPage = ({ initialPokemonList }: ClientMainPageProps) => {
               'transition-colors'
             )}
           >
-            🏠 Go to Home & Clear Cache
+            {t('mainPage.goHomeButton')}
           </button>
           <button
             onClick={handleThrowError}
@@ -156,7 +158,7 @@ const ClientMainPage = ({ initialPokemonList }: ClientMainPageProps) => {
               'outline-none hover:outline-red-400 focus:outline-4 focus:outline-blue-400'
             )}
           >
-            Throw error
+            {t('mainPage.throwErrorButton')}
           </button>
         </div>
       </div>
