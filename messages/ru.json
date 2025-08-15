@@ -26,7 +26,7 @@
   },
   "mainPage": {
     "title": "🔍 Поиск Покемонов",
-    "goHomeButton": "🏠 Домой и Очистить Кэш",
-    "throwErrorButton": "Выбросить ошибку"
+    "goHomeButton": "На главную",
+    "searchPlaceholder": "Поиск покемонов по имени..."
   }
 }

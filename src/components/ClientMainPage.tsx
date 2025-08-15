@@ -104,10 +104,6 @@ const ClientMainPage = ({ initialPokemonList }: ClientMainPageProps) => {
     setSearchTerm('');
   };
 
-  const handleThrowError = () => {
-    throw new Error('This is a test error to demonstrate error boundary');
-  };
-
   const showPagination = searchTerm.trim() === '' && totalPages > 1;
 
   return (
@@ -147,18 +143,6 @@ const ClientMainPage = ({ initialPokemonList }: ClientMainPageProps) => {
             )}
           >
             {t('mainPage.goHomeButton')}
-          </button>
-          <button
-            onClick={handleThrowError}
-            className={twMerge(
-              'bg-red-500 hover:bg-red-600 transition-colors',
-              'px-4 py-2 rounded-lg',
-              'text-base font-medium text-white',
-              'border border-transparent hover:border-red-400',
-              'outline-none hover:outline-red-400 focus:outline-4 focus:outline-blue-400'
-            )}
-          >
-            {t('mainPage.throwErrorButton')}
           </button>
         </div>
       </div>

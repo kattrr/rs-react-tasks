@@ -236,7 +236,7 @@ describe('ClientMainPage', () => {
   it('handles refresh button click to reset all state', async () => {
     render(<ClientMainPage initialPokemonList={mockPokemon} />);
 
-    const refreshButton = screen.getByText('🏠 Go to Home & Clear Cache');
+    const refreshButton = screen.getByText('Go Home');
 
     await act(async () => {
       fireEvent.click(refreshButton);
@@ -245,19 +245,6 @@ describe('ClientMainPage', () => {
     await waitFor(() => {
       expect(screen.getByTestId('pagination')).toBeInTheDocument();
     });
-  });
-
-  it('handles throw error button to test error boundary', async () => {
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-
-    render(<ClientMainPage initialPokemonList={mockPokemon} />);
-
-    const errorButton = screen.getByText('Throw error');
-
-    expect(errorButton).toBeInTheDocument();
-    expect(errorButton).toHaveTextContent('Throw error');
-
-    consoleSpy.mockRestore();
   });
 
   it('handles search with API error', async () => {

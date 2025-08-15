@@ -26,7 +26,7 @@
   },
   "mainPage": {
     "title": "🔍 Búsqueda de Pokémon",
-    "goHomeButton": "🏠 Ir al Inicio y Limpiar Cache",
-    "throwErrorButton": "Lanzar error"
+    "goHomeButton": "Ir al Inicio",
+    "searchPlaceholder": "Buscar Pokémon por nombre..."
   }
 }

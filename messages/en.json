@@ -27,7 +27,7 @@
   },
   "mainPage": {
     "title": "🔍 Pokémon Search",
-    "goHomeButton": "🏠 Go to Home & Clear Cache",
-    "throwErrorButton": "Throw error"
+    "goHomeButton": "Go Home",
+    "searchPlaceholder": "Search Pokémon by name..."
   }
 }

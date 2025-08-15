@@ -33,8 +33,8 @@ vi.mock('next-intl', async () => {
         'navigation.about': 'About',
         'navigation.home': 'Home',
         'mainPage.title': '🔍 Pokémon Search',
-        'mainPage.goHomeButton': '🏠 Go to Home & Clear Cache',
-        'mainPage.throwErrorButton': 'Throw error',
+        'mainPage.goHomeButton': 'Go Home',
+        'mainPage.searchPlaceholder': 'Search Pokémon by name...',
       };
       return translations[key] || key;
     },
