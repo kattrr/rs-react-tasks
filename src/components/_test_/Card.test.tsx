@@ -38,7 +38,7 @@ describe('Card component', () => {
 
   it('renders name and type correctly', () => {
     render(<Card pokemon={mockPokemon} />);
-    
+
     expect(screen.getByText('pikachu')).toBeInTheDocument();
     expect(screen.getByText('electric')).toBeInTheDocument();
   });
@@ -55,14 +55,14 @@ describe('Card component', () => {
     } as unknown as PokemonDetails;
 
     render(<Card pokemon={incompletePokemon} />);
-    
+
     expect(screen.getByText('unknown')).toBeInTheDocument();
     expect(screen.getByText(/type:/i)).toBeInTheDocument(); // empty but doesn't break
   });
 
   it('renders checkbox for item selection', () => {
     render(<Card pokemon={mockPokemon} />);
-    
+
     const checkbox = screen.getByRole('checkbox');
     expect(checkbox).toBeInTheDocument();
     expect(checkbox).not.toBeChecked();
@@ -76,7 +76,7 @@ describe('Card component', () => {
     });
 
     render(<Card pokemon={mockPokemon} />);
-    
+
     const checkbox = screen.getByRole('checkbox');
     expect(checkbox).toBeChecked();
   });
@@ -90,7 +90,7 @@ describe('Card component', () => {
     });
 
     render(<Card pokemon={mockPokemon} />);
-    
+
     const checkbox = screen.getByRole('checkbox');
     fireEvent.click(checkbox);
 
@@ -106,7 +106,7 @@ describe('Card component', () => {
     });
 
     render(<Card pokemon={mockPokemon} />);
-    
+
     const checkbox = screen.getByRole('checkbox');
     fireEvent.click(checkbox);
 
@@ -122,32 +122,50 @@ describe('Card component', () => {
     });
 
     render(<Card pokemon={mockPokemon} />);
-    
+
     const checkbox = screen.getByRole('checkbox');
-  
+
     const card = screen.getByText('pikachu').closest('div');
     expect(card).toBeInTheDocument();
-    
+
     fireEvent.click(checkbox);
     expect(mockAddItem).toHaveBeenCalledWith(mockPokemon);
   });
 
   it('renders with correct CSS classes and structure', () => {
     const { container } = render(<Card pokemon={mockPokemon} />);
-    
+
     const cardElement = container.firstChild as HTMLElement;
-    expect(cardElement).toHaveClass('bg-white', 'rounded-3xl', 'flex', 'flex-col', 'items-center', 'p-4', 'shadow-md', 'relative');
-    
+    expect(cardElement).toHaveClass(
+      'bg-white',
+      'rounded-3xl',
+      'flex',
+      'flex-col',
+      'items-center',
+      'p-4',
+      'shadow-md',
+      'relative'
+    );
+
     const checkbox = screen.getByRole('checkbox');
-    expect(checkbox).toHaveClass('w-4', 'h-4', 'text-blue-600', 'bg-gray-100', 'border-gray-300', 'rounded', 'focus:ring-blue-500', 'focus:ring-2');
-    
+    expect(checkbox).toHaveClass(
+      'w-4',
+      'h-4',
+      'text-blue-600',
+      'bg-gray-100',
+      'border-gray-300',
+      'rounded',
+      'focus:ring-blue-500',
+      'focus:ring-2'
+    );
+
     const nameElement = screen.getByText('pikachu');
     expect(nameElement).toHaveClass('text-black', 'text-lg', 'font-semibold');
-    
+
     // Check that the type element exists and verify the complete text content
     expect(screen.getByText(/type:/i)).toBeInTheDocument();
     expect(screen.getByText('electric')).toBeInTheDocument();
-    
+
     // Verify the complete text structure
     const typeSection = screen.getByText(/type:/i).closest('p');
     expect(typeSection).toHaveClass('text-black', 'text-base');

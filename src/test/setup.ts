@@ -106,8 +106,6 @@ globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
   disconnect: vi.fn(),
 }));
 
-
-
 if (typeof window !== 'undefined') {
   Object.defineProperty(window, 'URL', {
     value: {

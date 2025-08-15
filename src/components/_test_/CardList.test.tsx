@@ -63,4 +63,46 @@ describe('CardList component', () => {
     expect(cards).toHaveLength(1);
     expect(cards[0]).toHaveTextContent('');
   });
+  it('calls onCardClick when card is clicked', () => {
+    const mockOnCardClick = vi.fn();
+    const mockData: PokemonDetails[] = [
+      {
+        name: 'bulbasaur',
+        sprites: { front_default: '' },
+        types: [],
+        height: 7,
+        abilities: [{ ability: { name: 'overgrow' } }],
+        forms: [{ name: 'bulbasaur' }],
+        moves: [{ move: { name: 'tackle' } }],
+      },
+    ];
+  
+    render(<CardList pokemons={mockData} onCardClick={mockOnCardClick} />);
+    
+    const card = screen.getByTestId('mock-card');
+    card.click();
+    
+    expect(mockOnCardClick).toHaveBeenCalledWith('bulbasaur');
+  });
+  
+  it('applies cursor-pointer class when onCardClick is provided', () => {
+    const mockOnCardClick = vi.fn();
+    const mockData: PokemonDetails[] = [
+      {
+        name: 'bulbasaur',
+        sprites: { front_default: '' },
+        types: [],
+        height: 7,
+        abilities: [{ ability: { name: 'overgrow' } }],
+        forms: [{ name: 'bulbasaur' }],
+        moves: [{ move: { name: 'tackle' } }],
+      },
+    ];
+  
+    render(<CardList pokemons={mockData} onCardClick={mockOnCardClick} />);
+    
+    const cardContainer = screen.getByTestId('mock-card').parentElement;
+    expect(cardContainer).toHaveClass('cursor-pointer');
+  });
+
 });
