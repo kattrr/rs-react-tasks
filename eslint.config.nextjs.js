@@ -9,7 +9,77 @@ import tsparser from '@typescript-eslint/parser';
 
 export default [
   {
-    ignores: ['dist/**', 'coverage/**', 'node_modules/**', '.next/**'],
+    ignores: [
+      // Build outputs
+      'dist/**',
+      '.next/**',
+      '.netlify/**',
+
+      // Dependencies
+      'node_modules/**',
+
+      // Coverage reports
+      'coverage/**',
+
+      // Environment files
+      '.env*',
+      '!.env.example',
+
+      // Logs
+      '*.log',
+      'npm-debug.log*',
+      'yarn-debug.log*',
+      'yarn-error.log*',
+
+      // Runtime data
+      'pids',
+      '*.pid',
+      '*.seed',
+      '*.pid.lock',
+
+      // Optional npm cache directory
+      '.npm',
+
+      // Optional eslint cache
+      '.eslintcache',
+
+      // Microbundle cache
+      '.rpt2_cache/**',
+      '.rts2_cache_cjs/**',
+      '.rts2_cache_es/**',
+      '.rts2_cache_umd/**',
+
+      // Optional REPL history
+      '.node_repl_history',
+
+      // Output of 'npm pack'
+      '*.tgz',
+
+      // Yarn Integrity file
+      '.yarn-integrity',
+
+      // parcel-bundler cache
+      '.cache',
+      '.parcel-cache',
+
+      // nuxt.js build output
+      '.nuxt',
+
+      // vuepress build output
+      '.vuepress/dist',
+
+      // Serverless directories
+      '.serverless/**',
+
+      // FuseBox cache
+      '.fusebox/**',
+
+      // DynamoDB Local files
+      '.dynamodb/**',
+
+      // TernJS port file
+      '.tern-port',
+    ],
   },
   js.configs.recommended,
   {
