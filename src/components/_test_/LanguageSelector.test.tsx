@@ -13,38 +13,43 @@ vi.mock('next/navigation', () => ({
 }));
 
 vi.mock('@/i18n/routing', () => ({
-  locales: ['en', 'es'],
+  locales: ['en', 'es', 'ru', 'de'],
 }));
 
 describe('LanguageSelector', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-
     mockPathname = '/en/home';
   });
 
-  it('renders language buttons for all locales', () => {
+  it('renders dropdown button with current language', () => {
     render(<LanguageSelector />);
 
-    expect(screen.getByText('EN')).toBeInTheDocument();
-    expect(screen.getByText('ES')).toBeInTheDocument();
+    expect(screen.getByText('English')).toBeInTheDocument();
+    expect(screen.getByRole('button')).toBeInTheDocument();
   });
 
-  it('highlights current locale button', () => {
+  it('shows dropdown when clicked', () => {
     render(<LanguageSelector />);
 
-    const enButton = screen.getByText('EN');
-    const esButton = screen.getByText('ES');
+    const dropdownButton = screen.getByRole('button');
+    fireEvent.click(dropdownButton);
 
-    expect(enButton).toHaveClass('bg-indigo-600', 'text-white');
-
-    expect(esButton).toHaveClass('bg-white', 'text-indigo-600');
+    // Check if dropdown options are visible
+    const englishElements = screen.getAllByText('English');
+    expect(englishElements).toHaveLength(2); // One in button, one in dropdown
+    expect(screen.getByText('Español')).toBeInTheDocument();
+    expect(screen.getByText('Русский')).toBeInTheDocument();
+    expect(screen.getByText('Deutsch')).toBeInTheDocument();
   });
 
   it('calls router.push with correct path when changing to different locale', () => {
     render(<LanguageSelector />);
 
-    const esButton = screen.getByText('ES');
+    const dropdownButton = screen.getByRole('button');
+    fireEvent.click(dropdownButton);
+
+    const esButton = screen.getByText('Español');
     fireEvent.click(esButton);
 
     expect(mockPush).toHaveBeenCalledWith('/es/home');
@@ -53,7 +58,11 @@ describe('LanguageSelector', () => {
   it('calls router.push with correct path when changing to same locale', () => {
     render(<LanguageSelector />);
 
-    const enButton = screen.getByText('EN');
+    const dropdownButton = screen.getByRole('button');
+    fireEvent.click(dropdownButton);
+
+    const enButtons = screen.getAllByText('English');
+    const enButton = enButtons[1]; // Select the dropdown option, not the button text
     fireEvent.click(enButton);
 
     expect(mockPush).toHaveBeenCalledWith('/en/home');
@@ -64,7 +73,10 @@ describe('LanguageSelector', () => {
 
     render(<LanguageSelector />);
 
-    const esButton = screen.getByText('ES');
+    const dropdownButton = screen.getByRole('button');
+    fireEvent.click(dropdownButton);
+
+    const esButton = screen.getByText('Español');
     fireEvent.click(esButton);
 
     expect(mockPush).toHaveBeenCalledWith('/es/home');
@@ -75,7 +87,10 @@ describe('LanguageSelector', () => {
 
     render(<LanguageSelector />);
 
-    const esButton = screen.getByText('ES');
+    const dropdownButton = screen.getByRole('button');
+    fireEvent.click(dropdownButton);
+
+    const esButton = screen.getByText('Español');
     fireEvent.click(esButton);
 
     expect(mockPush).not.toHaveBeenCalled();
@@ -86,7 +101,10 @@ describe('LanguageSelector', () => {
 
     render(<LanguageSelector />);
 
-    const esButton = screen.getByText('ES');
+    const dropdownButton = screen.getByRole('button');
+    fireEvent.click(dropdownButton);
+
+    const esButton = screen.getByText('Español');
     fireEvent.click(esButton);
 
     expect(mockPush).toHaveBeenCalledWith('/es/');
@@ -97,9 +115,42 @@ describe('LanguageSelector', () => {
 
     render(<LanguageSelector />);
 
-    const esButton = screen.getByText('ES');
+    const dropdownButton = screen.getByRole('button');
+    fireEvent.click(dropdownButton);
+
+    const esButton = screen.getByText('Español');
     fireEvent.click(esButton);
 
     expect(mockPush).toHaveBeenCalledWith('/es/about/contact');
+  });
+
+  it('closes dropdown when clicking outside', () => {
+    render(<LanguageSelector />);
+
+    const dropdownButton = screen.getByRole('button');
+    fireEvent.click(dropdownButton);
+
+    expect(screen.getByText('Español')).toBeInTheDocument();
+
+    fireEvent.mouseDown(document.body);
+
+    expect(screen.queryByText('Español')).not.toBeInTheDocument();
+  });
+
+  it('closes dropdown after selecting a language', () => {
+    render(<LanguageSelector />);
+
+    const dropdownButton = screen.getByRole('button');
+    fireEvent.click(dropdownButton);
+
+    // Verify dropdown is open
+    expect(screen.getByText('Español')).toBeInTheDocument();
+
+    // Select a language
+    const esButton = screen.getByText('Español');
+    fireEvent.click(esButton);
+
+    // Verify dropdown is closed
+    expect(screen.queryByText('Español')).not.toBeInTheDocument();
   });
 });

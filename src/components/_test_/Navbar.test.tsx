@@ -1,8 +1,7 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import Navbar from '../Navbar';
 
-// Mock next-intl
 vi.mock('next-intl', () => ({
   useTranslations: () => (key: string) => {
     const translations: Record<string, string> = {
@@ -69,8 +68,13 @@ describe('Navbar', () => {
   it('renders theme and language selectors', () => {
     render(<Navbar />);
     expect(screen.getByText('Theme:')).toBeInTheDocument();
-    expect(screen.getByText('EN')).toBeInTheDocument();
-    expect(screen.getByText('ES')).toBeInTheDocument();
+    expect(screen.getByText('English')).toBeInTheDocument();
+
+    const languageButton = screen.getByText('English').closest('button');
+    if (languageButton) {
+      fireEvent.click(languageButton);
+      expect(screen.getByText('Español')).toBeInTheDocument();
+    }
   });
 
   it('renders Pokédex SPA text', () => {

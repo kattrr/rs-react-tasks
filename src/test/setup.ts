@@ -27,9 +27,14 @@ vi.mock('next-intl', async () => {
         'common.theme.light': 'Light',
         'common.theme.dark': 'Dark',
         'common.error': 'Something went wrong',
+        'common.previous': 'Previous',
+        'common.next': 'Next',
         'pokemon.noResults': 'No Pokemon found',
         'navigation.about': 'About',
         'navigation.home': 'Home',
+        'mainPage.title': '🔍 Pokémon Search',
+        'mainPage.goHomeButton': '🏠 Go to Home & Clear Cache',
+        'mainPage.throwErrorButton': 'Throw error',
       };
       return translations[key] || key;
     },
