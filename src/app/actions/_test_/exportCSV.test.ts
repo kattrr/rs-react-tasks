@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { exportCSVAction } from '../exportCSV';
 
-// Mock CSVExportService
 vi.mock('@/services/CSVExportService', () => ({
   exportSelectedItems: vi.fn(),
 }));

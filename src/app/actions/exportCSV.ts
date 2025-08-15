@@ -15,10 +15,7 @@ export async function exportCSVAction(
         filename: '',
       };
     }
-
-    // Compile CSV on the server
     const csvContent = exportSelectedItems(items);
-
     return {
       success: true,
       data: csvContent,

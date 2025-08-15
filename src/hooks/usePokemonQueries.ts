@@ -25,7 +25,7 @@ export const usePokemonList = (page: number) => {
         )
         .map((result) => result.value);
     },
-    placeholderData: (keepPreviousData) => keepPreviousData, // Correct way to maintain previous data
+    placeholderData: (keepPreviousData) => keepPreviousData,
   });
 };
 

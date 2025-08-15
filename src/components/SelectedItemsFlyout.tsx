@@ -16,7 +16,6 @@ const SelectedItemsFlyout = () => {
       );
 
       if (result.success && result.data) {
-        // Create and download the CSV file
         const blob = new Blob([result.data], { type: 'text/csv' });
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');

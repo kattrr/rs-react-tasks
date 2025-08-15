@@ -19,14 +19,12 @@ const ClientMainPage = ({ initialPokemonList }: ClientMainPageProps) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1); // Will be calculated based on total Pokemon count
+  const [totalPages, setTotalPages] = useState(1);
   const [detailsName, setDetailsName] = useState<string | null>(null);
 
-  // Calculate total pages based on total Pokemon count (1302 from the API)
   const TOTAL_POKEMON_COUNT = 1302;
   const PAGE_SIZE = 12;
 
-  // Update total pages when component mounts
   useMemo(() => {
     setTotalPages(Math.ceil(TOTAL_POKEMON_COUNT / PAGE_SIZE));
   }, []);
@@ -39,14 +37,12 @@ const ClientMainPage = ({ initialPokemonList }: ClientMainPageProps) => {
     try {
       const trimmed = term.trim();
       if (trimmed === '') {
-        // Reset to initial state
         setPokemons(initialPokemonList);
         setCurrentPage(1);
         setError(null);
         return;
       }
 
-      // Search for specific Pokemon
       const result = await fetchPokemonByName(trimmed);
       setPokemons([result]);
       setCurrentPage(1);
@@ -70,7 +66,6 @@ const ClientMainPage = ({ initialPokemonList }: ClientMainPageProps) => {
       const offset = (page - 1) * PAGE_SIZE;
       const pokemonList = await fetchPokemonList(offset, PAGE_SIZE);
 
-      // Fetch full details for each Pokemon
       const pokemonDetails = await Promise.all(
         pokemonList.map((pokemon) => fetchPokemonByName(pokemon.name))
       );
@@ -111,7 +106,6 @@ const ClientMainPage = ({ initialPokemonList }: ClientMainPageProps) => {
     throw new Error('This is a test error to demonstrate error boundary');
   };
 
-  // Show pagination only when not searching and there are multiple pages
   const showPagination = searchTerm.trim() === '' && totalPages > 1;
 
   return (

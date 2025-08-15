@@ -116,7 +116,6 @@ if (typeof window !== 'undefined') {
     configurable: true,
   });
 
-  // Mock navigation API to suppress JSDOM warnings
   try {
     const nav = (window as unknown as Record<string, unknown>).navigation;
     if (nav && typeof nav === 'object') {
@@ -127,12 +126,10 @@ if (typeof window !== 'undefined') {
       });
     }
   } catch {
-    // Navigation API not available, skip
+    console.debug('Navigation API not supported');
   }
 
-  // Mock HTMLAnchorElement.prototype.click to suppress navigation warnings
   HTMLAnchorElement.prototype.click = function () {
-    // Suppress navigation warnings by doing nothing
     return;
   };
 }

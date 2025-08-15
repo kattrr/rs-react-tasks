@@ -162,7 +162,7 @@ describe('Pagination', () => {
     renderPagination({ currentPage: 5, totalPages: 10 });
 
     const ellipsisElements = screen.getAllByText('...');
-    expect(ellipsisElements).toHaveLength(2); // One before first page, one before last page
+    expect(ellipsisElements).toHaveLength(2);
   });
 
   it('does not show ellipsis when pageNumbers[0] === 2', () => {

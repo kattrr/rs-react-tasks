@@ -24,7 +24,6 @@ vi.mock('next/navigation', () => ({
   }),
 }));
 
-// Mock next-intl/navigation
 vi.mock('next-intl/navigation', () => ({
   createNavigation: () => ({
     Link: ({
@@ -43,7 +42,6 @@ vi.mock('next-intl/navigation', () => ({
   }),
 }));
 
-// Mock useTheme hook
 vi.mock('@/hooks/useTheme', () => ({
   useTheme: () => ({
     theme: 'light',
@@ -51,14 +49,12 @@ vi.mock('@/hooks/useTheme', () => ({
   }),
 }));
 
-// Mock i18n routing
 vi.mock('@/i18n/routing', () => ({
   locales: ['en', 'es'],
 }));
 
 describe('Navbar', () => {
   beforeEach(() => {
-    // Reset to default pathname
     mockPathname = '/en/home';
     vi.clearAllMocks();
   });
@@ -72,8 +68,6 @@ describe('Navbar', () => {
 
   it('renders theme and language selectors', () => {
     render(<Navbar />);
-
-    // Check for actual rendered elements instead of mocked ones
     expect(screen.getByText('Theme:')).toBeInTheDocument();
     expect(screen.getByText('EN')).toBeInTheDocument();
     expect(screen.getByText('ES')).toBeInTheDocument();
@@ -90,9 +84,6 @@ describe('Navbar', () => {
     render(<Navbar />);
 
     const homeLink = screen.getByTestId('nav-link-/');
-    // The isActive function checks if pathname === `/${locale}${path}`
-    // For pathname '/en/' and path '', it should be '/en/' === '/en' which is false
-    // So it should have inactive styles
     expect(homeLink).toHaveClass('hover:text-purple-500');
     expect(homeLink).not.toHaveClass(
       'underline',
@@ -143,7 +134,6 @@ describe('Navbar', () => {
     mockPathname = '/home';
     render(<Navbar />);
 
-    // Should still render without errors
     expect(screen.getByText('Home')).toBeInTheDocument();
     expect(screen.getByText('About')).toBeInTheDocument();
   });
@@ -152,7 +142,6 @@ describe('Navbar', () => {
     mockPathname = '';
     render(<Navbar />);
 
-    // Should still render without errors
     expect(screen.getByText('Home')).toBeInTheDocument();
     expect(screen.getByText('About')).toBeInTheDocument();
   });
@@ -161,7 +150,6 @@ describe('Navbar', () => {
     mockPathname = '/es/about';
     render(<Navbar />);
 
-    // Should still render without errors
     expect(screen.getByText('Home')).toBeInTheDocument();
     expect(screen.getByText('About')).toBeInTheDocument();
   });

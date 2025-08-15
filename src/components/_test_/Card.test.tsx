@@ -4,9 +4,8 @@ import Card from '../Card';
 import type { PokemonDetails } from '@api/pokeapi';
 import { useSelectedItemsStore } from '@store/selectedItemsStore';
 
-// Mock next/image to avoid testing image functionality
 vi.mock('next/image', () => ({
-  default: () => null, // Return null to avoid image testing
+  default: () => null,
 }));
 
 vi.mock('@store/selectedItemsStore', () => ({
@@ -57,7 +56,7 @@ describe('Card component', () => {
     render(<Card pokemon={incompletePokemon} />);
 
     expect(screen.getByText('unknown')).toBeInTheDocument();
-    expect(screen.getByText(/type:/i)).toBeInTheDocument(); // empty but doesn't break
+    expect(screen.getByText(/type:/i)).toBeInTheDocument();
   });
 
   it('renders checkbox for item selection', () => {
@@ -162,11 +161,9 @@ describe('Card component', () => {
     const nameElement = screen.getByText('pikachu');
     expect(nameElement).toHaveClass('text-black', 'text-lg', 'font-semibold');
 
-    // Check that the type element exists and verify the complete text content
     expect(screen.getByText(/type:/i)).toBeInTheDocument();
     expect(screen.getByText('electric')).toBeInTheDocument();
 
-    // Verify the complete text structure
     const typeSection = screen.getByText(/type:/i).closest('p');
     expect(typeSection).toHaveClass('text-black', 'text-base');
   });

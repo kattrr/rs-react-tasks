@@ -4,18 +4,15 @@ import type { UseQueryResult } from '@tanstack/react-query';
 import PokemonDetailsPanel from '../PokemonDetailsPanel';
 import { QueryProvider } from '../../providers/QueryProvider';
 import type { PokemonDetails } from '@api/pokeapi';
-import { mock } from 'node:test';
-// Mock next/image to avoid testing image functionality
+
 vi.mock('next/image', () => ({
-  default: () => null, // Return null to avoid image testing
+  default: () => null,
 }));
 
-// Mock the usePokemonDetails hook
 vi.mock('../../hooks/usePokemonQueries', () => ({
   usePokemonDetails: vi.fn(),
 }));
 
-// Mock Spinner component
 vi.mock('../Spinner', () => ({
   default: () => <div data-testid="spinner">Loading...</div>,
 }));
@@ -70,7 +67,7 @@ describe('PokemonDetailsPanel', () => {
   };
   beforeEach(() => {
     vi.clearAllMocks();
-    // Set default mock return value
+
     mockUsePokemonDetails.mockReturnValue({
       data: mockPokemon,
       isLoading: false,
@@ -111,7 +108,6 @@ describe('PokemonDetailsPanel', () => {
     const panel = screen.getByTestId('details-panel');
     expect(panel).toBeInTheDocument();
 
-    // Test that the panel has the correct structure and classes
     expect(panel).toHaveClass(
       'w-1/3',
       'bg-white',
@@ -149,7 +145,6 @@ describe('PokemonDetailsPanel', () => {
     const panel = screen.getByTestId('details-panel');
     expect(panel).toBeInTheDocument();
 
-    // Verify the component renders without crashing
     expect(panel.firstChild).toBeInTheDocument();
   });
 
@@ -166,7 +161,6 @@ describe('PokemonDetailsPanel', () => {
   });
 
   it('shows error state when error occurs', () => {
-    // Mock the hook to return error state
     mockUsePokemonDetails.mockReturnValue({
       data: mockPokemonNull,
       isLoading: false,
@@ -184,8 +178,6 @@ describe('PokemonDetailsPanel', () => {
 
   it('handles pokemon without abilities', () => {
     const pokemonWithoutAbilities = { ...mockPokemon, abilities: [] };
-
-    // Mock the hook to return pokemon without abilities
     mockUsePokemonDetails.mockReturnValue({
       data: pokemonWithoutAbilities,
       isLoading: false,
@@ -193,8 +185,6 @@ describe('PokemonDetailsPanel', () => {
     } as MockQueryResult);
 
     renderWithProvider('pikachu');
-
-    // Abilities section should not be rendered
     expect(screen.queryByText(/abilities:/i)).not.toBeInTheDocument();
   });
 
@@ -204,7 +194,6 @@ describe('PokemonDetailsPanel', () => {
       moves: mockPokemon.moves.slice(0, 5),
     };
 
-    // Mock the hook to return pokemon with few moves
     mockUsePokemonDetails.mockReturnValue({
       data: pokemonWithFewMoves,
       isLoading: false,
@@ -213,12 +202,10 @@ describe('PokemonDetailsPanel', () => {
 
     renderWithProvider('pikachu');
 
-    // Should not show "+X more" text
     expect(screen.queryByText(/\+.*more/)).not.toBeInTheDocument();
   });
 
   it('formats move names correctly by replacing hyphens with spaces', () => {
-    // Mock the hook to return pokemon data
     mockUsePokemonDetails.mockReturnValue({
       data: mockPokemon,
       isLoading: false,
@@ -226,8 +213,6 @@ describe('PokemonDetailsPanel', () => {
     } as MockQueryResult);
 
     renderWithProvider('pikachu');
-
-    // Check that move names are formatted correctly
     expect(screen.getByText('thunder shock')).toBeInTheDocument();
     expect(screen.getByText('quick attack')).toBeInTheDocument();
   });
@@ -242,7 +227,6 @@ describe('PokemonDetailsPanel', () => {
       ],
     };
 
-    // Mock the hook to return charizard data
     mockUsePokemonDetails.mockReturnValue({
       data: charizardPokemon,
       isLoading: false,
@@ -251,7 +235,6 @@ describe('PokemonDetailsPanel', () => {
 
     renderWithProvider('charizard');
 
-    // Check that names are capitalized
     expect(screen.getByText('charizard')).toBeInTheDocument();
     expect(screen.getByText('fire spin')).toBeInTheDocument();
     expect(screen.getByText('dragon claw')).toBeInTheDocument();
@@ -260,7 +243,6 @@ describe('PokemonDetailsPanel', () => {
   it('handles pokemon with no moves', () => {
     const pokemonWithoutMoves = { ...mockPokemon, moves: [] };
 
-    // Mock the hook to return pokemon without moves
     mockUsePokemonDetails.mockReturnValue({
       data: pokemonWithoutMoves,
       isLoading: false,
@@ -269,14 +251,12 @@ describe('PokemonDetailsPanel', () => {
 
     renderWithProvider('pikachu');
 
-    // Moves section should not be rendered
     expect(screen.queryByText(/moves:/i)).not.toBeInTheDocument();
   });
 
   it('handles pokemon with no types', () => {
     const pokemonWithoutTypes = { ...mockPokemon, types: [] };
 
-    // Mock the hook to return pokemon without types
     mockUsePokemonDetails.mockReturnValue({
       data: pokemonWithoutTypes,
       isLoading: false,
@@ -285,14 +265,12 @@ describe('PokemonDetailsPanel', () => {
 
     renderWithProvider('pikachu');
 
-    // Types section should not be rendered
     expect(screen.queryByText(/type:/i)).not.toBeInTheDocument();
   });
 
   it('handles pokemon with height 0', () => {
     const pokemonWithZeroHeight = { ...mockPokemon, height: 0 };
 
-    // Mock the hook to return pokemon with zero height
     mockUsePokemonDetails.mockReturnValue({
       data: pokemonWithZeroHeight,
       isLoading: false,
@@ -300,15 +278,12 @@ describe('PokemonDetailsPanel', () => {
     } as MockQueryResult);
 
     renderWithProvider('pikachu');
-
-    // Height should display as 0
     expect(screen.getByText('0 m')).toBeInTheDocument();
   });
 
   it('handles pokemon with decimal height', () => {
     const pokemonWithDecimalHeight = { ...mockPokemon, height: 17 };
 
-    // Mock the hook to return pokemon with decimal height
     mockUsePokemonDetails.mockReturnValue({
       data: pokemonWithDecimalHeight,
       isLoading: false,
@@ -317,7 +292,6 @@ describe('PokemonDetailsPanel', () => {
 
     renderWithProvider('pikachu');
 
-    // Height should display as 1.7
     expect(screen.getByText('1.7 m')).toBeInTheDocument();
   });
 });

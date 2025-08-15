@@ -62,7 +62,6 @@ describe('usePokemonQueries', () => {
 
       const { result } = renderHook(() => usePokemonList(1), { wrapper });
 
-      // Wait for the error to be set
       await waitFor(
         () => {
           expect(result.current.error).toBeTruthy();

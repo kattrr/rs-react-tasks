@@ -2,7 +2,6 @@ import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import HomePage from '../page';
 
-// Mock the API functions
 vi.mock('@/api/pokeapi', () => ({
   fetchPokemonList: vi.fn(() =>
     Promise.resolve([
@@ -24,7 +23,6 @@ vi.mock('@/api/pokeapi', () => ({
   ),
 }));
 
-// Mock the components
 vi.mock('@/components/Spinner', () => ({
   default: () => <div data-testid="spinner">Loading...</div>,
 }));

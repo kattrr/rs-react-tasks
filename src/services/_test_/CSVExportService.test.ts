@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { exportSelectedItems } from '../CSVExportService';
 import type { SelectedItem } from '@store/selectedItemsStore';
 
@@ -22,18 +22,14 @@ describe('CSVExportService', () => {
     },
   ];
 
-  beforeEach(() => {
-    // No setup needed for the new CSV string-based approach
-  });
-
   describe('exportSelectedItems', () => {
     it('should return empty string when items array is empty', () => {
-      const result = exportSelectedItems([], 'test.csv');
+      const result = exportSelectedItems([]);
       expect(result).toBe('');
     });
 
     it('should create CSV content with correct headers', () => {
-      const result = exportSelectedItems(mockItems, 'test.csv');
+      const result = exportSelectedItems(mockItems);
 
       expect(result).toContain('Name,Description,Details URL,Image URL,Types');
       expect(result).toContain(
@@ -45,7 +41,7 @@ describe('CSVExportService', () => {
     });
 
     it('should create CSV content with correct data rows', () => {
-      const result = exportSelectedItems(mockItems, 'test.csv');
+      const result = exportSelectedItems(mockItems);
 
       expect(result).toContain(
         'pikachu,Type: electric,https://pokeapi.co/api/v2/pokemon/pikachu,https://example.com/pikachu.png,electric'
@@ -56,7 +52,7 @@ describe('CSVExportService', () => {
     });
 
     it('should return CSV string with correct format', () => {
-      const result = exportSelectedItems(mockItems, 'test.csv');
+      const result = exportSelectedItems(mockItems);
 
       const lines = result.split('\n');
       expect(lines).toHaveLength(3); // Header + 2 data rows
@@ -77,7 +73,7 @@ describe('CSVExportService', () => {
         },
       ];
 
-      const result = exportSelectedItems(itemsWithMultipleTypes, 'test.csv');
+      const result = exportSelectedItems(itemsWithMultipleTypes);
 
       expect(result).toContain(
         'venusaur,Type: grass, poison,https://pokeapi.co/api/v2/pokemon/venusaur,https://example.com/venusaur.png,grass;poison'
@@ -96,7 +92,7 @@ describe('CSVExportService', () => {
         },
       ];
 
-      const result = exportSelectedItems(itemsWithSingleType, 'test.csv');
+      const result = exportSelectedItems(itemsWithSingleType);
 
       expect(result).toContain(
         'pikachu,Type: electric,https://pokeapi.co/api/v2/pokemon/pikachu,https://example.com/pikachu.png,electric'
@@ -115,7 +111,7 @@ describe('CSVExportService', () => {
         },
       ];
 
-      const result = exportSelectedItems(itemsWithSpecialChars, 'test.csv');
+      const result = exportSelectedItems(itemsWithSpecialChars);
 
       expect(result).toContain(
         'mewtwo,Type: psychic (Legendary),https://pokeapi.co/api/v2/pokemon/mewtwo,https://example.com/mewtwo.png,psychic'
@@ -123,7 +119,7 @@ describe('CSVExportService', () => {
     });
 
     it('should return CSV string with proper formatting', () => {
-      const result = exportSelectedItems(mockItems, 'pokemon_list.csv');
+      const result = exportSelectedItems(mockItems);
 
       expect(result).toContain('Name,Description,Details URL,Image URL,Types');
       expect(result.split('\n')).toHaveLength(3);

@@ -6,28 +6,32 @@ import { ThemeContext } from '@contexts/ThemeContext';
 
 describe('useTheme', () => {
   it('should return theme context when used within ThemeProvider', () => {
-    const mockTheme = { 
-      theme: 'light' as const, 
+    const mockTheme = {
+      theme: 'light' as const,
       toggleTheme: vi.fn(),
-      setTheme: vi.fn() // Agregar la propiedad faltante
+      setTheme: vi.fn(),
     };
-    
+
     const wrapper = ({ children }: { children: React.ReactNode }) => {
-      return React.createElement(ThemeContext.Provider, { value: mockTheme }, children);
+      return React.createElement(
+        ThemeContext.Provider,
+        { value: mockTheme },
+        children
+      );
     };
-  
+
     const { result } = renderHook(() => useTheme(), { wrapper });
-    
+
     expect(result.current).toBe(mockTheme);
   });
 
   it('should throw error when used outside ThemeProvider', () => {
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    
+
     expect(() => {
       renderHook(() => useTheme());
     }).toThrow('useTheme must be used within a ThemeProvider');
-    
+
     consoleSpy.mockRestore();
   });
 });

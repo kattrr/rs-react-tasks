@@ -2,12 +2,11 @@ import createNextIntlPlugin from 'next-intl/plugin';
 
 const withNextIntl = createNextIntlPlugin();
 
-/** @type {import('next').NextConfig} */
 const nextConfig = {
-  distDir: './dist', // Changes the build output directory to `./dist/`
+  distDir: './dist',
   trailingSlash: true,
   images: {
-    unoptimized: true, // Required for static export
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',

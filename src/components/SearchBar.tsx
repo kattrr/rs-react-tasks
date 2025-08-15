@@ -17,7 +17,6 @@ const SearchBar = ({
   const [inputValue, setInputValue] = useState(propSearchTerm);
   const t = useTranslations();
 
-  // Sync input value when propSearchTerm changes
   useEffect(() => {
     setInputValue(propSearchTerm);
   }, [propSearchTerm]);
@@ -26,9 +25,8 @@ const SearchBar = ({
     const value = event.target.value;
     setInputValue(value);
 
-    // Automatically search when input is cleared or changed
     if (value === '') {
-      onSearch(''); // Clear search
+      onSearch('');
     }
   };
 

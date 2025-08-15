@@ -76,15 +76,15 @@ describe('CardList component', () => {
         moves: [{ move: { name: 'tackle' } }],
       },
     ];
-  
+
     render(<CardList pokemons={mockData} onCardClick={mockOnCardClick} />);
-    
+
     const card = screen.getByTestId('mock-card');
     card.click();
-    
+
     expect(mockOnCardClick).toHaveBeenCalledWith('bulbasaur');
   });
-  
+
   it('applies cursor-pointer class when onCardClick is provided', () => {
     const mockOnCardClick = vi.fn();
     const mockData: PokemonDetails[] = [
@@ -98,11 +98,10 @@ describe('CardList component', () => {
         moves: [{ move: { name: 'tackle' } }],
       },
     ];
-  
+
     render(<CardList pokemons={mockData} onCardClick={mockOnCardClick} />);
-    
+
     const cardContainer = screen.getByTestId('mock-card').parentElement;
     expect(cardContainer).toHaveClass('cursor-pointer');
   });
-
 });

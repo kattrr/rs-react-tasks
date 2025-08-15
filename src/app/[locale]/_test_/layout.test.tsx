@@ -1,12 +1,10 @@
 import { describe, it, expect, vi } from 'vitest';
 import LocaleLayout from '../layout';
 
-// Mock next-intl
 vi.mock('next-intl/server', () => ({
   getMessages: vi.fn(() => Promise.resolve({})),
 }));
 
-// Mock next-intl
 vi.mock('next-intl', () => ({
   NextIntlClientProvider: ({
     children,
@@ -21,7 +19,6 @@ vi.mock('next-intl', () => ({
   ),
 }));
 
-// Mock the providers
 vi.mock('@/providers', () => ({
   ThemeProvider: ({ children }: { children: React.ReactNode }) => (
     <div data-testid="theme-provider">{children}</div>
@@ -31,7 +28,6 @@ vi.mock('@/providers', () => ({
   ),
 }));
 
-// Mock the components
 vi.mock('@/components/Navbar', () => ({
   default: () => <nav data-testid="navbar">Navigation</nav>,
 }));
@@ -46,7 +42,6 @@ vi.mock('@/components/SelectedItemsFlyout', () => ({
   default: () => <div data-testid="selected-items-flyout">Flyout</div>,
 }));
 
-// Mock CSS import
 vi.mock('@/index.css', () => ({}));
 
 describe('LocaleLayout', () => {
@@ -56,7 +51,6 @@ describe('LocaleLayout', () => {
       params: Promise.resolve({ locale: 'en' }),
     });
 
-    // Verify that the layout function returns a valid React element
     expect(layout).toBeDefined();
     expect(typeof layout).toBe('object');
     expect(layout).toHaveProperty('type');
@@ -71,10 +65,8 @@ describe('LocaleLayout', () => {
       params: mockParams,
     });
 
-    // Verify that the layout function executes without errors
     expect(layout).toBeDefined();
 
-    // Verify that the params are properly awaited
     const resolvedParams = await mockParams;
     expect(resolvedParams.locale).toBe('es');
   });

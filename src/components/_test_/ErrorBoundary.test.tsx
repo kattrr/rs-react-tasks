@@ -56,7 +56,6 @@ describe('ErrorBoundary', () => {
   });
 
   it('resets state when clicking "Try again"', () => {
-    // Wrapper to control ErrorBoundary key for remounting
     function Wrapper({
       shouldThrow,
       boundaryKey,
