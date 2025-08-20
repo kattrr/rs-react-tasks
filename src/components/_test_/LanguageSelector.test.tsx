@@ -13,7 +13,7 @@ vi.mock('next/navigation', () => ({
 }));
 
 vi.mock('@/i18n/routing', () => ({
-  locales: ['en', 'es', 'ru', 'de'],
+  locales: ['en', 'es', 'ru', 'de', 'be'],
 }));
 
 describe('LanguageSelector', () => {

@@ -2,6 +2,19 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import SelectedItemsFlyout from '../SelectedItemsFlyout';
 
+// Mock next-intl
+vi.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => {
+    const translations: Record<string, string> = {
+      'selectedItems.itemSelected': 'item is selected',
+      'selectedItems.itemsSelected': 'items are selected',
+      'selectedItems.clearAll': 'Clear All',
+      'selectedItems.download': 'Download',
+    };
+    return translations[key] || key;
+  },
+}));
+
 vi.mock('../../store/selectedItemsStore', () => ({
   useSelectedItemsStore: vi.fn(),
 }));

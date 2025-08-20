@@ -49,7 +49,7 @@ vi.mock('@/hooks/useTheme', () => ({
 }));
 
 vi.mock('@/i18n/routing', () => ({
-  locales: ['en', 'es'],
+  locales: ['en', 'es', 'ru', 'de', 'be'],
 }));
 
 describe('Navbar', () => {
