@@ -28,5 +28,11 @@
     "title": "🔍 Búsqueda de Pokémon",
     "goHomeButton": "Ir al Inicio",
     "searchPlaceholder": "Buscar Pokémon por nombre..."
+  },
+  "selectedItems": {
+    "itemSelected": "elemento está seleccionado",
+    "itemsSelected": "elementos están seleccionados",
+    "clearAll": "Limpiar Todo",
+    "download": "Descargar"
   }
 }

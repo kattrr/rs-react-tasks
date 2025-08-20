@@ -16,7 +16,7 @@ const LanguageSelector = () => {
     const segments = pathname.split('/');
     if (
       segments.length > 1 &&
-      locales.includes(segments[1] as 'en' | 'es' | 'ru' | 'de')
+      locales.includes(segments[1] as 'en' | 'es' | 'ru' | 'de' | 'be')
     ) {
       segments[1] = newLocale;
       router.push(segments.join('/'));
@@ -30,10 +30,11 @@ const LanguageSelector = () => {
 
   const getLanguageName = (locale: string) => {
     const languageNames: Record<string, string> = {
+      be: 'Беларуская',
+      de: 'Deutsch',
       en: 'English',
       es: 'Español',
       ru: 'Русский',
-      de: 'Deutsch',
     };
     return languageNames[locale] || locale.toUpperCase();
   };

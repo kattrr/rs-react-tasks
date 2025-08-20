@@ -29,5 +29,11 @@
     "title": "🔍 Pokémon Search",
     "goHomeButton": "Go Home",
     "searchPlaceholder": "Search Pokémon by name..."
+  },
+  "selectedItems": {
+    "itemSelected": "item is selected",
+    "itemsSelected": "items are selected",
+    "clearAll": "Clear All",
+    "download": "Download"
   }
 }

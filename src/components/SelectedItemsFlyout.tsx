@@ -1,10 +1,12 @@
 'use client';
 import { useSelectedItemsStore } from '@store/selectedItemsStore';
 import { exportCSVAction } from '@/app/actions';
+import { useTranslations } from 'next-intl';
 
 const SelectedItemsFlyout = () => {
   const { selectedItems, clearAll, getSelectedCount } = useSelectedItemsStore();
   const selectedCount = getSelectedCount();
+  const t = useTranslations();
 
   const handleDownload = async () => {
     if (selectedCount === 0) return;
@@ -38,8 +40,10 @@ const SelectedItemsFlyout = () => {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <span className="text-lg font-semibold">
-            {selectedCount} {selectedCount === 1 ? 'item is' : 'items are'}{' '}
-            selected
+            {selectedCount}{' '}
+            {selectedCount === 1
+              ? t('selectedItems.itemSelected')
+              : t('selectedItems.itemsSelected')}
           </span>
         </div>
         <div className="flex items-center space-x-3">
@@ -47,13 +51,13 @@ const SelectedItemsFlyout = () => {
             onClick={clearAll}
             className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
           >
-            Clear All
+            {t('selectedItems.clearAll')}
           </button>
           <button
             onClick={handleDownload}
             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
-            Download
+            {t('selectedItems.download')}
           </button>
         </div>
       </div>
