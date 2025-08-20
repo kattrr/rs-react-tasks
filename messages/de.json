@@ -1,0 +1,38 @@
+{
+  "navigation": {
+    "home": "Startseite",
+    "about": "Über uns",
+    "pokemon": "Pokemon"
+  },
+  "common": {
+    "loading": "Lädt...",
+    "error": "Ein Fehler ist aufgetreten",
+    "search": "Suchen",
+    "previous": "Zurück",
+    "next": "Weiter",
+    "export": "CSV exportieren",
+    "theme": {
+      "light": "Hell",
+      "dark": "Dunkel"
+    }
+  },
+  "pokemon": {
+    "height": "Größe",
+    "weight": "Gewicht",
+    "types": "Typen",
+    "abilities": "Fähigkeiten",
+    "stats": "Statuswerte",
+    "noResults": "Keine Pokemon gefunden"
+  },
+  "mainPage": {
+    "title": "🔍 Pokémon-Suche",
+    "goHomeButton": "Nach Hause",
+    "searchPlaceholder": "Pokémon nach Namen suchen..."
+  },
+  "selectedItems": {
+    "itemSelected": "Element ist ausgewählt",
+    "itemsSelected": "Elemente sind ausgewählt",
+    "clearAll": "Alle löschen",
+    "download": "Herunterladen"
+  }
+}

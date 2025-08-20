@@ -1,3 +1,7 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
+
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
@@ -9,6 +13,8 @@ const Pagination = ({
   totalPages,
   onPageChange,
 }: PaginationProps) => {
+  const t = useTranslations();
+
   if (totalPages <= 1) return null;
 
   const getPageNumbers = () => {
@@ -31,14 +37,14 @@ const Pagination = ({
   return (
     <div
       role="navigation"
-      className="flex justify-center items-center gap-2 mt-6"
+      className="flex justify-center items-center gap-2 mt-6 page"
     >
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
         className="px-3 py-1 rounded bg-gray-200 disabled:bg-gray-100 text-gray-700 font-medium"
       >
-        Previous
+        {t('common.previous')}
       </button>
       {pageNumbers[0] > 1 && (
         <>
@@ -82,7 +88,7 @@ const Pagination = ({
         disabled={currentPage === totalPages}
         className="px-3 py-1 rounded bg-gray-200 disabled:bg-gray-100 text-gray-700 font-medium"
       >
-        Next
+        {t('common.next')}
       </button>
     </div>
   );

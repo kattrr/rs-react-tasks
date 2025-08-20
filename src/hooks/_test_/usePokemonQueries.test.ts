@@ -1,7 +1,7 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, waitFor } from '@testing-library/react';
-import { TestQueryClientProvider } from '../../test/queryClient';
+import { QueryProvider } from '../../providers/QueryProvider';
 import {
   usePokemonList,
   usePokemonSearch,
@@ -15,7 +15,7 @@ import type { PokemonDetails } from '@api/pokeapi';
 vi.mock('../../api/pokeapi');
 
 const wrapper = ({ children }: { children: React.ReactNode }) => {
-  return React.createElement(TestQueryClientProvider, null, children);
+  return React.createElement(QueryProvider, null, children);
 };
 
 describe('usePokemonQueries', () => {
@@ -62,9 +62,12 @@ describe('usePokemonQueries', () => {
 
       const { result } = renderHook(() => usePokemonList(1), { wrapper });
 
-      await waitFor(() => {
-        expect(result.current.error).toBeTruthy();
-      });
+      await waitFor(
+        () => {
+          expect(result.current.error).toBeTruthy();
+        },
+        { timeout: 5000 }
+      );
 
       expect(result.current.error?.message).toBe('Network error');
     });

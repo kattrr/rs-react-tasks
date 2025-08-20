@@ -11,7 +11,9 @@ describe('SearchBar component', () => {
 
   test('renders the search input and button', () => {
     render(<SearchBar onSearch={mockOnSearch} />);
-    expect(screen.getByPlaceholderText(/Search Pokémon/i)).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText(/No Pokemon found/i)
+    ).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Search/i })).toBeInTheDocument();
   });
 
@@ -22,19 +24,19 @@ describe('SearchBar component', () => {
 
   test('shows empty input when no search term is provided', () => {
     render(<SearchBar onSearch={mockOnSearch} />);
-    expect(screen.getByPlaceholderText(/Search Pokémon/i)).toHaveValue('');
+    expect(screen.getByPlaceholderText(/No Pokemon found/i)).toHaveValue('');
   });
 
   test('updates input value when the user types', () => {
     render(<SearchBar onSearch={mockOnSearch} />);
-    const input = screen.getByPlaceholderText(/Search Pokémon/i);
+    const input = screen.getByPlaceholderText(/No Pokemon found/i);
     fireEvent.change(input, { target: { value: 'bulbasaur' } });
     expect(input).toHaveValue('bulbasaur');
   });
 
   test('calls onSearch when search button is clicked with trimmed term', () => {
     render(<SearchBar onSearch={mockOnSearch} />);
-    const input = screen.getByPlaceholderText(/Search Pokémon/i);
+    const input = screen.getByPlaceholderText(/No Pokemon found/i);
     const button = screen.getByRole('button', { name: /Search/i });
 
     fireEvent.change(input, { target: { value: ' charmander  ' } });
@@ -43,20 +45,20 @@ describe('SearchBar component', () => {
     expect(mockOnSearch).toHaveBeenCalledWith('charmander');
   });
 
-  test('does not call onSearch when search button is clicked with empty term', () => {
+  test('calls onSearch with empty string when search button is clicked with empty term', () => {
     render(<SearchBar onSearch={mockOnSearch} />);
-    const input = screen.getByPlaceholderText(/Search Pokémon/i);
+    const input = screen.getByPlaceholderText(/No Pokemon found/i);
     const button = screen.getByRole('button', { name: /Search/i });
 
     fireEvent.change(input, { target: { value: '   ' } });
     fireEvent.click(button);
 
-    expect(mockOnSearch).not.toHaveBeenCalled();
+    expect(mockOnSearch).toHaveBeenCalledWith('');
   });
 
   test('calls onSearch when Enter key is pressed with trimmed term', () => {
     render(<SearchBar onSearch={mockOnSearch} />);
-    const input = screen.getByPlaceholderText(/Search Pokémon/i);
+    const input = screen.getByPlaceholderText(/No Pokemon found/i);
 
     fireEvent.change(input, { target: { value: '  pikachu  ' } });
     fireEvent.keyDown(input, { key: 'Enter' });
@@ -66,7 +68,7 @@ describe('SearchBar component', () => {
 
   test('calls onSearch with empty string when Enter key is pressed with empty term', () => {
     render(<SearchBar onSearch={mockOnSearch} />);
-    const input = screen.getByPlaceholderText(/Search Pokémon/i);
+    const input = screen.getByPlaceholderText(/No Pokemon found/i);
 
     fireEvent.change(input, { target: { value: '   ' } });
     fireEvent.keyDown(input, { key: 'Enter' });
@@ -74,15 +76,15 @@ describe('SearchBar component', () => {
     expect(mockOnSearch).toHaveBeenCalledWith('');
   });
 
-  test('disables search button when input value matches current search term', () => {
+  test('search button is always enabled', () => {
     render(<SearchBar onSearch={mockOnSearch} searchTerm="pikachu" />);
     const button = screen.getByRole('button', { name: /Search/i });
-    expect(button).toBeDisabled();
+    expect(button).not.toBeDisabled();
   });
 
-  test('enables search button when input value changes', () => {
+  test('search button remains enabled when input value changes', () => {
     render(<SearchBar onSearch={mockOnSearch} searchTerm="pikachu" />);
-    const input = screen.getByPlaceholderText(/Search Pokémon/i);
+    const input = screen.getByPlaceholderText(/No Pokemon found/i);
     const button = screen.getByRole('button', { name: /Search/i });
 
     fireEvent.change(input, { target: { value: 'raichu' } });

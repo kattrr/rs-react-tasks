@@ -1,0 +1,38 @@
+{
+  "navigation": {
+    "home": "Главная",
+    "about": "О нас",
+    "pokemon": "Покемон"
+  },
+  "common": {
+    "loading": "Загрузка...",
+    "error": "Произошла ошибка",
+    "search": "Поиск",
+    "previous": "Предыдущий",
+    "next": "Следующий",
+    "export": "Экспорт CSV",
+    "theme": {
+      "light": "Светлый",
+      "dark": "Темный"
+    }
+  },
+  "pokemon": {
+    "height": "Высота",
+    "weight": "Вес",
+    "types": "Типы",
+    "abilities": "Способности",
+    "stats": "Характеристики",
+    "noResults": "Покемоны не найдены"
+  },
+  "mainPage": {
+    "title": "🔍 Поиск Покемонов",
+    "goHomeButton": "На главную",
+    "searchPlaceholder": "Поиск покемонов по имени..."
+  },
+  "selectedItems": {
+    "itemSelected": "элемент выбран",
+    "itemsSelected": "элементов выбрано",
+    "clearAll": "Очистить все",
+    "download": "Скачать"
+  }
+}
