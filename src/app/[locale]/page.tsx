@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import { fetchPokemonList, fetchPokemonByName } from '@/api/pokeapi';
 import Spinner from '@/components/Spinner';
 import ClientMainPage from '@/components/ClientMainPage';
+import FormMainPage from '@/components/FormMainPage';
 
 export default async function HomePage() {
   const pokemonList = await fetchPokemonList(0, 12);
@@ -12,7 +13,10 @@ export default async function HomePage() {
 
   return (
     <Suspense fallback={<Spinner />}>
-      <ClientMainPage initialPokemonList={initialPokemonDetails} />
+      <div className="space-y-8">
+        <FormMainPage />
+        <ClientMainPage initialPokemonList={initialPokemonDetails} />
+      </div>
     </Suspense>
   );
 }
