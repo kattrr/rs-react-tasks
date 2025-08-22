@@ -96,6 +96,7 @@ const FormMainPage: React.FC = () => {
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
+              data-testid="empty-state-icon"
             >
               <path
                 strokeLinecap="round"

@@ -73,6 +73,17 @@ export const HookForm: React.FC<HookFormProps> = ({ onClose }) => {
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
     mode: 'onChange',
+    defaultValues: {
+      name: '',
+      age: 0,
+      email: '',
+      password: '',
+      confirmPassword: '',
+      gender: '',
+      acceptTerms: false,
+      picture: undefined,
+      country: '',
+    },
   });
 
   const password = watch('password');
