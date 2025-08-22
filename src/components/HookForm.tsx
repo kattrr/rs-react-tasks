@@ -236,11 +236,14 @@ export const HookForm: React.FC<HookFormProps> = ({ onClose }) => {
           control={control}
           render={({ field }) => (
             <input
-              {...field}
               type="number"
               id="hook-age"
               min="0"
+              value={field.value}
               onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+              onBlur={field.onBlur}
+              name={field.name}
+              ref={field.ref}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               placeholder={t('placeholders.age')}
             />
@@ -407,11 +410,13 @@ export const HookForm: React.FC<HookFormProps> = ({ onClose }) => {
           control={control}
           render={({ field }) => (
             <input
-              {...field}
               type="checkbox"
               id="hook-acceptTerms"
               checked={field.value}
               onChange={field.onChange}
+              onBlur={field.onBlur}
+              name={field.name}
+              ref={field.ref}
               className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
             />
           )}
