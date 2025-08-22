@@ -16,8 +16,8 @@ describe('ThemeSelector', () => {
     );
 
     expect(screen.getByText('Theme:')).toBeInTheDocument();
-    expect(screen.getByText('Light')).toBeInTheDocument();
-    expect(screen.getByText('Dark')).toBeInTheDocument();
+    expect(screen.getByText('common.theme.light')).toBeInTheDocument();
+    expect(screen.getByText('common.theme.dark')).toBeInTheDocument();
   });
 
   it('should have light theme selected by default', () => {
@@ -27,8 +27,8 @@ describe('ThemeSelector', () => {
       </ThemeProvider>
     );
 
-    const lightButton = screen.getByText('Light');
-    const darkButton = screen.getByText('Dark');
+    const lightButton = screen.getByText('common.theme.light');
+    const darkButton = screen.getByText('common.theme.dark');
 
     expect(lightButton).toHaveClass('bg-white', 'text-gray-900', 'shadow-sm');
     expect(darkButton).not.toHaveClass(
@@ -45,7 +45,7 @@ describe('ThemeSelector', () => {
       </ThemeProvider>
     );
 
-    const darkButton = screen.getByText('Dark');
+    const darkButton = screen.getByText('common.theme.dark');
     fireEvent.click(darkButton);
 
     expect(darkButton).toHaveClass('bg-white', 'text-gray-900', 'shadow-sm');
@@ -60,8 +60,8 @@ describe('ThemeSelector', () => {
       </ThemeProvider>
     );
 
-    const lightButton = screen.getByText('Light');
-    const darkButton = screen.getByText('Dark');
+    const lightButton = screen.getByText('common.theme.light');
+    const darkButton = screen.getByText('common.theme.dark');
 
     fireEvent.click(darkButton);
     expect(document.body.className).toBe('dark');
@@ -77,7 +77,7 @@ describe('ThemeSelector', () => {
       </ThemeProvider>
     );
 
-    const darkButton = screen.getByText('Dark');
+    const darkButton = screen.getByText('common.theme.dark');
     fireEvent.click(darkButton);
 
     expect(document.body.className).toBe('dark');

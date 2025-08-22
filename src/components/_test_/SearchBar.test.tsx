@@ -12,7 +12,7 @@ describe('SearchBar component', () => {
   test('renders the search input and button', () => {
     render(<SearchBar onSearch={mockOnSearch} />);
     expect(
-      screen.getByPlaceholderText(/No Pokemon found/i)
+      screen.getByPlaceholderText('pokemon.noResults')
     ).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Search/i })).toBeInTheDocument();
   });
@@ -24,19 +24,19 @@ describe('SearchBar component', () => {
 
   test('shows empty input when no search term is provided', () => {
     render(<SearchBar onSearch={mockOnSearch} />);
-    expect(screen.getByPlaceholderText(/No Pokemon found/i)).toHaveValue('');
+    expect(screen.getByPlaceholderText('pokemon.noResults')).toHaveValue('');
   });
 
   test('updates input value when the user types', () => {
     render(<SearchBar onSearch={mockOnSearch} />);
-    const input = screen.getByPlaceholderText(/No Pokemon found/i);
+    const input = screen.getByPlaceholderText('pokemon.noResults');
     fireEvent.change(input, { target: { value: 'bulbasaur' } });
     expect(input).toHaveValue('bulbasaur');
   });
 
   test('calls onSearch when search button is clicked with trimmed term', () => {
     render(<SearchBar onSearch={mockOnSearch} />);
-    const input = screen.getByPlaceholderText(/No Pokemon found/i);
+    const input = screen.getByPlaceholderText('pokemon.noResults');
     const button = screen.getByRole('button', { name: /Search/i });
 
     fireEvent.change(input, { target: { value: ' charmander  ' } });
@@ -47,7 +47,7 @@ describe('SearchBar component', () => {
 
   test('calls onSearch with empty string when search button is clicked with empty term', () => {
     render(<SearchBar onSearch={mockOnSearch} />);
-    const input = screen.getByPlaceholderText(/No Pokemon found/i);
+    const input = screen.getByPlaceholderText('pokemon.noResults');
     const button = screen.getByRole('button', { name: /Search/i });
 
     fireEvent.change(input, { target: { value: '   ' } });
@@ -58,7 +58,7 @@ describe('SearchBar component', () => {
 
   test('calls onSearch when Enter key is pressed with trimmed term', () => {
     render(<SearchBar onSearch={mockOnSearch} />);
-    const input = screen.getByPlaceholderText(/No Pokemon found/i);
+    const input = screen.getByPlaceholderText('pokemon.noResults');
 
     fireEvent.change(input, { target: { value: '  pikachu  ' } });
     fireEvent.keyDown(input, { key: 'Enter' });
@@ -68,7 +68,7 @@ describe('SearchBar component', () => {
 
   test('calls onSearch with empty string when Enter key is pressed with empty term', () => {
     render(<SearchBar onSearch={mockOnSearch} />);
-    const input = screen.getByPlaceholderText(/No Pokemon found/i);
+    const input = screen.getByPlaceholderText('pokemon.noResults');
 
     fireEvent.change(input, { target: { value: '   ' } });
     fireEvent.keyDown(input, { key: 'Enter' });
@@ -84,7 +84,7 @@ describe('SearchBar component', () => {
 
   test('search button remains enabled when input value changes', () => {
     render(<SearchBar onSearch={mockOnSearch} searchTerm="pikachu" />);
-    const input = screen.getByPlaceholderText(/No Pokemon found/i);
+    const input = screen.getByPlaceholderText('pokemon.noResults');
     const button = screen.getByRole('button', { name: /Search/i });
 
     fireEvent.change(input, { target: { value: 'raichu' } });

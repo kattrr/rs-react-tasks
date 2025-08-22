@@ -131,7 +131,7 @@ describe('ClientMainPage', () => {
   it('renders with initial Pokemon list', () => {
     render(<ClientMainPage initialPokemonList={mockPokemon} />);
 
-    expect(screen.getByText('🔍 Pokémon Search')).toBeInTheDocument();
+    expect(screen.getByText('mainPage.title')).toBeInTheDocument();
     expect(screen.getByTestId('card-list')).toBeInTheDocument();
     expect(screen.getByTestId('pokemon-bulbasaur')).toBeInTheDocument();
     expect(screen.getByTestId('pokemon-ivysaur')).toBeInTheDocument();
@@ -220,7 +220,7 @@ describe('ClientMainPage', () => {
     });
 
     const container = screen
-      .getByText('🔍 Pokémon Search')
+      .getByText('mainPage.title')
       .closest('div')?.parentElement;
     if (container) {
       await act(async () => {
@@ -236,7 +236,7 @@ describe('ClientMainPage', () => {
   it('handles refresh button click to reset all state', async () => {
     render(<ClientMainPage initialPokemonList={mockPokemon} />);
 
-    const refreshButton = screen.getByText('Go Home');
+    const refreshButton = screen.getByText('mainPage.goHomeButton');
 
     await act(async () => {
       fireEvent.click(refreshButton);
