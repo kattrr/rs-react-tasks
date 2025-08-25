@@ -1,6 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { useTranslations } from 'next-intl';
+import { useModalAccessibility } from '../hooks/useModalAccessibility';
+import { ModalContent } from './ModalContent';
 
 interface ModalProps {
   isOpen: boolean;
@@ -15,46 +16,13 @@ export const Modal: React.FC<ModalProps> = ({
   title,
   children,
 }) => {
-  const t = useTranslations('common');
   const modalRef = useRef<HTMLDivElement>(null);
-  const previousActiveElement = useRef<HTMLElement | null>(null);
 
-  useEffect(() => {
-    if (isOpen) {
-      previousActiveElement.current = document.activeElement as HTMLElement;
-      document.body.style.overflow = 'hidden';
-
-      // Focus the modal
-      if (modalRef.current) {
-        modalRef.current.focus();
-      }
-    } else {
-      document.body.style.overflow = 'unset';
-      if (previousActiveElement.current) {
-        previousActiveElement.current.focus();
-      }
-    }
-
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [isOpen]);
-
-  useEffect(() => {
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && isOpen) {
-        onClose();
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener('keydown', handleEscape);
-    }
-
-    return () => {
-      document.removeEventListener('keydown', handleEscape);
-    };
-  }, [isOpen, onClose]);
+  useModalAccessibility({
+    isOpen,
+    onClose,
+    modalRef,
+  });
 
   const handleBackdropClick = (event: React.MouseEvent) => {
     if (event.target === event.currentTarget) {
@@ -72,38 +40,14 @@ export const Modal: React.FC<ModalProps> = ({
       aria-modal="true"
       aria-labelledby="modal-title"
     >
-      <div
-        ref={modalRef}
-        className="relative w-full max-w-md max-h-[90vh] overflow-y-auto bg-white rounded-lg shadow-xl p-6 mx-4"
-        tabIndex={-1}
-        role="document"
+      <ModalContent
+        title={title}
+        onClose={onClose}
+        modalRef={modalRef}
+        closeLabel="Close"
       >
-        <div className="flex items-center justify-between mb-4">
-          <h2 id="modal-title" className="text-xl font-semibold text-gray-900">
-            {title}
-          </h2>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
-            aria-label={t('close')}
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
-        </div>
-        <div className="space-y-4">{children}</div>
-      </div>
+        {children}
+      </ModalContent>
     </div>,
     document.body
   );
