@@ -42,7 +42,7 @@ describe('Modal', () => {
     expect(screen.getByText('Test Modal')).toBeInTheDocument();
     expect(screen.getByText('Modal content')).toBeInTheDocument();
     expect(screen.getByRole('dialog')).toBeInTheDocument();
-    expect(screen.getByLabelText('Close modal')).toBeInTheDocument();
+    expect(screen.getByLabelText('Close')).toBeInTheDocument();
   });
 
   it('does not render when isOpen is false', () => {
@@ -55,7 +55,7 @@ describe('Modal', () => {
   it('calls onClose when close button is clicked', () => {
     render(<Modal {...defaultProps} />);
 
-    const closeButton = screen.getByLabelText('Close modal');
+    const closeButton = screen.getByLabelText('Close');
     fireEvent.click(closeButton);
 
     expect(mockOnClose).toHaveBeenCalledTimes(1);
