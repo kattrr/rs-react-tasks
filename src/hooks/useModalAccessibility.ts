@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react';
 interface UseModalAccessibilityProps {
   isOpen: boolean;
   onClose: () => void;
-  modalRef: React.RefObject<HTMLDivElement>;
+  modalRef: React.RefObject<HTMLDivElement | null>;
 }
 
 export const useModalAccessibility = ({

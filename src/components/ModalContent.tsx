@@ -5,7 +5,7 @@ interface ModalContentProps {
   title: string;
   onClose: () => void;
   children: React.ReactNode;
-  modalRef: React.RefObject<HTMLDivElement>;
+  modalRef: React.RefObject<HTMLDivElement | null>;
   closeLabel: string;
 }
 
