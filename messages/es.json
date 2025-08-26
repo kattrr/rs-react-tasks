@@ -11,6 +11,7 @@
     "previous": "Anterior",
     "next": "Siguiente",
     "export": "Exportar CSV",
+    "close": "Cerrar modal",
     "theme": {
       "light": "Claro",
       "dark": "Oscuro"
@@ -34,5 +35,82 @@
     "itemsSelected": "elementos están seleccionados",
     "clearAll": "Limpiar Todo",
     "download": "Descargar"
+  },
+  "forms": {
+    "title": "Sistema de Gestión de Formularios",
+    "subtitle": "Elige entre componentes no controlados o enfoques con React Hook Form",
+    "uncontrolledForm": "Abrir Formulario No Controlado",
+    "hookForm": "Abrir React Hook Form",
+    "submittedForms": "Formularios Enviados",
+    "noFormsSubmitted": "Aún no se han enviado formularios",
+    "noFormsDescription": "Envía un formulario usando uno de los botones de arriba para ver los datos aquí.",
+    "fields": {
+      "name": "Nombre",
+      "age": "Edad",
+      "email": "Correo Electrónico",
+      "password": "Contraseña",
+      "confirmPassword": "Confirmar Contraseña",
+      "gender": "Género",
+      "picture": "Foto de Perfil",
+      "country": "País",
+      "acceptTerms": "Acepto los Términos y Condiciones"
+    },
+    "placeholders": {
+      "name": "Ingresa tu nombre",
+      "age": "Ingresa tu edad",
+      "email": "Ingresa tu correo electrónico",
+      "password": "Ingresa tu contraseña",
+      "confirmPassword": "Confirma tu contraseña",
+      "country": "Ingresa tu país"
+    },
+    "options": {
+      "selectGender": "Selecciona género",
+      "male": "Masculino",
+      "female": "Femenino",
+      "other": "Otro",
+      "preferNotToSay": "Prefiero no decir",
+      "selectCountry": "Selecciona país"
+    },
+    "validation": {
+      "required": "Este campo es requerido",
+      "nameRequired": "El nombre es requerido",
+      "nameUppercase": "El nombre debe comenzar con mayúscula",
+      "ageRequired": "La edad es requerida",
+      "agePositive": "La edad debe ser un número positivo",
+      "ageWhole": "La edad debe ser un número entero",
+      "emailRequired": "El correo electrónico es requerido",
+      "emailValid": "Por favor ingresa un correo electrónico válido",
+      "passwordRequired": "La contraseña es requerida",
+      "passwordStrength": "La contraseña debe contener al menos un número, letra mayúscula, minúscula y carácter especial",
+      "confirmPasswordRequired": "Por favor confirma tu contraseña",
+      "passwordsMatch": "Las contraseñas no coinciden",
+      "genderRequired": "Por favor selecciona un género",
+      "termsRequired": "Debes aceptar los términos y condiciones",
+      "countryRequired": "Por favor selecciona un país"
+    },
+    "buttons": {
+      "cancel": "Cancelar",
+      "submit": "Enviar",
+      "submitting": "Enviando..."
+    },
+    "display": {
+      "uncontrolledForm": "Formulario No Controlado",
+      "reactHookForm": "React Hook Form",
+      "new": "Nuevo",
+      "personalInformation": "Información Personal",
+      "additionalDetails": "Detalles Adicionales",
+      "profilePicture": "Foto de Perfil",
+      "termsAccepted": "Términos Aceptados",
+      "yes": "Sí",
+      "no": "No",
+      "uploaded": "Subida",
+      "none": "Ninguna"
+    },
+    "passwordStrength": {
+      "number": "Número",
+      "uppercase": "Mayúscula",
+      "lowercase": "Minúscula",
+      "special": "Especial"
+    }
   }
 }
