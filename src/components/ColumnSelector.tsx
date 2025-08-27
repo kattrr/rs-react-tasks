@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import type { ColumnOption } from '@types';
 
 interface ColumnSelectorProps {
@@ -104,17 +103,5 @@ const ColumnSelector: React.FC<ColumnSelectorProps> = React.memo(
 );
 
 ColumnSelector.displayName = 'ColumnSelector';
-
-ColumnSelector.propTypes = {
-  selectedColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
-  availableColumns: PropTypes.arrayOf(
-    PropTypes.shape({
-      key: PropTypes.string.isRequired,
-      label: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-  onColumnsChange: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired,
-};
 
 export default ColumnSelector;

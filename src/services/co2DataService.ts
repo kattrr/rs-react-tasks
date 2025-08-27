@@ -44,7 +44,6 @@ export const getLatestDataPoint = (
     return dataPoints.find((point) => point.year === year) || null;
   }
 
-  // Get the latest year with data
   const sortedData = dataPoints
     .filter(
       (point) => point.population !== undefined || point.co2 !== undefined
@@ -145,11 +144,9 @@ export const getColumnDefinitions = () => [
 ];
 
 export const getAvailableRegions = (data: CO2DataSet): string[] => {
-  // This is a simplified region mapping - in a real app you might have a more comprehensive mapping
   const regions = new Set<string>();
 
   Object.keys(data).forEach((countryName) => {
-    // Simple region detection based on country names (very basic)
     if (
       countryName.toLowerCase().includes('europe') ||
       countryName.toLowerCase().includes('germany') ||

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useCO2Data } from '@hooks';
+import { useCO2Data } from '@/hooks';
 import { FilterControls, CO2DataTable } from '@components';
 
 const CO2Dashboard: React.FC = () => {

@@ -1,4 +1,3 @@
-// Services
 export {
   fetchCO2Data,
   getLatestDataPoint,

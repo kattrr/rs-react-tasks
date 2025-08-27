@@ -44,6 +44,11 @@ export default defineConfig([
         { allowConstantExport: true },
       ],
       'react-compiler/react-compiler': 'error',
+      '@typescript-eslint/no-unused-expressions': [
+        'error',
+        { allowTernary: true },
+      ],
+      'react/prop-types': 'off',
     },
     extends: [js.configs.recommended, ...tseslint.configs.strict, prettier],
   },

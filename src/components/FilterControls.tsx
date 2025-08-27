@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 interface FilterControlsProps {
   year: number;
@@ -89,16 +88,5 @@ const FilterControls: React.FC<FilterControlsProps> = React.memo(
 );
 
 FilterControls.displayName = 'FilterControls';
-
-FilterControls.propTypes = {
-  year: PropTypes.number.isRequired,
-  availableYears: PropTypes.arrayOf(PropTypes.number).isRequired,
-  region: PropTypes.string.isRequired,
-  availableRegions: PropTypes.arrayOf(PropTypes.string).isRequired,
-  searchTerm: PropTypes.string.isRequired,
-  onYearChange: PropTypes.func.isRequired,
-  onRegionChange: PropTypes.func.isRequired,
-  onSearchChange: PropTypes.func.isRequired,
-};
 
 export default FilterControls;

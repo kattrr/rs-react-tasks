@@ -26,7 +26,6 @@ export const useCO2Data = () => {
     selectedColumns: ['population', 'co2', 'co2_per_capita'],
   });
 
-  // Fetch data on mount
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -34,7 +33,6 @@ export const useCO2Data = () => {
         const co2Data = await fetchCO2Data();
         setData(co2Data);
 
-        // Set default year to the latest available year
         const years = getAvailableYears(co2Data);
         if (years.length > 0) {
           setFilters((prev) => ({ ...prev, year: years[0] }));
@@ -51,7 +49,6 @@ export const useCO2Data = () => {
     loadData();
   }, []);
 
-  // Memoized computed values
   const availableYears = useMemo(() => {
     return data ? getAvailableYears(data) : [];
   }, [data]);
@@ -59,15 +56,12 @@ export const useCO2Data = () => {
   const availableRegions = useMemo(() => {
     return data ? ['All', ...getAvailableRegions(data)] : ['All'];
   }, [data]);
-
-  // Filter and transform data
   const processedData = useMemo(() => {
     if (!data) return [];
 
     const filteredData: CountryDisplayData[] = [];
 
     Object.entries(data).forEach(([countryName, countryData]) => {
-      // Region filter
       if (filters.region !== 'All') {
         const countryLower = countryName.toLowerCase();
         const isInRegion =
@@ -109,7 +103,6 @@ export const useCO2Data = () => {
         if (!isInRegion) return;
       }
 
-      // Search filter
       if (
         filters.searchTerm &&
         !countryName.toLowerCase().includes(filters.searchTerm.toLowerCase())
@@ -127,7 +120,6 @@ export const useCO2Data = () => {
         data: {},
       };
 
-      // Add selected columns data
       filters.selectedColumns.forEach((column) => {
         displayData.data[column] =
           (dataPoint[column as keyof typeof dataPoint] as number | undefined) ||
@@ -137,7 +129,6 @@ export const useCO2Data = () => {
       filteredData.push(displayData);
     });
 
-    // Sort data
     filteredData.sort((a, b) => {
       let aValue: string | number;
       let bValue: string | number;
@@ -163,7 +154,6 @@ export const useCO2Data = () => {
     return filteredData;
   }, [data, filters]);
 
-  // Callbacks for updating filters
   const updateYear = useCallback((year: number) => {
     setFilters((prev) => ({ ...prev, year }));
   }, []);
