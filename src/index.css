@@ -6,53 +6,11 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  --background: oklch(0.93 0 0);
-  --foreground: oklch(0.35 0 0);
-  color: var(--foreground);
-  background-color: var(--background);
+  color: oklch(0.93 0 0);
+  background-color: oklch(0.35 0 0);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-/* Dark theme styles */
-.dark {
-  color-scheme: dark;
-  color: oklch(0.93 0 0);
-  background-color: oklch(0.1 0 0);
-}
-
-.dark body {
-  background-color: oklch(0.1 0 0);
-  color: oklch(0.93 0 0);
-}
-
-.dark .bg-white {
-  background-color: oklch(0.15 0 0);
-}
-
-.dark .text-black {
-  color: oklch(0.93 0 0);
-}
-
-.dark .border-gray-200 {
-  border-color: oklch(0.2 0 0);
-}
-
-.dark .bg-gray-50 {
-  background-color: oklch(0.08 0 0);
-}
-
-.dark .bg-gray-100 {
-  background-color: oklch(0.15 0 0);
-}
-
-.dark .text-gray-600 {
-  color: oklch(0.7 0 0);
-}
-
-.dark .text-gray-900 {
-  color: oklch(0.93 0 0);
 }

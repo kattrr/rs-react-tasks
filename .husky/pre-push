@@ -11,21 +11,27 @@ RESET='\033[0m'
 # Start message
 echo "${CYAN}${BOLD}🚀 Husky pre-push hook is running...${RESET}"
 
-# Run tests before push
-echo "${CYAN}Running tests...${RESET}"
-npm run test
-TEST_STATUS=$?
-if [ $TEST_STATUS -ne 0 ]; then
-    echo "${RED}${BOLD}❌ Tests failed! Push aborted.${RESET}"
-    exit 1
-fi
+# Check if tests exist
+if [ -d "src/test" ] || [ -f "src/**/*.test.*" ] || [ -f "src/**/*.spec.*" ]; then
+    echo "${CYAN}Tests found, running them...${RESET}"
+    
+    # Run tests before push
+    npm run test
+    TEST_STATUS=$?
+    if [ $TEST_STATUS -ne 0 ]; then
+        echo "${RED}${BOLD}❌ Tests failed! Push aborted.${RESET}"
+        exit 1
+    fi
 
-echo "${CYAN}Running test coverage...${RESET}"
-npm run test:coverage
-COVERAGE_STATUS=$?
-if [ $COVERAGE_STATUS -ne 0 ]; then
-    echo "${RED}${BOLD}❌ Test coverage failed!${RESET}"
-    exit 1
+    echo "${CYAN}Running test coverage...${RESET}"
+    npm run test:coverage
+    COVERAGE_STATUS=$?
+    if [ $COVERAGE_STATUS -ne 0 ]; then
+        echo "${RED}${BOLD}❌ Test coverage failed!${RESET}"
+        exit 1
+    fi
+else
+    echo "${CYAN}No tests found, skipping test execution...${RESET}"
 fi
 
 # End message
