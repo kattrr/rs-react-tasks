@@ -2,21 +2,6 @@
 
 A React TypeScript application that displays global CO2 emissions data by countries. The application fetches data from a large hierarchical JSON file (~100MB) and provides comprehensive filtering, sorting, and visualization capabilities.
 
-## 📊 **Project Status: ✅ COMPLETE**
-
-### **Requirements Met: 125/100 Points**
-
-This project successfully implements all required features for the CO2 Emissions Dashboard task, including advanced performance optimizations and modern UI design.
-
-### **Key Achievements:**
-
-- ✅ **Complete Data Pipeline**: Fetches and processes ~100MB of CO2 data
-- ✅ **Advanced Filtering**: Year, region, and search functionality
-- ✅ **Dynamic Column Selection**: Modal with 15+ environmental metrics
-- ✅ **Performance Optimized**: React.memo, useMemo, and useCallback implementation
-- ✅ **Modern UI**: Tailwind CSS with glassmorphism design
-- ✅ **TypeScript**: Full type safety throughout the application
-
 ## Features
 
 ### 1. Data Fetching and Display
@@ -38,7 +23,14 @@ This project successfully implements all required features for the CO2 Emissions
 - **Multiple Metrics**: Choose from 15+ CO2 and environmental metrics
 - **Real-time Updates**: Columns update immediately when selected/deselected
 
-### 4. Performance Optimizations
+### 4. Year Change Highlighting
+
+- **Visual Feedback**: Brief highlight effect when year changes
+- **Reusable Components**: Modular highlight system for different UI elements
+- **Smooth Animations**: Pulse, bounce, and progress animations
+- **Context-Aware**: Different highlight styles for headers, tables, and selectors
+
+### 5. Performance Optimizations
 
 - **useMemo**: Memoized filtered, searched, and sorted data
 - **useCallback**: Memoized event handlers for optimal performance
@@ -67,100 +59,6 @@ This project successfully implements all required features for the CO2 Emissions
 - Proper TypeScript typing for all data structures
 - Memory-efficient data processing
 - **Tailwind CSS**: Modern utility-first CSS framework for responsive design
-
-## ✅ Requirements Verification
-
-### **Fetch and Display Data (35 points total)**
-
-#### ✅ **1. Large JSON Data Fetching (10/10 points)**
-
-- **✅ Hierarchical JSON**: Fetches ~100MB from `https://nyc3.digitaloceanspaces.com/owid-public/data/co2/owid-co2-data.json`
-- **✅ Country/Region Keys**: Each country is a root-level key with yearly data arrays
-- **✅ Data Structure**: Properly typed with TypeScript interfaces
-- **✅ Caching**: Implements caching mechanism to prevent redundant fetches
-
-#### ✅ **2. React Suspense Implementation (10/10 points)**
-
-- **✅ Suspense**: Used in `App.tsx` with `CO2Dashboard` component
-- **✅ Fallback UI**: Loading spinner with backdrop blur
-- **✅ Error Handling**: Graceful error states with retry functionality
-- **✅ Responsive UI**: Loading states don't block the interface
-
-#### ✅ **3. Data Display (10/10 points)**
-
-- **✅ Country List**: Shows name, population (latest year), and ISO code
-- **✅ Required Columns**: year, population, co2, co2_per_capita
-- **✅ Missing Values**: Displays "N/A" for missing data
-- **✅ Table Structure**: Clean, sortable table with proper formatting
-
-#### ✅ **4. Modal Column Selection (15/15 points)**
-
-- **✅ Modal Widget**: Interactive column selector with checkboxes
-- **✅ Additional Fields**: 15+ metrics (methane, oil_co2, temperature_change_from_co2, etc.)
-- **✅ Real-time Updates**: Columns update immediately when selected/deselected
-- **✅ User Experience**: Select All/Deselect All functionality
-
-### **Year Selection, Filtering, Sorting, and Search (50 points total)**
-
-#### ✅ **5. Year Selector with Highlighting (15/15 points)**
-
-- **✅ Year Selector**: Dropdown at the top for choosing display year
-- **✅ All Countries**: Year change affects all displayed countries/regions
-- **✅ Data Highlighting**: Brief visual feedback when data updates
-- **✅ Default Year**: Automatically selects latest available year
-
-#### ✅ **6. Regional Filtering (10/10 points)**
-
-- **✅ Region Dropdown**: Filter countries by continent/region
-- **✅ Multiple Regions**: Europe, Asia, Americas, Africa, Oceania
-- **✅ Dynamic Filtering**: Real-time filtering as you select regions
-- **✅ "All" Option**: Show all countries without regional filter
-
-#### ✅ **7. Search Functionality (10/10 points)**
-
-- **✅ Search Bar**: Text input for searching countries by name
-- **✅ Real-time Search**: Updates results as you type
-- **✅ Case Insensitive**: Search works regardless of case
-- **✅ Partial Matches**: Finds countries with partial name matches
-
-#### ✅ **8. Sorting (10/10 points)**
-
-- **✅ Population Sorting**: Sort by population for selected year
-- **✅ Name Sorting**: Sort by country name (ascending/descending)
-- **✅ Column Sorting**: Sort by any selected data column
-- **✅ Visual Indicators**: Sort icons (↕️, ↑, ↓) show current sort state
-
-### **Performance Optimization (40 points total)**
-
-#### ✅ **9. useMemo Implementation (10/10 points)**
-
-- **✅ Filtered Data**: `processedData` memoized with `useMemo`
-- **✅ Search Results**: Search filtering memoized
-- **✅ Sorted Data**: Sorting operations memoized
-- **✅ Selected Columns**: Column selection memoized
-- **✅ Available Years/Regions**: Computed values memoized
-
-#### ✅ **10. useCallback Implementation (10/10 points)**
-
-- **✅ Event Handlers**: All filter functions use `useCallback`
-- **✅ Search Handler**: `updateSearchTerm` memoized
-- **✅ Sort Handler**: `updateSort` memoized
-- **✅ Column Handler**: `updateSelectedColumns` memoized
-- **✅ Year/Region Handlers**: `updateYear` and `updateRegion` memoized
-
-#### ✅ **11. React.memo Implementation (10/10 points)**
-
-- **✅ FilterControls**: Wrapped with `React.memo`
-- **✅ CO2DataTable**: Wrapped with `React.memo`
-- **✅ ColumnSelector**: Wrapped with `React.memo`
-- **✅ Performance**: Prevents unnecessary re-renders
-
-#### ✅ **12. Proper Key Props (10/10 points)**
-
-- **✅ Unique Keys**: All lists use unique, stable keys
-- **✅ Table Rows**: `key={country.name}` for table rows
-- **✅ Option Elements**: `key={y}` for year options
-- **✅ Column Headers**: `key={columnKey}` for dynamic columns
 
 ## Performance Profiling
 
@@ -220,6 +118,45 @@ src/
 │   └── index.ts               # Barrel exports
 ├── index.css            # Tailwind CSS imports
 └── main.tsx             # React entry point
+```
+
+## 🎨 **Reusable Highlight Components**
+
+The application now includes a comprehensive set of reusable components for year change highlighting:
+
+### **Components Created:**
+
+1. **`YearChangeHighlight`** - General-purpose highlight component with size options (used in header and table)
+2. **`TableRowHighlight`** - Specialized component for highlighting table rows
+3. **`YearSelectorHighlight`** - Specialized component for highlighting the year selector
+
+### **Features:**
+
+- **Consistent Visual Style**: All highlights use the same yellow gradient theme
+- **Multiple Sizes**: Different sizes for different contexts (small, medium, large)
+- **Smooth Animations**: Pulse, bounce, and spin animations for visual feedback
+- **Animated Dots**: Three bouncing dots with staggered animation delays
+- **TypeScript Support**: Full type safety with proper prop validation
+- **Performance Optimized**: All components use React.memo
+
+### **Usage Examples:**
+
+```tsx
+// Header indicator (small)
+<YearChangeHighlight isActive={isUpdating} size="small" />
+
+// Table indicator (large)
+<YearChangeHighlight isActive={highlightYearChange} size="large" />
+
+// Highlighted table row
+<TableRowHighlight isActive={highlightYearChange} className="bg-white/5">
+  {/* row content */}
+</TableRowHighlight>
+
+// Highlighted year selector
+<YearSelectorHighlight isActive={highlightYearChange} showProgress={true}>
+  <select>{/* options */}</select>
+</YearSelectorHighlight>
 ```
 
 ## 🔗 **Import Aliases**
