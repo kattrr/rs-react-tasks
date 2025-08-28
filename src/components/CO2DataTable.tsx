@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import type { CountryDisplayData, SortField, SortDirection } from '@types';
 import { getColumnDefinitions } from '@services';
-import { ColumnSelector } from '@components';
+import {
+  ColumnSelector,
+  YearChangeHighlight,
+  TableRowHighlight,
+} from '@components';
 import PropTypes from 'prop-types';
 
 interface CO2DataTableProps {
@@ -9,6 +13,7 @@ interface CO2DataTableProps {
   selectedColumns: string[];
   sortField: SortField;
   sortDirection: SortDirection;
+  highlightYearChange: boolean;
   onSort: (field: SortField, direction: SortDirection) => void;
   onColumnsChange: (columns: string[]) => void;
 }
@@ -19,6 +24,7 @@ const CO2DataTable: React.FC<CO2DataTableProps> = React.memo(
     selectedColumns,
     sortField,
     sortDirection,
+    highlightYearChange,
     onSort,
     onColumnsChange,
   }) => {
@@ -49,12 +55,15 @@ const CO2DataTable: React.FC<CO2DataTableProps> = React.memo(
           <h3 className="text-2xl font-semibold">
             CO2 Emissions Data ({data.length} countries)
           </h3>
-          <button
-            className="bg-white/20 border border-white/30 text-white px-6 py-3 rounded-lg cursor-pointer text-base transition-all hover:bg-white/30 hover:border-white/50"
-            onClick={() => setShowColumnSelector(!showColumnSelector)}
-          >
-            📊 Select Columns
-          </button>
+          <div className="flex items-center gap-4">
+            <YearChangeHighlight isActive={highlightYearChange} size="large" />
+            <button
+              className="bg-white/20 border border-white/30 text-white px-6 py-3 rounded-lg cursor-pointer text-base transition-all hover:bg-white/30 hover:border-white/50"
+              onClick={() => setShowColumnSelector(!showColumnSelector)}
+            >
+              📊 Select Columns
+            </button>
+          </div>
         </div>
 
         {showColumnSelector && (
@@ -105,8 +114,9 @@ const CO2DataTable: React.FC<CO2DataTableProps> = React.memo(
             </thead>
             <tbody>
               {data.map((country, index) => (
-                <tr
+                <TableRowHighlight
                   key={country.name}
+                  isActive={highlightYearChange}
                   className={
                     index % 2 === 0
                       ? 'bg-white/5'
@@ -133,7 +143,7 @@ const CO2DataTable: React.FC<CO2DataTableProps> = React.memo(
                       {formatValue(country.data[columnKey], columnKey)}
                     </td>
                   ))}
-                </tr>
+                </TableRowHighlight>
               ))}
             </tbody>
           </table>
@@ -164,6 +174,7 @@ CO2DataTable.propTypes = {
   sortField: PropTypes.oneOf(['name', 'population', 'co2', 'co2_per_capita'])
     .isRequired,
   sortDirection: PropTypes.oneOf(['asc', 'desc']).isRequired,
+  highlightYearChange: PropTypes.bool.isRequired,
   onSort: PropTypes.func.isRequired,
   onColumnsChange: PropTypes.func.isRequired,
 };

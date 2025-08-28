@@ -10,6 +10,7 @@ const CO2Dashboard: React.FC = () => {
     filters,
     availableYears,
     availableRegions,
+    highlightYearChange,
     updateYear,
     updateRegion,
     updateSearchTerm,
@@ -52,6 +53,7 @@ const CO2Dashboard: React.FC = () => {
         region={filters.region}
         availableRegions={availableRegions}
         searchTerm={filters.searchTerm}
+        highlightYearChange={highlightYearChange}
         onYearChange={updateYear}
         onRegionChange={updateRegion}
         onSearchChange={updateSearchTerm}
@@ -62,6 +64,7 @@ const CO2Dashboard: React.FC = () => {
         selectedColumns={filters.selectedColumns}
         sortField={filters.sortField}
         sortDirection={filters.sortDirection}
+        highlightYearChange={highlightYearChange}
         onSort={updateSort}
         onColumnsChange={updateSelectedColumns}
       />

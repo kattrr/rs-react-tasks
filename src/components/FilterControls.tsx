@@ -1,4 +1,5 @@
 import React from 'react';
+import { YearSelectorHighlight } from '@components';
 
 interface FilterControlsProps {
   year: number;
@@ -6,6 +7,7 @@ interface FilterControlsProps {
   region: string;
   availableRegions: string[];
   searchTerm: string;
+  highlightYearChange: boolean;
   onYearChange: (year: number) => void;
   onRegionChange: (region: string) => void;
   onSearchChange: (searchTerm: string) => void;
@@ -18,6 +20,7 @@ const FilterControls: React.FC<FilterControlsProps> = React.memo(
     region,
     availableRegions,
     searchTerm,
+    highlightYearChange,
     onYearChange,
     onRegionChange,
     onSearchChange,
@@ -31,18 +34,27 @@ const FilterControls: React.FC<FilterControlsProps> = React.memo(
           >
             Year:
           </label>
-          <select
-            id="year-select"
-            value={year}
-            onChange={(e) => onYearChange(Number(e.target.value))}
-            className="px-3 py-3 border border-white/20 rounded-lg bg-white/10 text-white text-base transition-all focus:outline-none focus:border-white/50 focus:bg-white/15 focus:shadow-lg focus:shadow-white/10"
+          <YearSelectorHighlight
+            isActive={highlightYearChange}
+            showProgress={true}
           >
-            {availableYears.map((y) => (
-              <option key={y} value={y} className="bg-gray-800 text-white">
-                {y}
-              </option>
-            ))}
-          </select>
+            <select
+              id="year-select"
+              value={year}
+              onChange={(e) => onYearChange(Number(e.target.value))}
+              className={`px-3 py-3 border border-white/20 rounded-lg bg-white/10 text-white text-base transition-all duration-500 ease-in-out focus:outline-none focus:border-white/50 focus:bg-white/15 focus:shadow-lg focus:shadow-white/10 ${
+                highlightYearChange
+                  ? 'border-yellow-400 bg-gradient-to-r from-yellow-500/20 via-yellow-400/15 to-yellow-300/10 animate-pulse shadow-lg shadow-yellow-400/25 scale-105'
+                  : 'hover:border-white/40 hover:bg-white/15'
+              }`}
+            >
+              {availableYears.map((y) => (
+                <option key={y} value={y} className="bg-gray-800 text-white">
+                  {y}
+                </option>
+              ))}
+            </select>
+          </YearSelectorHighlight>
         </div>
 
         <div className="flex flex-col gap-2 w-full md:min-w-[200px]">

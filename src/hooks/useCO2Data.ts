@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import type {
   CO2DataSet,
   FilterOptions,
@@ -25,6 +25,10 @@ export const useCO2Data = () => {
     sortDirection: 'asc',
     selectedColumns: ['population', 'co2', 'co2_per_capita'],
   });
+
+  // Add state for year change highlighting
+  const [highlightYearChange, setHighlightYearChange] = useState(false);
+  const previousYearRef = useRef<number>(2020);
 
   useEffect(() => {
     const loadData = async () => {
@@ -155,6 +159,16 @@ export const useCO2Data = () => {
   }, [data, filters]);
 
   const updateYear = useCallback((year: number) => {
+    // Check if year actually changed
+    if (year !== previousYearRef.current) {
+      setHighlightYearChange(true);
+      // Remove highlight after animation duration
+      setTimeout(() => setHighlightYearChange(false), 1500);
+      previousYearRef.current = year;
+
+      // Dispatch custom event for parent component
+      window.dispatchEvent(new CustomEvent('yearChange', { detail: { year } }));
+    }
     setFilters((prev) => ({ ...prev, year }));
   }, []);
 
@@ -184,6 +198,7 @@ export const useCO2Data = () => {
     filters,
     availableYears,
     availableRegions,
+    highlightYearChange,
     updateYear,
     updateRegion,
     updateSearchTerm,
